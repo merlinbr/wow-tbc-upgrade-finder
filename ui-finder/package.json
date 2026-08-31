@@ -1,0 +1,17 @@
+{
+  "name": "wow-upgrade-finder-ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "svelte": "^5.38.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@sveltejs/vite-plugin-svelte": "^6.1.4",
+    "vite": "^7.1.3"
+  }
+}

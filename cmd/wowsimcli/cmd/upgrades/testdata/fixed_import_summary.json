@@ -1,0 +1,15 @@
+{
+  "name": "TestMage",
+  "class": "ClassMage",
+  "spec": "Mage",
+  "race": "RaceTroll",
+  "equippedItems": 17,
+  "professions": [
+    11,
+    3
+  ],
+  "phase": 2,
+  "iterations": 1000,
+  "fixedRngSeed": true,
+  "encounterTargets": 1
+}
