@@ -10,6 +10,9 @@ rtk go run ./cmd/wowsimcli rank-upgrades
 
 The command starts a loopback-only local server and opens the application in your browser. Add `--no-browser` when you only need the URL printed to the terminal.
 
+For frontend changes, use the Vite dev server with hot reload instead of
+rebuilding the embedded UI: [UI development (hot reload)](docs/upgrade-finder.md#ui-development-hot-reload).
+
 ## Use it
 
 1. Paste an individual-sim wowsims export link.

@@ -55,6 +55,7 @@ The armory redesign is implemented: character-centered layout with Gear/Stats/Ta
 - Ranking preserves the original pasted link, validates screening/confirmation budgets, polls every 500 ms, retains completed reports, clears canceled/failed reports, and guards stale asynchronous actions.
 - Reports display baseline/assumptions/exclusions/failures/confirmed upgrades, human-readable target slots and sources, per-upgrade assumptions, and JSON clipboard copy status.
 - The generated Vite bundle is committed under `cmd/wowsimcli/cmd/upgrade_ui/`; Go builds and Go tests do not require Node.
+- UI iteration uses the Vite dev server with HMR (`ui-finder/` `npm run dev`, proxying `/api` to the Go server on port `43123`); the embedded bundle only updates on `npm run build` plus Go restart. Workflow: `docs/upgrade-finder.md` "UI development (hot reload)".
 
 ### Repo and CI
 

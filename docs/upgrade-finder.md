@@ -18,6 +18,25 @@ rtk npm ci
 rtk npm run build
 ```
 
+## UI development (hot reload)
+
+The served UI is compiled into the `wowsimcli` binary (`//go:embed upgrade_ui`),
+so refreshing the browser against the Go server always shows the build-time
+snapshot. For frontend iteration, use the Vite dev server with HMR instead:
+
+```bash
+# Terminal 1 — API backend (restart only when Go code changes)
+rtk go run ./cmd/wowsimcli rank-upgrades --addr [IP_ADDRESS]:43123 --no-browser
+
+# Terminal 2 — Vite dev server; proxies /api to the backend
+cd ui-finder
+rtk npm run dev
+```
+
+Open `http://localhost:5173`. Svelte/CSS edits hot-reload instantly, no rebuild
+or refresh. Run `rtk npm run build` and restart the Go server only when you need
+the embedded production UI or want to commit rebuilt assets.
+
 ## Run
 
 ```bash

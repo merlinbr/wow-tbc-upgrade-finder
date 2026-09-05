@@ -99,8 +99,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .character-facts dd { color: var(--text); font-weight: 650; }
 
 .gear-grid { align-items: start; display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem) minmax(0, 1fr); margin-top: 1rem; }
-.gear-column { display: grid; align-content: start; gap: 0.7rem; }
-.weapon-strip { display: grid; gap: 0.7rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1rem; }
+.gear-column { align-self: stretch; display: grid; align-content: start; gap: 0.7rem; grid-auto-rows: minmax(auto, 1fr); }
+.weapon-strip { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem) minmax(0, 1fr); margin-top: 1rem; }
 .gear-slot { align-items: start; background: rgba(6, 10, 16, 0.65); border: 1px solid var(--border); border-left: 3px solid var(--border-bright); border-radius: 7px; display: flex; gap: 0.7rem; min-height: 5rem; padding: 0.65rem; }
 .gear-slot.quality-0 { border-color: #9d9d9d; border-left-color: #9d9d9d; }
 .gear-slot.quality-1 { border-color: #ffffff; border-left-color: #ffffff; }
@@ -111,6 +111,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .gear-slot.quality-6 { border-color: #e6cc80; border-left-color: #e6cc80; }
 .gear-slot.quality-7 { border-color: #00ccff; border-left-color: #00ccff; }
 .gear-slot.mirror { flex-direction: row-reverse; }
+.gear-slot.mirror .gear-copy { text-align: right; }
 .gear-icon-wrap { flex: 0 0 3.4rem; height: 3.4rem; position: relative; }
 .gear-icon, .gear-icon-fallback { border: 1px solid var(--border-bright); border-radius: 4px; display: block; height: 3.4rem; object-fit: cover; width: 3.4rem; }
 .gear-icon-fallback { align-items: center; background: #263247; color: var(--gold); display: flex; font-size: 1.3rem; justify-content: center; }
@@ -127,7 +128,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .socket { align-items: center; background: #263247; border: 1px solid var(--border-bright); border-radius: 3px; display: inline-flex; height: 1rem; justify-content: center; overflow: hidden; width: 1rem; }
 .socket img { height: 100%; object-fit: cover; width: 100%; }
 .empty-socket { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
-.gear-copy { min-width: 0; }
+.gear-copy { flex: 1; min-width: 0; }
 .item-name { font-weight: 700; margin: 0 0 0.12rem; overflow-wrap: anywhere; }
 .quality-text-0 { color: #9d9d9d; }
 .quality-text-1 { color: #ffffff; }
@@ -184,6 +185,7 @@ footer { border-top: 1px solid var(--border); color: var(--muted); font-size: 0.
 footer a { color: var(--accent-strong); }
 @media (max-width: 900px) {
   .gear-grid { grid-template-columns: minmax(0, 1fr) 14rem minmax(0, 1fr); }
+  .weapon-strip { grid-template-columns: minmax(0, 1fr) 14rem minmax(0, 1fr); }
   .control-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .character-actions { justify-items: start; }
   .character-header { flex-direction: column; }
