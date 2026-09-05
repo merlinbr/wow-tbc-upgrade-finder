@@ -1,6 +1,7 @@
 <script>
   import GearSlot from './GearSlot.svelte';
   import StatPanels from './StatPanels.svelte';
+  import { humanizeEnum } from './labels.js';
 
   let { imported } = $props();
   let character = $derived(imported?.character ?? {});
@@ -39,7 +40,7 @@
     <div>
       <div class="section-kicker">Imported character</div>
       <h2 id="armory-heading">{character.name || 'Unnamed character'}</h2>
-      <p class="character-subtitle">Level 70 {character.race || 'Unknown race'} {character.class || 'Unknown class'}{character.spec ? ` · ${character.spec}` : ''}</p>
+      <p class="character-subtitle">Level 70 {humanizeEnum(character.race, 'Race') || 'Unknown race'} {humanizeEnum(character.class, 'Class') || 'Unknown class'}{character.spec ? ` · ${humanizeEnum(character.spec)}` : ''}</p>
     </div>
     <dl class="character-facts">
       <div><dt>Professions</dt><dd>{professions.length ? professions.join(', ') : 'None'}</dd></div>
