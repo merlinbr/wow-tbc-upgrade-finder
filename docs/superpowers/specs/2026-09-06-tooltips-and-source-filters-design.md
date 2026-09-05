@@ -20,21 +20,36 @@ carries only id, name, icon, quality, phase, type, slot.
 ### Armory tooltip (full)
 
 Hovering (or keyboard-focusing) a gear card's icon/name in `GearSlot.svelte`
-shows a popover with:
+shows a popover styled after the classic Wowhead item tooltip (mockups
+approved 2026-09-06), top to bottom:
 
-- item name (quality-colored), item level, phase, quality name;
-- humanized stat lines — proper stat names ("Hit Rating"), not raw
-  snake_case keys;
-- random-suffix name plus its stats as additional stat lines when present
-  (`GearSlotData.RandomSuffix`); suffix stats are not in `slot.stats`, so
-  they must be rendered separately or random-suffix items show incomplete
-  stats;
-- enchant effect line;
-- gems with socket colors;
-- socket bonus with active/inactive state.
+1. Header row: quality-colored item name; right-aligned `Phase N` badge.
+2. `Item Level N` in the item-level gold/orange.
+3. Slot line (`slotName`).
+4. Stat lines in white, humanized (`+32 Strength`, `+45 Stamina`) — proper
+   stat names, not raw snake_case keys.
+5. Random suffix: when `RandomSuffix` is present, its stats render as
+   additional stat lines (suffix stats are not in `slot.stats`, so without
+   this random-suffix items show incomplete stats).
+6. Gems: per socket, the gem's colored icon followed by its stat
+   contribution in green (`+10 Strength`), matching the mockup's socketed
+   gem lines; empty sockets render as an empty colored socket icon.
+7. `Socket Bonus: …` in green, with inactive bonuses shown dimmed/gray.
+8. Enchant as green `Equip: …` lines (`EnchantData.Description`, falling
+   back to its name).
+
+Tooltip body text is white on a dark `#0a0d14`-style panel with a dark
+border, like the mockups.
 
 Empty slots show no tooltip. The existing Details disclosure stays; the
 tooltip is the quick-glance layer.
+
+Mockup lines with no data behind them are omitted: `Binds when picked up`
+(constant flavor), armor type (Plate/Leather — `GearSlotData` carries no
+item class), weapon damage/speed/DPS, durability, class restriction,
+`Requires Level` (always 70), sell price, and the set-piece list with set
+bonuses (only `setName` is in the payload). Adding any of these is a
+server payload change, out of scope.
 
 ### Report tooltip (reduced)
 
