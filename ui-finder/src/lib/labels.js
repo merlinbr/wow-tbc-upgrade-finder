@@ -45,14 +45,14 @@ export const sourceKinds = [
   { value: 1, label: 'Crafting', proto: 'SourceCrafting' },
   { value: 2, label: 'Quest', proto: 'SourceQuest' },
   { value: 3, label: 'Reputation', proto: 'SourceReputation' },
-  { value: 4, label: 'PvP', proto: 'SourcePvP' },
+  { value: 4, label: 'PvP', proto: 'SourcePvp' },
   { value: 5, label: 'Dungeon', proto: 'SourceDungeon' },
-  { value: 6, label: 'Heroic dungeon', proto: 'SourceHeroicDungeon' },
+  { value: 6, label: 'Heroic dungeon', proto: 'SourceDungeonH' },
   { value: 7, label: 'Raid', proto: 'SourceRaid' },
-  { value: 8, label: 'Heroic raid', proto: 'SourceHeroicRaid' },
-  { value: 9, label: 'Raid finder', proto: 'SourceRaidFinder' },
-  { value: 10, label: 'Flexible raid', proto: 'SourceFlexibleRaid' },
-  { value: 11, label: 'Sold by vendor', proto: 'SourceSoldByVendor' },
+  { value: 8, label: 'Heroic raid', proto: 'SourceRaidH' },
+  { value: 9, label: 'Raid finder', proto: 'SourceRaidRF' },
+  { value: 10, label: 'Flexible raid', proto: 'SourceRaidFlex' },
+  { value: 11, label: 'Sold by vendor', proto: 'SourceSoldBy' },
 ];
 
 const sourceKindsByValue = new Map(sourceKinds.map((k) => [k.value, k.label]));

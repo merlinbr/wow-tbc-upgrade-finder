@@ -45,7 +45,16 @@ test('sourceKindLabel maps known kinds and flags unknown', () => {
 
 test('humanizeSourceKind maps proto names to labels', () => {
   assert.equal(humanizeSourceKind('SourceCrafting'), 'Crafting');
-  assert.equal(humanizeSourceKind('SourceHeroicDungeon'), 'Heroic dungeon');
+  assert.equal(humanizeSourceKind('SourceQuest'), 'Quest');
+  assert.equal(humanizeSourceKind('SourceReputation'), 'Reputation');
+  assert.equal(humanizeSourceKind('SourcePvp'), 'PvP');
+  assert.equal(humanizeSourceKind('SourceDungeon'), 'Dungeon');
+  assert.equal(humanizeSourceKind('SourceDungeonH'), 'Heroic dungeon');
+  assert.equal(humanizeSourceKind('SourceRaid'), 'Raid');
+  assert.equal(humanizeSourceKind('SourceRaidH'), 'Heroic raid');
+  assert.equal(humanizeSourceKind('SourceRaidRF'), 'Raid finder');
+  assert.equal(humanizeSourceKind('SourceRaidFlex'), 'Flexible raid');
+  assert.equal(humanizeSourceKind('SourceSoldBy'), 'Sold by vendor');
   assert.equal(humanizeSourceKind('SourceSomethingNew'), 'Something New');
 });
 

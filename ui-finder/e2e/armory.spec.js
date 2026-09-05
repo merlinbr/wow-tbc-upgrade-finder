@@ -75,6 +75,7 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(page.getByRole('table', { name: 'Confirmed single-item upgrades' })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText('Source filters')).toBeVisible();
   await expect(page.locator('.report-summary dd').filter({ hasText: 'Crafting' })).toBeVisible();
+  await expect(page.locator('.report-summary dd').filter({ hasText: 'Sold by vendor' })).toBeVisible();
   const reportTrigger = page.locator('.report-item-trigger').first();
   await reportTrigger.hover();
   await expect(reportTrigger.locator('.item-tooltip')).toBeVisible();

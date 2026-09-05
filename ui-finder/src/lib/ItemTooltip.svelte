@@ -3,10 +3,15 @@
 
   let { item, variant = 'full' } = $props();
 
+  let iconFailed = $state(false);
   let summary = $derived(variant === 'summary');
   let name = $derived(item?.itemName ?? item?.name ?? '');
   let statEntries = $derived(Object.entries(item?.stats ?? {}));
   let suffixEntries = $derived(item?.randomSuffix ? Object.entries(item.randomSuffix.stats ?? {}) : []);
+
+  function iconUrl(icon) {
+    return `https://wow.zamimg.com/images/wow/icons/large/${icon}.jpg`;
+  }
 
   function gemText(gem) {
     const lines = Object.entries(gem?.stats ?? {}).map(([key, value]) => formatStatLine(key, value));
@@ -18,7 +23,12 @@
   <span class="item-tooltip" role="tooltip">
     {#if summary}
       <span class="tooltip-summary">
-        <span class="tooltip-name quality-text-{item.quality ?? 0}">{name}</span>
+        <span class="tooltip-name quality-text-{item.quality ?? 0}">
+          {#if item.icon && !iconFailed}
+            <img class="tooltip-icon" src={iconUrl(item.icon)} alt={name} onerror={() => (iconFailed = true)} />
+          {/if}
+          {name}
+        </span>
         {#if item.phase}<span class="tooltip-phase">Phase {item.phase}</span>{/if}
       </span>
       <span class="tooltip-meta">{qualityLabel(item.quality)}</span>
@@ -86,6 +96,7 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
   }
   .tooltip-header { display: flex; justify-content: space-between; gap: 12px; }
+  .tooltip-icon { border: 1px solid #2b3444; border-radius: 3px; height: 18px; object-fit: cover; vertical-align: middle; width: 18px; }
   .tooltip-phase { color: #b8c0cc; white-space: nowrap; }
   .tooltip-ilvl { color: #e6b23c; }
   .tooltip-meta { color: #d5dae2; }
