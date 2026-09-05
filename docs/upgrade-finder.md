@@ -74,6 +74,7 @@ in the card's Details disclosure. Stats shows the deterministic **raid buffed
 the bundled TBC talent trees. The 3D character model is not available yet;
 the stage shows a labeled placeholder until the gated viewer integration
 lands (see `docs/armory-redesign-research.md`).
+Hovering or keyboard-focusing an item icon or name shows a tooltip with the item's stats, gems, socket bonus, and enchant.
 
 The armory snapshot uses the imported baseline as-is — raid, party, and
 individual buffs, consumes, and talents — so the displayed stats match both
@@ -91,6 +92,7 @@ imported baseline remains unchanged while candidates are tested.
 3. **Select** content filters (maximum phase, optional inclusion of items without
    source metadata) and simulation budgets (screening and confirmation
    iterations).
+   Optionally restrict ranked sources by checking the desired source kinds; with none checked, all sources are ranked.
 4. **Run** ranking with *Start ranking*. Progress reports queued/running work
    and completed candidate runs. *Cancel ranking* stops outstanding work and
    leaves the canceled job without a report.

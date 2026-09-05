@@ -43,6 +43,16 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
     'https://github.com/wowsims/tbc-new',
   );
 
+  // Full tooltip on the armory (hover the first gear icon).
+  const firstTrigger = page.locator('.gear-trigger').first();
+  await firstTrigger.hover();
+  const tooltip = page.locator('.item-tooltip').first();
+  await expect(tooltip).toBeVisible();
+  await expect(tooltip).toContainText(/Item Level/i);
+  await expect(tooltip.locator('.tooltip-enchant, .tooltip-socket').first()).toBeAttached();
+
+  // Summary tooltip in the report appears after ranking; asserted below.
+
   const maxPhase = page.getByLabel('Maximum phase');
   const screening = page.getByLabel('Screening iterations');
   const confirmation = page.getByLabel('Confirmation iterations');
@@ -52,12 +62,22 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(maxPhase).toHaveValue('1');
   await expect(screening).toHaveValue('1');
   await expect(confirmation).toHaveValue('1');
+  const kindBoxes = page.locator('.source-kind-group input[type="checkbox"]');
+  const kindCount = await kindBoxes.count();
+  for (let index = 0; index < kindCount; index += 1) {
+    await kindBoxes.nth(index).check();
+  }
 
   const progress = page.getByRole('status');
   await page.getByRole('button', { name: 'Start ranking', exact: true }).click();
   await expect(progress).toContainText(/queued|running/i, { timeout: 15_000 });
   await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByRole('table', { name: 'Confirmed single-item upgrades' })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText('Source filters')).toBeVisible();
+  await expect(page.locator('.report-summary dd').filter({ hasText: 'Crafting' })).toBeVisible();
+  const reportTrigger = page.locator('.report-item-trigger').first();
+  await reportTrigger.hover();
+  await expect(reportTrigger.locator('.item-tooltip')).toBeVisible();
 
   await page.getByRole('button', { name: 'Copy JSON', exact: true }).click();
   await expect(page.getByText('Report copied to clipboard.', { exact: true })).toBeVisible();
