@@ -15,7 +15,7 @@ export default defineConfig({
     use: { ...devices['Desktop Chrome'] },
   }],
   webServer: {
-    command: 'rtk go run ./cmd/wowsimcli rank-upgrades --addr 127.0.0.1:43123 --no-browser',
+    command: 'go run ./cmd/wowsimcli rank-upgrades --addr 127.0.0.1:43123 --no-browser',
     url: 'http://127.0.0.1:43123/',
     reuseExistingServer: false,
     cwd: fileURLToPath(new URL('..', import.meta.url)),
