@@ -7,8 +7,20 @@ const fixtureLink = readFileSync(
   'utf8',
 ).trim();
 
+const enchantedFixtureLink = readFileSync(
+  fileURLToPath(new URL('../../cmd/wowsimcli/cmd/upgrades/testdata/retribution_no_settings_link.txt', import.meta.url)),
+  'utf8',
+).trim();
+
 test('imports the armory, ranks upgrades, copies the report, and cancels a job', async ({ page }) => {
   await page.goto('/');
+
+  // The fixed mage fixture has no enchants; the Retribution fixture does.
+  // Import it first to exercise the enchant effect line, then re-import the
+  // mage fixture for the remaining armory and ranking assertions.
+  await page.getByLabel('wowsims export link').fill(enchantedFixtureLink);
+  await page.getByRole('button', { name: 'Import settings', exact: true }).click();
+  await expect(page.locator('.enchant-effect').first()).toBeVisible();
 
   await page.getByLabel('wowsims export link').fill(fixtureLink);
   await page.getByRole('button', { name: 'Import settings', exact: true }).click();

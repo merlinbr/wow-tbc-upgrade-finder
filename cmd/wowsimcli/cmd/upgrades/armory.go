@@ -93,7 +93,7 @@ func itemRandPropPoints(item *proto.UIItem) int32 {
 // itemIlvl reads the item's level from its own scaling bucket; the bundled
 // database leaves UIItem.ilvl unset and stores the level per scaling option.
 func itemIlvl(item *proto.UIItem) int32 {
-	if scaling := item.GetScalingOptions()[0]; scaling != nil && scaling.GetIlvl() > 0 {
+	if scaling, ok := item.GetScalingOptions()[0]; ok && scaling != nil && scaling.GetIlvl() > 0 {
 		return scaling.GetIlvl()
 	}
 	return item.GetIlvl()
