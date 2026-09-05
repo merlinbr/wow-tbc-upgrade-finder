@@ -181,3 +181,16 @@ footer a { color: var(--accent-strong); }
   .character-facts { grid-template-columns: 1fr; }
   .report-header { align-items: start; flex-direction: column; }
 }
+.talent-trees { display: grid; gap: 1rem; margin-top: 1rem; }
+.talent-tree { background: rgba(5, 9, 15, 0.55); border: 1px solid var(--border); border-radius: 7px; padding: 0.9rem; }
+.talent-tree-header { align-items: baseline; display: flex; gap: 1rem; justify-content: space-between; margin-bottom: 0.6rem; }
+.talent-tree-header h3 { margin: 0; }
+.talent-tree-points { color: var(--gold); font-variant-numeric: tabular-nums; }
+.talent-tree-body { background-position: center; background-size: cover; border: 1px solid var(--border); border-radius: 5px; display: grid; gap: 2px; grid-template-columns: repeat(var(--talent-cols), minmax(0, 1fr)); padding: 0.4rem; }
+.talent-cell { background: rgba(9, 13, 20, 0.88); border: 1px solid var(--border); border-radius: 4px; min-height: 3.4rem; padding: 0.3rem; }
+.talent-cell-empty { background: transparent; border-color: transparent; }
+.talent-cell.empty-rank { opacity: 0.55; }
+.talent-name { color: var(--text); display: block; font-size: 0.72rem; line-height: 1.25; }
+.rank-pips { display: flex; gap: 2px; margin-top: 0.25rem; }
+.rank-pip { background: #3a4a63; border-radius: 50%; height: 0.5rem; width: 0.5rem; }
+.rank-pip.filled { background: var(--gold); }
