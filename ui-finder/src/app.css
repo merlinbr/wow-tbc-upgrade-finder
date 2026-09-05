@@ -98,9 +98,9 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .character-facts dd, .report-summary dd, .stat-list dd { margin: 0; overflow-wrap: anywhere; }
 .character-facts dd { color: var(--text); font-weight: 650; }
 
-.gear-grid { display: grid; grid-template-columns: minmax(0, 1fr) 7rem minmax(0, 1fr); gap: 1rem; margin-top: 1.5rem; }
+.gear-grid { align-items: start; display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem) minmax(0, 1fr); margin-top: 1rem; }
 .gear-column { display: grid; align-content: start; gap: 0.7rem; }
-.gear-center { background: radial-gradient(ellipse, rgba(101, 183, 255, 0.12), transparent 70%); border-left: 1px solid rgba(83, 107, 138, 0.3); border-right: 1px solid rgba(83, 107, 138, 0.3); }
+.weapon-strip { display: grid; gap: 0.7rem; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 1rem; }
 .gear-slot { align-items: start; background: rgba(6, 10, 16, 0.65); border: 1px solid var(--border); border-left: 3px solid var(--border-bright); border-radius: 7px; display: flex; gap: 0.7rem; min-height: 5rem; padding: 0.65rem; }
 .gear-slot.quality-0 { border-color: #9d9d9d; border-left-color: #9d9d9d; }
 .gear-slot.quality-1 { border-color: #ffffff; border-left-color: #ffffff; }
@@ -182,18 +182,18 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 
 footer { border-top: 1px solid var(--border); color: var(--muted); font-size: 0.82rem; padding: 1.25rem; text-align: center; }
 footer a { color: var(--accent-strong); }
-
 @media (max-width: 900px) {
-  .gear-grid { grid-template-columns: minmax(0, 1fr) 4rem minmax(0, 1fr); }
+  .gear-grid { grid-template-columns: minmax(0, 1fr) 14rem minmax(0, 1fr); }
   .control-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .character-actions { justify-items: start; }
   .character-header { flex-direction: column; }
   .character-facts { min-width: 100%; }
 }
 @media (max-width: 640px) {
   main { padding: 1.25rem 0.75rem 2rem; }
   .gear-grid { grid-template-columns: minmax(0, 1fr); }
-  .gear-center { display: none; }
-  .gear-column-right { margin-top: 0.25rem; }
+  .character-stage { order: 2; }
+  .weapon-strip { grid-template-columns: minmax(0, 1fr); }
   .stat-panels, .report-summary, .control-grid { grid-template-columns: 1fr; }
   .character-facts { grid-template-columns: 1fr; }
   .report-header { align-items: start; flex-direction: column; }
@@ -211,3 +211,19 @@ footer a { color: var(--accent-strong); }
 .rank-pips { display: flex; gap: 2px; margin-top: 0.25rem; }
 .rank-pip { background: #3a4a63; border-radius: 50%; height: 0.5rem; width: 0.5rem; }
 .rank-pip.filled { background: var(--gold); }
+.character-identity { min-width: 0; }
+.character-actions { display: grid; gap: 0.75rem; justify-items: end; }
+.find-upgrades { background: var(--accent); border-radius: 6px; color: #0a1420; font-weight: 700; padding: 0.5rem 1rem; text-decoration: none; }
+.import-details { color: var(--muted); font-size: 0.8rem; max-width: 16rem; }
+.import-details summary { cursor: pointer; }
+.import-details dl { display: grid; gap: 0.2rem; margin: 0.4rem 0 0; }
+.import-details dt { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; }
+.import-details dd { margin: 0; overflow-wrap: anywhere; }
+.armory-tabs { border-bottom: 1px solid var(--border); display: flex; gap: 0.5rem; margin-top: 1.25rem; }
+.armory-tab { background: transparent; border: none; border-bottom: 2px solid transparent; border-radius: 0; color: var(--muted); padding: 0.55rem 0.9rem; }
+.armory-tab.active { border-bottom-color: var(--accent); color: var(--text); }
+.character-stage { background: linear-gradient(145deg, #182130, #0b1019); border: 1px solid var(--border); border-radius: 10px; min-height: clamp(14rem, 34vw, 26rem); overflow: hidden; position: relative; }
+.stage-backdrop { background-position: center; background-size: cover; inset: 0; opacity: 0.35; position: absolute; }
+.stage-placeholder { display: grid; gap: 0.3rem; inset: 0; place-content: center; position: absolute; text-align: center; }
+.stage-kicker { color: var(--gold); font-weight: 700; }
+.stage-note { color: var(--muted); font-size: 0.85rem; }

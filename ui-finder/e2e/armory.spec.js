@@ -18,9 +18,14 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(page.getByLabel(/sockets$/i).first()).toBeVisible();
   await expect(page.locator('.gear-details summary').first()).toBeVisible();
   await expect(page.locator('.item-ilvl').first()).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Find upgrades', exact: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'Stats', exact: true }).click();
   await expect(page.getByRole('heading', { name: 'Raw stats', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Derived percentages', exact: true })).toBeVisible();
   await expect(page.getByText('raid buffed (link settings)', { exact: true })).toBeVisible();
+  await page.getByRole('tab', { name: 'Talents', exact: true }).click();
+  await expect(page.locator('.talent-tree')).toHaveCount(3);
+  await page.getByRole('tab', { name: 'Gear', exact: true }).click();
   await expect(page.getByRole('link', { name: 'wowsims/tbc-new', exact: true })).toHaveAttribute(
     'href',
     'https://github.com/wowsims/tbc-new',
