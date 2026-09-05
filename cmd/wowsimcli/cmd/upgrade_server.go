@@ -173,6 +173,7 @@ func writeJSON(w http.ResponseWriter, status int, v any) {
 func writeError(w http.ResponseWriter, status int, code, message string) {
 	writeJSON(w, status, map[string]apiError{"error": {Code: code, Message: message}})
 }
+
 // decodeJSON rejects unknown fields, oversized bodies, and trailing content.
 func decodeJSON(w http.ResponseWriter, r *http.Request, v any) error {
 	body := http.MaxBytesReader(w, r.Body, maxBodyBytes)
@@ -212,9 +213,10 @@ type importResponse struct {
 	SimulatorRevision string                    `json:"simulatorRevision"`
 	DatabaseRevision  string                    `json:"databaseRevision"`
 	Defaults          defaultsResponse          `json:"defaults"`
-	Gear              []upgrades.GearSlotData    `json:"gear"`
-	Stats             map[string]float64         `json:"stats"`
-	DerivedStats      map[string]float64         `json:"derivedStats"`
+	Gear              []upgrades.GearSlotData   `json:"gear"`
+	Stats             map[string]float64        `json:"stats"`
+	DerivedStats      map[string]float64        `json:"derivedStats"`
+	TalentsString     string                    `json:"talentsString"`
 }
 
 func (s *upgradeServer) handleImport(w http.ResponseWriter, r *http.Request) {
@@ -260,9 +262,10 @@ func (s *upgradeServer) handleImport(w http.ResponseWriter, r *http.Request) {
 			ScreeningIterations:    300,
 			ConfirmationIterations: 1000,
 		},
-		Gear:         armory.Gear,
-		Stats:        armory.Stats,
-		DerivedStats: armory.DerivedStats,
+		Gear:          armory.Gear,
+		Stats:         armory.Stats,
+		DerivedStats:  armory.DerivedStats,
+		TalentsString: imported.Settings.Player.GetTalentsString(),
 	})
 }
 

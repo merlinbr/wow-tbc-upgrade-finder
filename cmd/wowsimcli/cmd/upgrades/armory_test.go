@@ -150,10 +150,10 @@ func TestEnrichArmoryScalesRandomSuffixAndMatchesEngineSnapshot(t *testing.T) {
 
 func TestPanelDebuffStatsMirrorsSite(t *testing.T) {
 	debuffs := &proto.Debuffs{
-		FaerieFire:                proto.TristateEffect_TristateEffectImproved,
-		ImprovedSealOfTheCrusader: proto.TristateEffect_TristateEffectImproved,
-		HuntersMark:               proto.TristateEffect_TristateEffectImproved,
-		ExposeWeaknessUptime:      0.9,
+		FaerieFire:                  proto.TristateEffect_TristateEffectImproved,
+		ImprovedSealOfTheCrusader:   proto.TristateEffect_TristateEffectImproved,
+		HuntersMark:                 proto.TristateEffect_TristateEffectImproved,
+		ExposeWeaknessUptime:        0.9,
 		ExposeWeaknessHunterAgility: 1150,
 	}
 	extra, pseudo := panelDebuffStats(debuffs)
@@ -235,5 +235,36 @@ func TestEnrichArmoryStatsMatchFullSettingsEngineSnapshot(t *testing.T) {
 		if got, want := armory.DerivedStats[entry.key], pseudo[entry.index]; got != want {
 			t.Fatalf("derived stat %s = %v, want %v", entry.key, got, want)
 		}
+	}
+}
+func TestEnrichArmoryExposesIlvlAndEnchantDescription(t *testing.T) {
+	imported, err := Import(readFixture(t, "retribution_no_settings_link.txt"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	armory, err := EnrichArmory(imported, NewCatalog(database.Load()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, slot := range armory.Gear {
+		if slot.ItemID == 0 {
+			continue
+		}
+		if slot.Ilvl <= 0 {
+			t.Fatalf("slot %s item %d has ilvl %d, want > 0", slot.SlotName, slot.ItemID, slot.Ilvl)
+		}
+	}
+	found := false
+	for _, slot := range armory.Gear {
+		if slot.Enchant == nil {
+			continue
+		}
+		found = true
+		if slot.Enchant.Description == "" {
+			t.Fatalf("enchant %s has empty description", slot.Enchant.Name)
+		}
+	}
+	if !found {
+		t.Fatal("fixture has no enchanted slot to assert description")
 	}
 }

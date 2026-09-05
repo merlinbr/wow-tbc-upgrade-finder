@@ -3,8 +3,10 @@ package upgrades
 import (
 	"fmt"
 	"strings"
+	"sync"
 	"unicode"
 
+	"github.com/wowsims/tbc/assets/enchants"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -35,6 +37,8 @@ var canonicalGearSlots = []armorySlot{
 	{proto.ItemSlot_ItemSlotTrinket2, "Trinket 2", int(proto.ItemSlot_ItemSlotTrinket2)},
 	{proto.ItemSlot_ItemSlotRanged, "Ranged", int(proto.ItemSlot_ItemSlotRanged)},
 }
+
+var enchantDescriptions = sync.OnceValue(func() map[int32]string { return enchants.Descriptions() })
 
 func statKey(name string) string {
 	runes := []rune(name)
@@ -86,6 +90,15 @@ func itemRandPropPoints(item *proto.UIItem) int32 {
 	return 0
 }
 
+// itemIlvl reads the item's level from its own scaling bucket; the bundled
+// database leaves UIItem.ilvl unset and stores the level per scaling option.
+func itemIlvl(item *proto.UIItem) int32 {
+	if scaling := item.GetScalingOptions()[0]; scaling != nil && scaling.GetIlvl() > 0 {
+		return scaling.GetIlvl()
+	}
+	return item.GetIlvl()
+}
+
 func scaledStatMap(values []float64, randPropPoints int32) map[string]float64 {
 	return statValuesMap(stats.FromProtoArray(values).Multiply(float64(randPropPoints) / 10000).Floor())
 }
@@ -124,6 +137,7 @@ func enrichItem(spec *proto.ItemSpec, item *proto.UIItem, catalog *Catalog) (Gea
 	data.Icon = item.GetIcon()
 	data.Phase = item.GetPhase()
 	data.SetName = item.GetSetName()
+	data.Ilvl = itemIlvl(item)
 	data.Stats = statValuesMap(itemBaseStats(item))
 
 	if suffixID := spec.GetRandomSuffix(); suffixID != 0 {
@@ -171,11 +185,16 @@ func enrichItem(spec *proto.ItemSpec, item *proto.UIItem, catalog *Catalog) (Gea
 		if enchant == nil {
 			return GearSlotData{}, fmt.Errorf("enchant %d not found in catalog", enchantID)
 		}
+		description := enchantDescriptions()[enchant.GetEffectId()]
+		if description == "" {
+			description = enchant.GetName()
+		}
 		data.Enchant = &EnchantData{
-			ID:    enchant.GetEffectId(),
-			Name:  enchant.GetName(),
-			Icon:  enchant.GetIcon(),
-			Stats: statMap(enchant.GetStats()),
+			ID:          enchant.GetEffectId(),
+			Name:        enchant.GetName(),
+			Icon:        enchant.GetIcon(),
+			Description: description,
+			Stats:       statMap(enchant.GetStats()),
 		}
 	}
 
@@ -263,7 +282,7 @@ func EnrichArmory(imported *ImportedSettings, catalog *Catalog) (*ArmoryData, er
 	}
 	armory := &ArmoryData{Gear: make([]GearSlotData, 0, len(canonicalGearSlots)), Stats: statValuesMap(final), DerivedStats: make(map[string]float64)}
 	for _, entry := range []struct {
-		key   string
+		key    string
 		pseudo proto.PseudoStat
 	}{
 		{"melee_hit_percent", proto.PseudoStat_PseudoStatMeleeHitPercent},

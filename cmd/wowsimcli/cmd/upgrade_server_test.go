@@ -156,6 +156,16 @@ func TestImportReturnsSummaryWithoutStartingJob(t *testing.T) {
 	if !ok || len(gear) != 17 {
 		t.Fatalf("gear = %#v, want array of 17 slots", payload["gear"])
 	}
+	if _, ok := payload["talentsString"].(string); !ok {
+		t.Fatalf("talentsString = %#v, want string", payload["talentsString"])
+	}
+	firstGear, ok := gear[0].(map[string]any)
+	if !ok {
+		t.Fatal("gear[0] is not an object")
+	}
+	if ilvl, _ := firstGear["ilvl"].(float64); ilvl <= 0 {
+		t.Fatalf("gear[0].ilvl = %v, want > 0", firstGear["ilvl"])
+	}
 	if _, ok := payload["stats"].(map[string]any); !ok {
 		t.Fatalf("stats = %#v, want object", payload["stats"])
 	}

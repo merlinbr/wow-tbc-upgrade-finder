@@ -26,12 +26,12 @@ type CharacterSummary struct {
 }
 
 type ImportedSettings struct {
-	Link             string                      `json:"link"`
+	Link             string                       `json:"link"`
 	Settings         *proto.IndividualSimSettings `json:"-"`
-	SettingsDigest   string                      `json:"settingsDigest"`
-	Character        CharacterSummary            `json:"character"`
-	SimulatorVersion string                      `json:"simulatorVersion"`
-	DatabaseVersion  string                      `json:"databaseVersion"`
+	SettingsDigest   string                       `json:"settingsDigest"`
+	Character        CharacterSummary             `json:"character"`
+	SimulatorVersion string                       `json:"simulatorVersion"`
+	DatabaseVersion  string                       `json:"databaseVersion"`
 }
 
 type ArmoryData struct {
@@ -41,19 +41,20 @@ type ArmoryData struct {
 }
 
 type GearSlotData struct {
-	Slot         proto.ItemSlot      `json:"slot"`
-	SlotName     string              `json:"slotName"`
-	ItemID       int32               `json:"itemId"`
-	ItemName     string              `json:"itemName"`
-	Quality      proto.ItemQuality   `json:"quality"`
-	Icon         string              `json:"icon"`
-	Phase        int32               `json:"phase"`
-	SetName      string              `json:"setName"`
-	Stats        map[string]float64  `json:"stats"`
-	RandomSuffix *RandomSuffixData   `json:"randomSuffix"`
-	Sockets      []SocketData        `json:"sockets"`
-	SocketBonus  SocketBonusData     `json:"socketBonus"`
-	Enchant      *EnchantData        `json:"enchant"`
+	Slot         proto.ItemSlot     `json:"slot"`
+	SlotName     string             `json:"slotName"`
+	ItemID       int32              `json:"itemId"`
+	ItemName     string             `json:"itemName"`
+	Quality      proto.ItemQuality  `json:"quality"`
+	Icon         string             `json:"icon"`
+	Phase        int32              `json:"phase"`
+	Ilvl         int32              `json:"ilvl"`
+	SetName      string             `json:"setName"`
+	Stats        map[string]float64 `json:"stats"`
+	RandomSuffix *RandomSuffixData  `json:"randomSuffix"`
+	Sockets      []SocketData       `json:"sockets"`
+	SocketBonus  SocketBonusData    `json:"socketBonus"`
+	Enchant      *EnchantData       `json:"enchant"`
 }
 
 type RandomSuffixData struct {
@@ -81,10 +82,11 @@ type SocketBonusData struct {
 }
 
 type EnchantData struct {
-	ID    int32              `json:"id"`
-	Name  string             `json:"name"`
-	Icon  string             `json:"icon"`
-	Stats map[string]float64 `json:"stats"`
+	ID          int32              `json:"id"`
+	Name        string             `json:"name"`
+	Description string             `json:"description"`
+	Icon        string             `json:"icon"`
+	Stats       map[string]float64 `json:"stats"`
 }
 
 type ValidationError struct {
@@ -165,12 +167,12 @@ func (e *PolicyError) Error() string {
 }
 
 type Candidate struct {
-	Item       UIItemSummary            `json:"item"`
-	TargetSlot proto.ItemSlot           `json:"targetSlot"`
-	Displaced  []UIItemSummary          `json:"displaced"`
-	Request    *proto.RaidSimRequest    `json:"-"`
-	Applied    PolicyApplication        `json:"applied"`
-	Source     SourceSummary            `json:"source"`
+	Item       UIItemSummary         `json:"item"`
+	TargetSlot proto.ItemSlot        `json:"targetSlot"`
+	Displaced  []UIItemSummary       `json:"displaced"`
+	Request    *proto.RaidSimRequest `json:"-"`
+	Applied    PolicyApplication     `json:"applied"`
+	Source     SourceSummary         `json:"source"`
 }
 
 type BuildResult struct {
@@ -184,26 +186,26 @@ type SimulationOptions struct {
 }
 
 type RankRequest struct {
-	Imported *ImportedSettings  `json:"imported"`
-	Filters  ContentFilters     `json:"filters"`
-	Policy   ItemPolicy         `json:"policy"`
-	Options  SimulationOptions  `json:"options"`
+	Imported *ImportedSettings `json:"imported"`
+	Filters  ContentFilters    `json:"filters"`
+	Policy   ItemPolicy        `json:"policy"`
+	Options  SimulationOptions `json:"options"`
 }
 
 type ConfirmedUpgrade struct {
-	Rank                  int               `json:"rank"`
-	Item                  UIItemSummary     `json:"item"`
-	TargetSlot            proto.ItemSlot    `json:"targetSlot"`
-	Displaced             []UIItemSummary   `json:"displaced"`
-	Source                SourceSummary     `json:"source"`
-	Applied               PolicyApplication `json:"applied"`
-	DpsDelta              float64           `json:"dpsDelta"`
-	RelativeGainPercent   float64           `json:"relativeGainPercent"`
-	StandardError         float64           `json:"standardError"`
-	ConfidenceInterval95  [2]float64        `json:"confidenceInterval95"`
-	Iterations            int32             `json:"iterations"`
-	TooCloseToCall        bool              `json:"tooCloseToCall"`
-	Assumptions           ReportAssumptions `json:"assumptions"`
+	Rank                 int               `json:"rank"`
+	Item                 UIItemSummary     `json:"item"`
+	TargetSlot           proto.ItemSlot    `json:"targetSlot"`
+	Displaced            []UIItemSummary   `json:"displaced"`
+	Source               SourceSummary     `json:"source"`
+	Applied              PolicyApplication `json:"applied"`
+	DpsDelta             float64           `json:"dpsDelta"`
+	RelativeGainPercent  float64           `json:"relativeGainPercent"`
+	StandardError        float64           `json:"standardError"`
+	ConfidenceInterval95 [2]float64        `json:"confidenceInterval95"`
+	Iterations           int32             `json:"iterations"`
+	TooCloseToCall       bool              `json:"tooCloseToCall"`
+	Assumptions          ReportAssumptions `json:"assumptions"`
 }
 
 type FailedCandidate struct {
@@ -213,16 +215,16 @@ type FailedCandidate struct {
 }
 
 type ReportAssumptions struct {
-	LinkDigest             string            `json:"linkDigest"`
-	MaxPhase               int32             `json:"maxPhase"`
-	SourceKinds            []string          `json:"sourceKinds"`
-	SourceNames            []string          `json:"sourceNames"`
-	IncludeUnknown         bool              `json:"includeUnknown"`
-	MaxGemQuality          string            `json:"maxGemQuality"`
-	GemBySocket            map[string]int32  `json:"gemBySocket"`
-	EnchantByType          map[string]int32  `json:"enchantByType"`
-	ScreeningIterations    int32             `json:"screeningIterations"`
-	ConfirmationIterations int32             `json:"confirmationIterations"`
+	LinkDigest             string           `json:"linkDigest"`
+	MaxPhase               int32            `json:"maxPhase"`
+	SourceKinds            []string         `json:"sourceKinds"`
+	SourceNames            []string         `json:"sourceNames"`
+	IncludeUnknown         bool             `json:"includeUnknown"`
+	MaxGemQuality          string           `json:"maxGemQuality"`
+	GemBySocket            map[string]int32 `json:"gemBySocket"`
+	EnchantByType          map[string]int32 `json:"enchantByType"`
+	ScreeningIterations    int32            `json:"screeningIterations"`
+	ConfirmationIterations int32            `json:"confirmationIterations"`
 }
 
 type BaselineSummary struct {
@@ -232,16 +234,16 @@ type BaselineSummary struct {
 }
 
 type UpgradeReport struct {
-	Baseline               BaselineSummary   `json:"baseline"`
-	Character              CharacterSummary  `json:"character"`
+	Baseline               BaselineSummary    `json:"baseline"`
+	Character              CharacterSummary   `json:"character"`
 	Confirmed              []ConfirmedUpgrade `json:"confirmed"`
-	Excluded               ExclusionSummary  `json:"excluded"`
-	Failed                 []FailedCandidate `json:"failed"`
-	Assumptions            ReportAssumptions `json:"assumptions"`
-	AssumptionsFingerprint string            `json:"assumptionsFingerprint"`
-	SimulatorRevision      string            `json:"simulatorRevision"`
-	DatabaseRevision       string            `json:"databaseRevision"`
-	CapTruncatedTieRegion  bool              `json:"capTruncatedTieRegion"`
+	Excluded               ExclusionSummary   `json:"excluded"`
+	Failed                 []FailedCandidate  `json:"failed"`
+	Assumptions            ReportAssumptions  `json:"assumptions"`
+	AssumptionsFingerprint string             `json:"assumptionsFingerprint"`
+	SimulatorRevision      string             `json:"simulatorRevision"`
+	DatabaseRevision       string             `json:"databaseRevision"`
+	CapTruncatedTieRegion  bool               `json:"capTruncatedTieRegion"`
 }
 
 type Progress struct {
