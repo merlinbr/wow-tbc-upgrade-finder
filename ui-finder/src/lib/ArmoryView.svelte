@@ -6,6 +6,10 @@
   let { imported } = $props();
   let character = $derived(imported?.character ?? {});
   let gear = $derived(Array.isArray(imported?.gear) ? imported.gear : []);
+  // Show the effective content phase (exported settings phase, else highest
+  // equipped-item phase) rather than the raw value, which is 0 for exports
+  // that omit simulation settings.
+  let phase = $derived(imported?.defaults?.maxPhase ?? 0);
   let professions = $derived((character.professions ?? []).map((profession) => {
     const names = {
       1: 'Alchemy',
@@ -44,7 +48,7 @@
     </div>
     <dl class="character-facts">
       <div><dt>Professions</dt><dd>{professions.length ? professions.join(', ') : 'None'}</dd></div>
-      <div><dt>Phase</dt><dd>{character.phase ?? '—'}</dd></div>
+      <div><dt>Phase</dt><dd>{phase || '—'}</dd></div>
       <div><dt>Settings digest</dt><dd title={imported?.settingsDigest || ''}>{digest(imported?.settingsDigest)}</dd></div>
     </dl>
   </div>
