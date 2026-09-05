@@ -20,17 +20,6 @@
   function validationError(message) {
     uiState.error = { code: 'invalid_options', message };
   }
-
-  function progressText(job) {
-    if (!job) return '';
-    if (job.status === 'canceled') return 'Ranking canceled.';
-    if (job.status !== 'queued' && job.status !== 'running') return '';
-    const progress = job.progress;
-    if (progress?.total > 0) {
-      return `${job.status} — ${progress.stage || 'ranking'}: ${progress.completed} / ${progress.total} candidate runs`;
-    }
-    return `${job.status}…`;
-  }
 </script>
 
 <svelte:head>
@@ -45,7 +34,6 @@
   </header>
 
   <p class="alert" role="alert" aria-live="assertive">{uiState.error?.message ?? ''}</p>
-  <p class="progress-status" role="status" aria-live="polite">{progressText(uiState.job)}</p>
 
   <ImportPanel error={uiState.error} onImportPending={importPending} onImportComplete={importComplete} />
 

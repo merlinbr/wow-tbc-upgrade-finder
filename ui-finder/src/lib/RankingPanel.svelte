@@ -19,6 +19,17 @@
     confirmationIterations = Number(defaults.confirmationIterations ?? 1000);
   });
 
+  function progressText(job) {
+    if (!job) return '';
+    if (job.status === 'canceled') return 'Ranking canceled.';
+    if (job.status !== 'queued' && job.status !== 'running') return '';
+    const progress = job.progress;
+    if (progress?.total > 0) {
+      return `${job.status} — ${progress.stage || 'ranking'}: ${progress.completed} / ${progress.total} candidate runs`;
+    }
+    return `${job.status}…`;
+  }
+
   let busy = $derived(submitting || job?.status === 'queued' || job?.status === 'running');
   let hasJob = $derived(job?.status === 'queued' || job?.status === 'running');
 
@@ -78,6 +89,7 @@
         <input id="confirmation-iterations" name="confirmationIterations" type="number" min="0" step="1" bind:value={confirmationIterations} disabled={busy} />
       </div>
     </div>
+    <p class="progress-status" role="status" aria-live="polite">{progressText(job)}</p>
     <div class="button-row">
       <button id="rank-button" type="submit" disabled={busy} data-action="start-ranking">{busy ? 'Ranking…' : 'Start ranking'}</button>
       {#if hasJob}
