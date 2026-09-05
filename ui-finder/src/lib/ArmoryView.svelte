@@ -40,7 +40,7 @@
     <div>
       <div class="section-kicker">Imported character</div>
       <h2 id="armory-heading">{character.name || 'Unnamed character'}</h2>
-      <p class="character-subtitle">Level 70 {humanizeEnum(character.race, 'Race') || 'Unknown race'} {humanizeEnum(character.class, 'Class') || 'Unknown class'}{character.spec ? ` · ${humanizeEnum(character.spec)}` : ''}</p>
+      <p class="character-subtitle">Level 70 {humanizeEnum(character.race, 'Race') || 'Unknown race'} · {character.spec ? humanizeEnum(character.spec) : humanizeEnum(character.class, 'Class') || 'Unknown class'}</p>
     </div>
     <dl class="character-facts">
       <div><dt>Professions</dt><dd>{professions.length ? professions.join(', ') : 'None'}</dd></div>

@@ -72,7 +72,7 @@
     <button type="button" class="secondary-button" onclick={copyReport} data-action="copy-report">Copy JSON</button>
   </div>
   {#if report.character}
-    <p class="report-character">Character: {report.character.name || 'Unnamed'} · Level 70 {humanizeEnum(report.character.race, 'Race') || 'Unknown race'} {humanizeEnum(report.character.class, 'Class') || 'Unknown class'}{report.character.spec ? ` · ${humanizeEnum(report.character.spec)}` : ''} · Phase {report.character.phase ?? '—'}</p>
+    <p class="report-character">Character: {report.character.name || 'Unnamed'} · Level 70 {humanizeEnum(report.character.race, 'Race') || 'Unknown race'} · {report.character.spec ? humanizeEnum(report.character.spec) : humanizeEnum(report.character.class, 'Class') || 'Unknown class'} · Phase {report.character.phase ?? '—'}</p>
   {/if}
   <p class="copy-status" aria-live="polite">{copyStatus}</p>
 
