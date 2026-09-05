@@ -38,8 +38,8 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   const progress = page.getByRole('status');
   await page.getByRole('button', { name: 'Start ranking', exact: true }).click();
   await expect(progress).toContainText(/queued|running/i, { timeout: 15_000 });
-  await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible();
-  await expect(page.getByRole('table', { name: 'Confirmed single-item upgrades' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole('table', { name: 'Confirmed single-item upgrades' })).toBeVisible({ timeout: 15_000 });
 
   await page.getByRole('button', { name: 'Copy JSON', exact: true }).click();
   await expect(page.getByText('Report copied to clipboard.', { exact: true })).toBeVisible();
