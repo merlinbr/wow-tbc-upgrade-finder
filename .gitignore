@@ -22,6 +22,7 @@ sim/web/__debug_bin
 
 # temporary files
 *.results.tmp
+ui-finder/test-results/
 package.json.tmp
 .stylelintcache
 

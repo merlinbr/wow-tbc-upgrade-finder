@@ -59,11 +59,11 @@ The current repository contains only planning material; the implementation begin
 - Consumes: upstream `cmd/wowsimcli` root command, `sim.RegisterAll()`, `assets/database.Load()`, and `core.RunRaidSimConcurrentAsync`.
 - Produces: `wowsimcli rank-upgrades [--addr 127.0.0.1:0] [--no-browser]`, a single local executable mode that owns the HTTP server.
 
-- [ ] **Step 1: Import the upstream tree without creating a second simulator module**
+- [x] **Step 1: Import the upstream tree without creating a second simulator module**
 
 Make the repository a fork whose source parent is exactly commit `88fb853466a391e731e12de012f6707a11e94446`; keep that upstream commit reachable as `upstream/master`. Retain upstream `go.mod`, `LICENSE`, generated protobufs, `assets/database/db.bin`, and the existing `cmd/wowsimcli` binary. Do not use a Go `replace`, a copied subset of simulator packages, or a separate simulation process: those approaches either lose the generated database or duplicate simulator ownership.
 
-- [ ] **Step 2: Record provenance next to the source pin**
+- [x] **Step 2: Record provenance next to the source pin**
 
 Create `UPSTREAM.md` containing the source repository, immutable simulator revision, database blob revision, and update rule:
 
@@ -77,7 +77,7 @@ Create `UPSTREAM.md` containing the source repository, immutable simulator revis
 Upgrade the simulator and database together. Update this file, the report revision constants, fixtures, and every expected report when changing this pin.
 ```
 
-- [ ] **Step 3: Write the failing command-registration test**
+- [x] **Step 3: Write the failing command-registration test**
 
 Add a test that builds the root command through the existing `cmd.Execute` construction seam (extract `newRootCommand(version string) *cobra.Command` from `root.go` if necessary) and asserts the new command is discoverable:
 
@@ -93,17 +93,17 @@ func TestRankUpgradesCommandIsRegistered(t *testing.T) {
 }
 ```
 
-- [ ] **Step 4: Add the command shell and keep initialization singular**
+- [x] **Step 4: Add the command shell and keep initialization singular**
 
 Register `rankUpgradesCmd` from `root.go`; define `--addr` (default `127.0.0.1:0`) and `--no-browser` on that command. Let `cli_main.go` continue to call `sim.RegisterAll()` once before `cmd.Execute(Version)`. The command calls `newUpgradeServer(Version).Serve(ctx, addr, openBrowser)` and must print the resolved `http://127.0.0.1:<port>/` URL. It must neither start a remote listener nor initialize a second simulator/database.
 
-- [ ] **Step 5: Run the focused command test**
+- [x] **Step 5: Run the focused command test**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd -run TestRankUpgradesCommandIsRegistered -count=1`
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit the upstream base and command entry point**
+- [x] **Step 6: Commit the upstream base and command entry point**
 
 ```bash
 git add .
@@ -123,7 +123,7 @@ git commit -m "feat: add pinned upgrade finder command"
 - Produces: `func Import(link string) (*ImportedSettings, error)` and `func (s *ImportedSettings) NewRequest(iterations int32) *proto.RaidSimRequest`.
 - Error contract: typed `ValidationError{Code, Message}` where `Code` is one of `invalid_link`, `unsupported_link`, `incompatible_settings`, or `incompatible_item`; callers render `Message` and never run a job after this error.
 
-- [ ] **Step 1: Define the boundary types and deterministic copy helper**
+- [x] **Step 1: Define the boundary types and deterministic copy helper**
 
 In `types.go`, import `googleProto "google.golang.org/protobuf/proto"` alongside the generated `sim/core/proto` package, keep the UI-facing request separate from protobufs, and make every report field JSON-ready:
 
@@ -145,7 +145,7 @@ func cloneMessage[M googleProto.Message](m M) M { return googleProto.Clone(m).(M
 
 Use `proto.MarshalOptions{Deterministic: true}` plus SHA-256 for `SettingsDigest`; do not retain or mutate the caller's message.
 
-- [ ] **Step 2: Write decoder contract tests before implementation**
+- [x] **Step 2: Write decoder contract tests before implementation**
 
 Create a compact `IndividualSimSettings` fixture, encode it using the same zlib + standard-base64 fragment format used by wowsims, and commit the resulting fixed URL in `testdata/fixed_individual_link.txt`. Assert all of the following:
 
@@ -178,23 +178,23 @@ func TestNewRequestDoesNotMutateImportedSettings(t *testing.T) {
 
 The fixture must contain a supported API version, one player, equipment, encounter, party buffs, raid buffs, debuffs, tanks, and a deterministic RNG seed. It must be generated once by a test-only `encodeIndividualLink` helper and then stored as a literal fixture; the decoder test reads the literal rather than testing encode/decode round-trip only.
 
-- [ ] **Step 3: Implement side-effect-free export-link import**
+- [x] **Step 3: Implement side-effect-free export-link import**
 
 Move the decode mechanics from `decode_link.go` into `upgrades.Import`: split exactly once at `#`, standard-base64 decode, zlib inflate, select `IndividualSimSettings` only for a non-raid URL, and `proto.Unmarshal`. Validate before returning: non-nil `Settings`, `Player`, `Encounter`, and `Settings.Settings`; supported API version; all equipped IDs exist in `database.Load().Items`; and the player has an equipment spec. Return the specified `ValidationError` instead of logging or exiting.
 
 Build `RaidSimRequest` from the imported individual setting exactly as the individual wowsims UI does: one party containing the imported player and party buffs; imported raid buffs, debuffs, tanks, target dummies, and encounter; `SimTypeIndividual`; and sim options copied from imported `iterations`/`fixed_rng_seed`, with only the requested iteration count substituted. Preserve every other imported rotation, talent, consume, profession, equipment, and encounter value.
 
-- [ ] **Step 4: Make the existing CLI decoder reuse the import parser**
+- [x] **Step 4: Make the existing CLI decoder reuse the import parser**
 
 Change `decodelink` to call the shared low-level parser and print the decoded protobuf as ProtoJSON. It remains a one-argument inspection command; it must not silently accept a raid link in `rank-upgrades` merely because `decodelink` can display it.
 
-- [ ] **Step 5: Run import contracts**
+- [x] **Step 5: Run import contracts**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades -run 'TestImport|TestNewRequest' -count=1`
 
 Expected: PASS; malformed/raid fixtures return a typed validation error and the baseline protobuf bytes match before/after conversion.
 
-- [ ] **Step 6: Commit the import boundary**
+- [x] **Step 6: Commit the import boundary**
 
 ```bash
 git add cmd/wowsimcli/cmd/decode_link.go cmd/wowsimcli/cmd/upgrades
@@ -214,7 +214,7 @@ git commit -m "feat: import individual wowsims settings"
 - Produces: `func BuildCandidates(imported *ImportedSettings, filters ContentFilters, policy ItemPolicy, catalog *Catalog) (BuildResult, error)` where `BuildResult` has `Candidates []Candidate`, `Excluded ExclusionSummary`, and no simulation result.
 - `Candidate` contains `Item UIItemSummary`, `TargetSlot proto.ItemSlot`, `Displaced []UIItemSummary`, `Request *proto.RaidSimRequest`, `Applied PolicyApplication`, and `Source SourceSummary`.
 
-- [ ] **Step 1: Define filters, policy references, and exclusions as explicit data**
+- [x] **Step 1: Define filters, policy references, and exclusions as explicit data**
 
 Add serializable types; use IDs/enums rather than UI labels as the source of truth:
 
@@ -243,7 +243,7 @@ type ExclusionSummary struct {
 
 Normalize `SourceKinds`/`SourceNames` by sorting and deduplicating before hashing or filtering. Keep unknown-source exclusion separate from source-filter exclusion so the UI can state why candidates were not evaluated.
 
-- [ ] **Step 2: Write catalog and compatibility tests against tiny fixture data**
+- [x] **Step 2: Write catalog and compatibility tests against tiny fixture data**
 
 Construct a test `proto.UIDatabase` with: one legal raid item, one unknown-source item, a profession-gated item, a class-gated item, a unique item already equipped, two ring candidates, one two-hand weapon, one off-hand, and a faction-gated item. Exercise the externally visible contract:
 ```go
@@ -285,23 +285,23 @@ func TestBuildCandidatesModelsTwoHandOffHandConflict(t *testing.T) {
 
 Use a deterministic `baselineBytes := mustMarshal(t, imported.Settings)` assertion after every build; no test may accept a mutation merely because a later clone hides it.
 
-- [ ] **Step 3: Load and index the bundled complete UI database once**
+- [x] **Step 3: Load and index the bundled complete UI database once**
 
 Create `NewCatalog(db *proto.UIDatabase) *Catalog` around `assets/database.Load()`. Index `UIItem`, `UIGem`, `UIEnchant`, NPCs, zones, and source names by ID. Resolve item source text from the database's crafted/drop/quest/vendor/reputation source variants; preserve phase and source-kind enum. The catalog is immutable after construction and shared by all jobs.
 
-- [ ] **Step 4: Implement filtering and all legal slot variants**
+- [x] **Step 4: Implement filtering and all legal slot variants**
 
 For each TBC `UIItem`, first require source metadata unless `IncludeUnknown` is true, then apply phase, source-kind, and optional normalized source-name filters. Check class allowlist, faction restriction, both imported professions, item type, armor proficiency, hand type/weapon requirements, and `limit_category` occupancy against the candidate equipment set.
 
 Generate every legal replacement position. Evaluate finger and trinket items in both slots. For one-hand weapons create main-hand and off-hand variants when both are legal; for two-hand/main-hand items create a main-hand variant that also clears the displaced off-hand; for off-hand-only items create only an off-hand variant. Reject variants that leave invalid equipment or exceed unique/limit constraints. Reuse the upstream database-registration/conversion path to make the candidate item and selected gem/enchant records available to the cloned simulator request. Build each variant from `cloneMessage(imported.Settings)` and convert that clone into its own request—never edit the baseline or reuse an equipment slice.
 
-- [ ] **Step 5: Run candidate contracts**
+- [x] **Step 5: Run candidate contracts**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades -run TestBuildCandidates -count=1`
 
 Expected: PASS; source/compatibility counts are correct, rings produce two variants, and all baseline byte-comparison assertions pass.
 
-- [ ] **Step 6: Commit candidate construction**
+- [x] **Step 6: Commit candidate construction**
 
 ```bash
 git add cmd/wowsimcli/cmd/upgrades
@@ -321,7 +321,7 @@ git commit -m "feat: construct legal upgrade candidates"
 - Produces: `func ApplyPolicy(candidate Candidate, policy ItemPolicy, catalog *Catalog) (Candidate, *PolicyError)` and `PolicyApplication{GemIDs, EnchantID, SocketChoices}` included in every result.
 - Rejects: missing selected database records, wrong gem colour, gem quality above policy, unique-gem conflict, profession/class-ineligible gems or enchants, and enchants in an ineligible slot/type.
 
-- [ ] **Step 1: Write policy contract tests first**
+- [x] **Step 1: Write policy contract tests first**
 
 Use catalog fixture items with red/blue/meta sockets and eligible/ineligible enchant types:
 ```go
@@ -351,19 +351,19 @@ func TestApplyPolicyDoesNotChangeBaselineEquipment(t *testing.T) {
 
 Also assert that the candidate report contains the selected gem IDs, enchant effect ID, and the policy values used; a reader must be able to distinguish an ungemed item from a policy-configured item.
 
-- [ ] **Step 2: Implement deterministic policy application**
+- [x] **Step 2: Implement deterministic policy application**
 
 For each candidate socket, choose only the configured `GemBySocket` record matching that socket colour or a legal prismatic interaction, at or below `MaxGemQuality`; preserve an empty socket when the policy has no legal selection. Enforce meta socket and unique-gem constraints using the full candidate equipment, not just the new item. Select an enchant only from `EnchantByType` when the selected `UIEnchant` permits the target item's type/extra type, class, profession, and phase. Store the result in the copied `ItemSpec` only after all policy checks pass.
 
 Policy failure excludes that candidate under `policy`; it is not a simulator failure and it must not fall back to a different gem/enchant.
 
-- [ ] **Step 3: Run policy contracts**
+- [x] **Step 3: Run policy contracts**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades -run TestApplyPolicy -count=1`
 
 Expected: PASS; policy is visible in output, illegal combinations are absent, and baseline bytes remain identical.
 
-- [ ] **Step 4: Commit policy application**
+- [x] **Step 4: Commit policy application**
 
 ```bash
 git add cmd/wowsimcli/cmd/upgrades
@@ -384,7 +384,7 @@ git commit -m "feat: apply declared item policies"
 - `SimulationOptions` has user-selected `ScreeningIterations`, `ConfirmationIterations`, and server-validated values `ScreeningIterations > 0`, `ConfirmationIterations >= ScreeningIterations`.
 - `UpgradeReport` contains baseline DPS/metadata, confirmed candidates, excluded counts, failed simulations, exact request assumptions, SHA-256 fingerprint, simulator/database revisions, and no internal simulator progress structures.
 
-- [ ] **Step 1: Write the service tests around a fake simulator**
+- [x] **Step 1: Write the service tests around a fake simulator**
 
 Define a small adapter so ranking tests never run a full TBC simulation:
 
@@ -428,13 +428,13 @@ func TestRankUpgradesIncludesStableFingerprintAndRevisions(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Implement the narrow real simulator adapter**
+- [x] **Step 2: Implement the narrow real simulator adapter**
 
 Implement `Simulator.Run` with `core.RunRaidSimConcurrentAsync(request, reporter, requestID)`. Forward only completed/total iteration counts to `onProgress`; wait for `FinalRaidResult`; return its error message as a Go error; and read the imported character's player DPS distribution from the first party/first player. Copy the request and give every run a unique request ID. On `ctx.Done()`, call `simsignals.AbortById(requestID)`, drain its reporter channel, and return `ctx.Err()`.
 
 Do not expose `ProgressMetrics`, simulator channels, or core request IDs through the HTTP/UI contract.
 
-- [ ] **Step 3: Implement two-pass selection and confidence intervals**
+- [x] **Step 3: Implement two-pass selection and confidence intervals**
 
 Run the unchanged baseline at screening iterations, then every legal candidate at screening iterations. Let a candidate delta be `candidate.Average - baseline.Average`; calculate each delta standard error as:
 
@@ -446,17 +446,17 @@ Use the two-sided 95% interval `delta ± 1.96 * standardError`. Sort screening c
 
 Run candidates with a bounded worker count `min(runtime.GOMAXPROCS(0), 8)`, returning work through channels and checking context before scheduling each candidate. This is intentionally a simple local CPU bound; add a `// ponytail:` comment only if profiling proves a different scheduler is needed.
 
-- [ ] **Step 4: Fingerprint all material assumptions**
+- [x] **Step 4: Fingerprint all material assumptions**
 
 Canonicalize the deterministic imported-settings protobuf bytes and a JSON structure containing normalized filters, normalized policy, options, simulator revision, and database revision. SHA-256 that byte sequence and set `AssumptionsFingerprint` to lower-case hexadecimal. Include the same structured assumptions alongside the hash so a copied report is interpretable without re-importing the link.
 
-- [ ] **Step 5: Run service contracts**
+- [x] **Step 5: Run service contracts**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades -run TestRankUpgrades -count=1`
 
 Expected: PASS; only finalists receive confirmation, overlaps are marked, one failure does not erase successes, and cancellation returns no report.
 
-- [ ] **Step 6: Commit the ranker**
+- [x] **Step 6: Commit the ranker**
 
 ```bash
 git add cmd/wowsimcli/cmd/upgrades
@@ -479,7 +479,7 @@ git commit -m "feat: rank confirmed single-item upgrades"
   - `DELETE /api/jobs/{id}` → cancellation acknowledgement; a canceled job never has `report`.
   - `GET /` and `/assets/*` → embedded UI only.
 
-- [ ] **Step 1: Write server contract tests with a fake rank service**
+- [x] **Step 1: Write server contract tests with a fake rank service**
 
 Exercise endpoint behavior with `httptest.NewServer` and a fake that blocks until its context is cancelled:
 ```go
@@ -506,23 +506,23 @@ func TestCancelJobReturnsCanceledWithoutPartialReport(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Implement one in-memory job manager**
+- [x] **Step 2: Implement one in-memory job manager**
 
 Use a mutex-protected `map[string]*job` with a `context.CancelFunc` per job and `crypto/rand`/hex job IDs. Store only the request summary, status, progress counts, final report, and error. A `POST /api/jobs` imports the submitted link and validates its filters, policy, and options synchronously, then starts one goroutine that calls `RankUpgrades`; progress updates are counters only. Cancel removes queued work where possible, signals the running context, and clears any report. Set `Cache-Control: no-store` on API responses; do not write reports, links, or characters to disk or browser storage.
 
 Bind the listener only to loopback. Reject non-JSON bodies, unknown fields, oversized bodies (1 MiB), unsupported methods, and paths outside the explicit route table with structured errors.
 
-- [ ] **Step 3: Register static assets and browser behavior**
+- [x] **Step 3: Register static assets and browser behavior**
 
 Embed `upgrade_ui/*` with `embed.FS`; serve `index.html` from `/` and assets under `/assets/` with content types and no directory listing. `rank-upgrades` opens the resolved local URL through the existing `github.com/pkg/browser` dependency unless `--no-browser` was selected. Graceful command shutdown cancels every active job and calls `http.Server.Shutdown`.
 
-- [ ] **Step 4: Run server contracts**
+- [x] **Step 4: Run server contracts**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd -run 'TestImport|TestCreateJob|TestInvalidImport|TestCancelJob' -count=1`
 
 Expected: PASS; import does not simulate, and canceled jobs expose no partial result.
 
-- [ ] **Step 5: Commit the HTTP boundary**
+- [x] **Step 5: Commit the HTTP boundary**
 
 ```bash
 git add cmd/wowsimcli/cmd/rank_upgrades.go cmd/wowsimcli/cmd/upgrade_server.go cmd/wowsimcli/cmd/upgrade_server_test.go
@@ -541,7 +541,7 @@ git commit -m "feat: serve local upgrade ranking jobs"
 - Consumes: the exact local HTTP API from Task 6.
 - Produces: an accessible, no-build browser UI with import, decoded-summary review, filters/policy/options selection, progress/cancellation, report display, and report-copying.
 
-- [ ] **Step 1: Add static-page route coverage before UI behavior**
+- [x] **Step 1: Add static-page route coverage before UI behavior**
 
 Extend the server test to assert that `/` returns the form landmarks and that `/assets/app.js` is served:
 
@@ -552,17 +552,17 @@ func TestUpgradePageAndAssetsAreServed(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Implement the import-and-review form**
+- [x] **Step 2: Implement the import-and-review form**
 
 Build semantic HTML with a labelled URL input, an `Import settings` button, live error region, and disabled ranking controls until `/api/import` succeeds. Render decoded player name/class/spec, equipped-item count, profession pair, phase, iterations, encounter, and settings digest before allowing a run. Include phase, source kind, optional source-name inputs; socket-colour gem selections; max gem quality; slot/type enchant selections; and positive screening/confirmation iteration inputs. Validate simple empty/non-positive input in the browser, but rely on the server for every authority decision.
 
-- [ ] **Step 3: Implement job progress, cancellation, and report rendering**
+- [x] **Step 3: Implement job progress, cancellation, and report rendering**
 
 On successful job creation, poll `GET /api/jobs/{id}` every 500 ms only while status is `queued` or `running`; show completed/total candidate runs and a `Cancel ranking` button. Stop polling on all terminal states. For `completed`, render baseline DPS, revisions, fingerprint, normalized filters/policy/options, excluded counts, failed candidates/reasons, and a table of item, target slot, displaced item(s), phase/source, gems/enchant, DPS delta, relative gain, iterations, 95% interval, and material assumptions. Render `tooCloseToCall` candidates with the shared label `Too close to call`; do not render numeric rank positions inside that group.
 
 Add `Copy assumptions and result` using `navigator.clipboard.writeText(JSON.stringify(report, null, 2))`; show success/failure in the live region. On cancellation, clear table rows and display only the canceled status—never stale data from a prior job.
 
-- [ ] **Step 4: Add attribution and non-goal copy**
+- [x] **Step 4: Add attribution and non-goal copy**
 
 Place this visible footer text and link in `index.html`:
 
@@ -574,13 +574,13 @@ Place this visible footer text and link in `index.html`:
 </p>
 ```
 
-- [ ] **Step 5: Run static-route tests**
+- [x] **Step 5: Run static-route tests**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd -run TestUpgradePageAndAssetsAreServed -count=1`
 
 Expected: PASS; the local page and JavaScript are reachable and the attribution is present.
 
-- [ ] **Step 6: Commit the browser UI**
+- [x] **Step 6: Commit the browser UI**
 
 ```bash
 git add cmd/wowsimcli/cmd/upgrade_ui cmd/wowsimcli/cmd/upgrade_server_test.go
@@ -602,7 +602,7 @@ git commit -m "feat: add upgrade finder browser UI"
 - Consumes: the completed local binary, immutable fixed fixture, and a small known source filter.
 - Produces: reproducible contract coverage and a documented manual browser smoke procedure proving the real local surface.
 
-- [ ] **Step 1: Complete the required contract matrix**
+- [x] **Step 1: Complete the required contract matrix**
 
 Confirm the focused tests collectively enforce every spec verification point:
 
@@ -626,7 +626,7 @@ if got := candidateIDs(result.Candidates); !slices.Equal(got, []int32{1001, 1002
 
 Use a local `slices.Equal` comparison instead of adding `go-cmp` if the fork does not already depend on it.
 
-- [ ] **Step 2: Document exact local usage and boundaries**
+- [x] **Step 2: Document exact local usage and boundaries**
 
 Write `docs/upgrade-finder.md` with these commands and behavior:
 
@@ -637,13 +637,13 @@ rtk go build -o wowsimcli ./cmd/wowsimcli
 
 Document the five UI steps (paste/import/review/filter-and-policy/run/copy), link constraints, loopback-only operation, the simulator/database revisions in results, uncertainty interpretation, cancellation semantics, and each explicitly deferred non-goal: Armory import, scheduled monitoring, MCP, pricing, multi-item optimization, non-DPS metrics, accounts, and remote persistence. Include the same required wowsims attribution link.
 
-- [ ] **Step 3: Run all deterministic Go contracts**
+- [x] **Step 3: Run all deterministic Go contracts**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/... -count=1`
 
 Expected: PASS.
 
-- [ ] **Step 4: Execute the real browser smoke test**
+- [x] **Step 4: Execute the real browser smoke test**
 
 Build and run the binary with `--no-browser`, open the printed loopback URL in a browser, paste `fixed_individual_link.txt`, select the fixture's small source set and legal policy, and run with the fixture's bounded iteration values. Verify all of these on the rendered page:
 
@@ -656,7 +656,7 @@ Build and run the binary with `--no-browser`, open the printed loopback URL in a
 
 Use browser automation against the running local page for this step and save its screenshot/output as the implementation evidence. Do not replace this with an HTTP-only test.
 
-- [ ] **Step 5: Commit verification and documentation**
+- [x] **Step 5: Commit verification and documentation**
 
 ```bash
 git add cmd/wowsimcli/cmd/upgrades/testdata cmd/wowsimcli/cmd/upgrades docs/upgrade-finder.md

@@ -28,7 +28,7 @@
 - Consumes: `proto.IndividualSimSettings.GetSettings() *proto.SimSettings`; protobuf getters return zero values for a nil message.
 - Produces: `Import(link string) (*ImportedSettings, error)` succeeds when `settings` is absent; `CharacterSummary` reports zero-valued phase/iterations and `false` fixed-seed state.
 
-- [ ] **Step 1: Add the failing production-export fixture and focused import test**
+- [x] **Step 1: Add the failing production-export fixture and focused import test**
 
 Create `retribution_no_settings_link.txt` containing exactly the supplied URL. Add this test next to `TestImportDecodesFixedIndividualLink`:
 
@@ -52,13 +52,13 @@ func TestImportAcceptsExportWithoutSimSettings(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run the focused test to verify the current rejection**
+- [x] **Step 2: Run the focused test to verify the current rejection**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades -run '^TestImportAcceptsExportWithoutSimSettings$' -count=1`
 
 Expected: FAIL with `missing simulation settings in export`.
 
-- [ ] **Step 3: Remove the invalid required-message check and use nil-safe protobuf getters**
+- [x] **Step 3: Remove the invalid required-message check and use nil-safe protobuf getters**
 
 Delete the `if settings.Settings == nil` validation block in `Import`. Replace the direct summary field reads with the generated protobuf getters:
 
@@ -70,13 +70,13 @@ FixedRngSeed:  settings.GetSettings().GetFixedRngSeed() != 0,
 
 This leaves player, encounter, equipment, version, and database-reference validation untouched.
 
-- [ ] **Step 4: Re-run the focused import test**
+- [x] **Step 4: Re-run the focused import test**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades -run '^TestImportAcceptsExportWithoutSimSettings$' -count=1`
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit the import behavior**
+- [x] **Step 5: Commit the import behavior**
 
 ```bash
 rtk git add cmd/wowsimcli/cmd/upgrades/import.go cmd/wowsimcli/cmd/upgrades/import_test.go cmd/wowsimcli/cmd/upgrades/testdata/retribution_no_settings_link.txt
@@ -93,7 +93,7 @@ rtk git commit -m "fix: accept exports without sim settings"
 - Consumes: `imported.Character.Phase`, which is `0` when the optional exported `SimSettings` message is absent.
 - Produces: `POST /api/import` returns `defaults.maxPhase: 5` for that export and preserves a positive imported phase.
 
-- [ ] **Step 1: Add the failing import-endpoint regression test**
+- [x] **Step 1: Add the failing import-endpoint regression test**
 
 Add a helper that reads `upgrades/testdata/retribution_no_settings_link.txt`, then add:
 
@@ -113,13 +113,13 @@ func TestImportDefaultsPhaseWhenExportOmitsSimSettings(t *testing.T) {
 }
 ```
 
-- [ ] **Step 2: Run the endpoint test to verify the current failure**
+- [x] **Step 2: Run the endpoint test to verify the current failure**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd -run '^TestImportDefaultsPhaseWhenExportOmitsSimSettings$' -count=1`
 
 Expected: FAIL because import returns HTTP 400.
 
-- [ ] **Step 3: Apply the bounded default before constructing `importResponse`**
+- [x] **Step 3: Apply the bounded default before constructing `importResponse`**
 
 In `handleImport`, after armory enrichment and before `writeJSON`, add:
 
@@ -132,13 +132,13 @@ if maxPhase < 1 {
 
 Set `Defaults.MaxPhase` to `maxPhase` instead of `imported.Character.Phase`.
 
-- [ ] **Step 4: Re-run the endpoint regression test**
+- [x] **Step 4: Re-run the endpoint regression test**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd -run '^TestImportDefaultsPhaseWhenExportOmitsSimSettings$' -count=1`
 
 Expected: PASS with HTTP 200 and `defaults.maxPhase` equal to `5`.
 
-- [ ] **Step 5: Commit the HTTP default**
+- [x] **Step 5: Commit the HTTP default**
 
 ```bash
 rtk git add cmd/wowsimcli/cmd/upgrade_server.go cmd/wowsimcli/cmd/upgrade_server_test.go
@@ -154,23 +154,23 @@ rtk git commit -m "fix: default phase for current exports"
 - Consumes: the production fixture and the updated import endpoint.
 - Produces: the running upgrade finder accepts the supplied URL and renders the imported Ret Paladin armory.
 
-- [ ] **Step 1: Run the focused server and upgrades packages**
+- [x] **Step 1: Run the focused server and upgrades packages**
 
 Run: `rtk go test ./cmd/wowsimcli/cmd/upgrades ./cmd/wowsimcli/cmd -count=1`
 
 Expected: PASS.
 
-- [ ] **Step 2: Build the executable**
+- [x] **Step 2: Build the executable**
 
 Run: `rtk go build -o wowsimcli ./cmd/wowsimcli`
 
 Expected: exit status `0`.
 
-- [ ] **Step 3: Restart the local service and import the fixture through its browser UI**
+- [x] **Step 3: Restart the local service and import the fixture through its browser UI**
 
 Run the rebuilt `wowsimcli rank-upgrades`, paste the fixture URL, click **Import settings**, and verify the Ret Paladin header, 17 armory slots, and maximum phase `5` appear without an error.
 
-- [ ] **Step 4: Commit the implementation plan if it changed during execution**
+- [x] **Step 4: Commit the implementation plan if it changed during execution**
 
 ```bash
 rtk git add docs/superpowers/plans/2026-08-31-optional-sim-settings-import.md
