@@ -47,13 +47,18 @@ nothing is written to disk and no character data is cached between runs.
 
 After import, review the complete canonical armory before ranking: character
 header, all 17 gear slots, item names and phases, gems, enchants, socket-bonus
-status, and the deterministic **unbuffed (base + gear)** raw and derived stat
-panels. This is a server-calculated armory view, not a decoded-link summary.
+status, and the deterministic **raid buffed (link settings)** raw and derived
+stat panels. This is a server-calculated armory view, not a decoded-link
+summary.
 
-The armory excludes buffs, consumes, and talents from its displayed unbuffed
-snapshot. It follows the simulator engine for racial effects, stat
-dependencies, random suffixes, socket rules, set bonuses, and static gear
-effects. The imported baseline remains unchanged while candidates are tested.
+The armory snapshot uses the imported baseline as-is — raid, party, and
+individual buffs, consumes, and talents — so the displayed stats match both
+what the ranking run simulates and the wowsims site's stats panel for the same
+link (including the site's target-debuff additions: Improved Faerie Fire hit,
+Improved Seal of the Crusader crit, Hunter's Mark, and Expose Weakness). It
+still follows the simulator engine for racial effects, stat dependencies,
+random suffixes, socket rules, set bonuses, and static gear effects. The
+imported baseline remains unchanged while candidates are tested.
 
 ## Workflow
 
@@ -123,8 +128,8 @@ Then, in a browser at the printed URL:
    `cmd/wowsimcli/cmd/upgrades/testdata/fixed_individual_link.txt` and import.
 2. Confirm the character header and all 17 gear slots render, including at
    least one socket line and enchant line.
-3. Confirm **Raw stats**, **Derived percentages**, and visible **unbuffed (base
-   + gear)** stat labeling; confirm the attribution link points to
+3. Confirm **Raw stats**, **Derived percentages**, and visible **raid buffed
+   (link settings)** stat labeling; confirm the attribution link points to
    `https://github.com/wowsims/tbc-new`.
 4. Set maximum phase, screening iterations, and confirmation iterations to `1`;
    start ranking and confirm queued/running progress appears before the report

@@ -19,7 +19,7 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(page.getByText(/^Enchant:/).first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Raw stats', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Derived percentages', exact: true })).toBeVisible();
-  await expect(page.getByText('unbuffed (base + gear)', { exact: true })).toBeVisible();
+  await expect(page.getByText('raid buffed (link settings)', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: 'wowsims/tbc-new', exact: true })).toHaveAttribute(
     'href',
     'https://github.com/wowsims/tbc-new',

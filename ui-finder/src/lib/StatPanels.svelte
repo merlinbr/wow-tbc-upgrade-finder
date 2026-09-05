@@ -46,7 +46,7 @@
 
 <div class="stat-panels" data-region="stat-panels">
   <section class="stat-panel" aria-labelledby="raw-stats-heading">
-    <div class="section-kicker">unbuffed (base + gear)</div>
+    <div class="section-kicker">raid buffed (link settings)</div>
     <h3 id="raw-stats-heading">Raw stats</h3>
     {#if rawEntries.length}
       <dl class="stat-list">

@@ -148,7 +148,38 @@ func TestEnrichArmoryScalesRandomSuffixAndMatchesEngineSnapshot(t *testing.T) {
 	}
 }
 
-func TestEnrichArmoryStatsAreSanitizedEngineGearSnapshot(t *testing.T) {
+func TestPanelDebuffStatsMirrorsSite(t *testing.T) {
+	debuffs := &proto.Debuffs{
+		FaerieFire:                proto.TristateEffect_TristateEffectImproved,
+		ImprovedSealOfTheCrusader: proto.TristateEffect_TristateEffectImproved,
+		HuntersMark:               proto.TristateEffect_TristateEffectImproved,
+		ExposeWeaknessUptime:      0.9,
+		ExposeWeaknessHunterAgility: 1150,
+	}
+	extra, pseudo := panelDebuffStats(debuffs)
+	if got, want := extra[stats.AttackPower], 1150*0.25+110; got != want {
+		t.Fatalf("attack power = %v, want %v", got, want)
+	}
+	if got, want := extra[stats.RangedAttackPower], 1150*0.25+440; got != want {
+		t.Fatalf("ranged attack power = %v, want %v", got, want)
+	}
+	for _, entry := range []struct {
+		pseudo proto.PseudoStat
+		want   float64
+	}{
+		{proto.PseudoStat_PseudoStatMeleeCritPercent, 3},
+		{proto.PseudoStat_PseudoStatRangedCritPercent, 3},
+		{proto.PseudoStat_PseudoStatSpellCritPercent, 3},
+		{proto.PseudoStat_PseudoStatMeleeHitPercent, 3},
+		{proto.PseudoStat_PseudoStatRangedHitPercent, 3},
+	} {
+		if got := pseudo[entry.pseudo]; got != entry.want {
+			t.Fatalf("pseudo %v = %v, want %v", entry.pseudo, got, entry.want)
+		}
+	}
+}
+
+func TestEnrichArmoryStatsMatchFullSettingsEngineSnapshot(t *testing.T) {
 	imported := mustImportFixture(t)
 	imported.Settings.Player.Buffs = cloneMessage(core.FullIndividualBuffs)
 	imported.Settings.Player.Consumables = &proto.ConsumesSpec{ScrollInt: true}
@@ -168,29 +199,23 @@ func TestEnrichArmoryStatsAreSanitizedEngineGearSnapshot(t *testing.T) {
 	}
 
 	expectedPlayer := cloneMessage(imported.Settings.Player)
-	expectedPlayer.TalentsString = ""
-	expectedPlayer.Consumables = nil
-	expectedPlayer.BonusStats = nil
-	expectedPlayer.EnableItemSwap = false
-	expectedPlayer.ItemSwap = nil
 	expectedPlayer.Database = buildSimDatabase()
-	expectedPlayer.Buffs = &proto.IndividualBuffs{}
 	expectedResult := core.ComputeStats(&proto.ComputeStatsRequest{
 		Raid: &proto.Raid{
-			Parties: []*proto.Party{{Players: []*proto.Player{expectedPlayer}, Buffs: &proto.PartyBuffs{}}},
-			Buffs:   &proto.RaidBuffs{},
-			Debuffs: &proto.Debuffs{},
+			Parties: []*proto.Party{{Players: []*proto.Player{expectedPlayer}, Buffs: cloneOrEmpty(imported.Settings.PartyBuffs, &proto.PartyBuffs{})}},
+			Buffs:   cloneOrEmpty(imported.Settings.RaidBuffs, &proto.RaidBuffs{}),
+			Debuffs: cloneOrEmpty(imported.Settings.Debuffs, &proto.Debuffs{}),
 		},
-		Encounter: cloneMessage(imported.Settings.Encounter),
+		Encounter: cloneOrEmpty(imported.Settings.Encounter, &proto.Encounter{}),
 	})
 	if expectedResult == nil || expectedResult.GetRaidStats() == nil || len(expectedResult.GetRaidStats().GetParties()) != 1 {
 		t.Fatal("independent engine snapshot was malformed")
 	}
 	expectedParty := expectedResult.GetRaidStats().GetParties()[0]
-	if expectedParty == nil || len(expectedParty.GetPlayers()) == 0 || expectedParty.GetPlayers()[0] == nil || expectedParty.GetPlayers()[0].GetGearStats() == nil {
-		t.Fatal("independent engine snapshot had no gear stats")
+	if expectedParty == nil || len(expectedParty.GetPlayers()) == 0 || expectedParty.GetPlayers()[0] == nil || expectedParty.GetPlayers()[0].GetFinalStats() == nil {
+		t.Fatal("independent engine snapshot had no final stats")
 	}
-	gear := expectedParty.GetPlayers()[0].GetGearStats()
+	gear := expectedParty.GetPlayers()[0].GetFinalStats()
 	if want := statMap(gear.GetStats()); !reflect.DeepEqual(armory.Stats, want) {
 		t.Fatalf("stats = %#v, want %#v", armory.Stats, want)
 	}

@@ -10,7 +10,9 @@ Approved implementation plans: `docs/superpowers/plans/2026-08-29-tbc-upgrade-fi
 
 ## Current status
 
-The Svelte armory migration is complete and committed. The local upgrade finder imports an individual-sim link, renders a server-enriched 17-slot armory review with deterministic base-plus-gear stats, runs the existing ranking flow, displays the report, supports clipboard copy, and supports cancellation.
+The Svelte armory migration is complete and committed. The local upgrade finder imports an individual-sim link, renders a server-enriched 17-slot armory review with a deterministic full-settings stat snapshot (the imported buffs, consumes, and talents, matching what ranking simulates), runs the existing ranking flow, displays the report, supports clipboard copy, and supports cancellation.
+
+The same-day buffed-stat parity follow-up is implemented: the armory stat panels now show the fully raid-buffed stats from the link's settings instead of the unbuffed base-plus-gear snapshot, mirroring the wowsims site's stats panel.
 
 The 2026-08-31 follow-up work is implemented and verified:
 
@@ -29,7 +31,7 @@ The 2026-08-31 follow-up work is implemented and verified:
 - `EnrichArmory` emits all 17 canonical slots in display order: Head, Neck, Shoulder, Back, Chest, Wrist, Main Hand, Off Hand, Hands, Waist, Legs, Feet, Finger 1, Finger 2, Trinket 1, Trinket 2, Ranged.
 - Armory metadata includes item names/quality/icons/phases/set names, scaled random suffixes, gems, enchants, declared sockets, socket bonuses, and empty-slot/empty-socket state.
 - Socket matching follows `core.ColorIntersects`, including hybrid, prismatic, and meta behavior. Suffix scaling follows `core.ItemEquipmentBaseStats`.
-- Armory totals come from `core.ComputeStats` on a cloned setup with buffs, consumes, talents, bonus stats, and item swaps cleared. It does not run simulation iterations and is labeled **unbuffed (base + gear)**.
+- Armory totals come from `core.ComputeStats` on the imported baseline as-is via the same raid construction ranking uses (`ImportedSettings.raidAndEncounter`): raid, party, and individual buffs, consumes, talents, and bonus stats are retained. The displayed panel reads the engine's `finalStats` snapshot and adds the site's target-debuff contributions (Improved Faerie Fire hit, Improved Seal of the Crusader crit, Hunter's Mark, Expose Weakness) exactly like the wowsims site's stats panel. It does not run simulation iterations and is labeled **raid buffed (link settings)**.
 - Raw stat keys use unprefixed snake_case `stats.StatName()` values, including `mp5`. Derived keys are limited to `melee_hit_percent`, `spell_hit_percent`, `melee_crit_percent`, `spell_crit_percent`, `ranged_hit_percent`, `ranged_crit_percent`, and `block_percent`.
 
 ### HTTP server
@@ -78,9 +80,9 @@ gear slots.
 
 ## Intentional boundaries
 
-- No 3D model, talents tab, item hover tooltips, buffed-stat mode, persistence, pricing, accounts, remote server, or ranking-domain rewrite.
+- No 3D model, talents tab, item hover tooltips, persistence, pricing, accounts, remote server, or ranking-domain rewrite.
 - The browser exposes the existing max-phase, unknown-source, screening, and confirmation controls. It does not search alternate gem/enchant policies or source-name filters.
-- The armory snapshot is not a simulation result and excludes temporary buffs, consumes, talents, and alternate item-swap gear.
+- The armory snapshot is not a simulation result; it shows the imported buffs, consumes, and talents but never runs iterations or applies fight-time item swaps.
 
 ## Known follow-up risks
 

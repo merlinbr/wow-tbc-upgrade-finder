@@ -104,6 +104,14 @@ func cloneMessage[M googleProto.Message](m M) M {
 	return googleProto.Clone(m).(M)
 }
 
+// cloneOrEmpty clones m, or returns empty when m is nil.
+func cloneOrEmpty[M googleProto.Message](m M, empty M) M {
+	if googleProto.Message(m) == nil {
+		return empty
+	}
+	return cloneMessage(m)
+}
+
 type ContentFilters struct {
 	MaxPhase       int32                      `json:"maxPhase"`
 	SourceKinds    []proto.SourceFilterOption `json:"sourceKinds"`

@@ -90,23 +90,13 @@ func scaledStatMap(values []float64, randPropPoints int32) map[string]float64 {
 	return statValuesMap(stats.FromProtoArray(values).Multiply(float64(randPropPoints) / 10000).Floor())
 }
 
+// armoryComputeRequest builds the full-settings snapshot ranking will simulate:
+// buffs, consumes, talents, and bonus stats from the imported baseline are
+// retained so the armory stats match both WoWSims and the ranking run.
 func armoryComputeRequest(imported *ImportedSettings) *proto.ComputeStatsRequest {
-	player := cloneMessage(imported.Settings.Player)
-	player.TalentsString = ""
-	player.Consumables = nil
-	player.BonusStats = nil
-	player.EnableItemSwap = false
-	player.ItemSwap = nil
-	player.Database = buildSimDatabase()
-	player.Buffs = &proto.IndividualBuffs{}
-	return &proto.ComputeStatsRequest{
-		Raid: &proto.Raid{
-			Parties: []*proto.Party{{Players: []*proto.Player{player}, Buffs: &proto.PartyBuffs{}}},
-			Buffs:   &proto.RaidBuffs{},
-			Debuffs: &proto.Debuffs{},
-		},
-		Encounter: cloneMessage(imported.Settings.Encounter),
-	}
+	raid, encounter := imported.raidAndEncounter()
+	raid.Parties[0].Players[0].Database = buildSimDatabase()
+	return &proto.ComputeStatsRequest{Raid: raid, Encounter: encounter}
 }
 
 func enrichGem(gem *proto.UIGem) *GemData {
@@ -192,6 +182,42 @@ func enrichItem(spec *proto.ItemSpec, item *proto.UIItem, catalog *Catalog) (Gea
 	return data, nil
 }
 
+// panelDebuffStats mirrors the wowsims site's CharacterStats.getDebuffStats
+// (ui/core/components/character_stats.tsx): the stats panel adds these
+// target-debuff benefits on top of the engine's finalStats, so the armory must
+// do the same to match the site's displayed numbers.
+// ponytail: expose-weakness uptime only gates the contribution (truthiness),
+// matching the site's display simplification; it is not scaled by uptime.
+func panelDebuffStats(debuffs *proto.Debuffs) (stats.Stats, map[proto.PseudoStat]float64) {
+	extra := stats.Stats{}
+	pseudo := map[proto.PseudoStat]float64{}
+	if debuffs == nil {
+		return extra, pseudo
+	}
+	if debuffs.GetFaerieFire() == proto.TristateEffect_TristateEffectImproved {
+		pseudo[proto.PseudoStat_PseudoStatMeleeHitPercent] += 3
+		pseudo[proto.PseudoStat_PseudoStatRangedHitPercent] += 3
+	}
+	if debuffs.GetImprovedSealOfTheCrusader() != proto.TristateEffect_TristateEffectMissing {
+		pseudo[proto.PseudoStat_PseudoStatMeleeCritPercent] += 3
+		pseudo[proto.PseudoStat_PseudoStatRangedCritPercent] += 3
+		pseudo[proto.PseudoStat_PseudoStatSpellCritPercent] += 3
+	}
+	if debuffs.GetExposeWeaknessUptime() != 0 && debuffs.GetExposeWeaknessHunterAgility() != 0 {
+		extra[stats.AttackPower] += debuffs.GetExposeWeaknessHunterAgility() * 0.25
+		extra[stats.RangedAttackPower] += debuffs.GetExposeWeaknessHunterAgility() * 0.25
+	}
+	switch debuffs.GetHuntersMark() {
+	case proto.TristateEffect_TristateEffectImproved:
+		extra[stats.AttackPower] += 110
+		extra[stats.RangedAttackPower] += 440
+	case proto.TristateEffect_TristateEffectMissing:
+	default:
+		extra[stats.RangedAttackPower] += 440
+	}
+	return extra, pseudo
+}
+
 func EnrichArmory(imported *ImportedSettings, catalog *Catalog) (*ArmoryData, error) {
 	if imported == nil || imported.Settings == nil || imported.Settings.Player == nil || imported.Settings.Encounter == nil {
 		return nil, fmt.Errorf("imported settings are incomplete")
@@ -225,11 +251,17 @@ func EnrichArmory(imported *ImportedSettings, catalog *Catalog) (*ArmoryData, er
 		}
 		playerStats = candidate
 	}
-	if playerStats == nil || playerStats.GetGearStats() == nil {
+	if playerStats == nil || playerStats.GetFinalStats() == nil {
 		return nil, fmt.Errorf("compute stats did not return exactly one player gear snapshot")
 	}
-	gearStats := playerStats.GetGearStats()
-	armory := &ArmoryData{Gear: make([]GearSlotData, 0, len(canonicalGearSlots)), Stats: statMap(gearStats.GetStats()), DerivedStats: make(map[string]float64)}
+	finalStats := playerStats.GetFinalStats()
+	extra, pseudoDebuffs := panelDebuffStats(imported.Settings.GetDebuffs())
+	final := stats.FromProtoArray(finalStats.GetStats()).Add(extra)
+	pseudo := append([]float64(nil), finalStats.GetPseudoStats()...)
+	for pseudoStat, value := range pseudoDebuffs {
+		pseudo[int(pseudoStat)] += value
+	}
+	armory := &ArmoryData{Gear: make([]GearSlotData, 0, len(canonicalGearSlots)), Stats: statValuesMap(final), DerivedStats: make(map[string]float64)}
 	for _, entry := range []struct {
 		key   string
 		pseudo proto.PseudoStat
@@ -243,10 +275,10 @@ func EnrichArmory(imported *ImportedSettings, catalog *Catalog) (*ArmoryData, er
 		{"block_percent", proto.PseudoStat_PseudoStatBlockPercent},
 	} {
 		index := int(entry.pseudo)
-		if index >= len(gearStats.GetPseudoStats()) {
+		if index >= len(pseudo) {
 			return nil, fmt.Errorf("compute stats returned malformed pseudo-stat snapshot")
 		}
-		armory.DerivedStats[entry.key] = gearStats.GetPseudoStats()[index]
+		armory.DerivedStats[entry.key] = pseudo[index]
 	}
 
 	equipment := imported.Settings.Player.GetEquipment()

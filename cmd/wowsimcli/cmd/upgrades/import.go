@@ -263,46 +263,30 @@ func Import(link string) (*ImportedSettings, error) {
 	}, nil
 }
 
+// raidAndEncounter clones the imported baseline raid composition and encounter,
+// retaining the player's complete settings: talents, consumes, bonus stats,
+// item swaps, and individual buffs. Both ranking and the armory snapshot share
+// this so the displayed stats always match what ranking simulates.
+func (s *ImportedSettings) raidAndEncounter() (*proto.Raid, *proto.Encounter) {
+	party := &proto.Party{
+		Players: []*proto.Player{cloneMessage(s.Settings.Player)},
+		Buffs:   cloneOrEmpty(s.Settings.PartyBuffs, &proto.PartyBuffs{}),
+	}
+	raid := &proto.Raid{
+		Parties:       []*proto.Party{party},
+		Buffs:         cloneOrEmpty(s.Settings.RaidBuffs, &proto.RaidBuffs{}),
+		Debuffs:       cloneOrEmpty(s.Settings.Debuffs, &proto.Debuffs{}),
+		TargetDummies: s.Settings.TargetDummies,
+	}
+	for _, tank := range s.Settings.Tanks {
+		raid.Tanks = append(raid.Tanks, cloneMessage(tank))
+	}
+	return raid, cloneOrEmpty(s.Settings.Encounter, &proto.Encounter{})
+}
+
 // NewRequest converts the immutable imported baseline into a new canonical RaidSimRequest.
 func (s *ImportedSettings) NewRequest(iterations int32) *proto.RaidSimRequest {
-	playerClone := cloneMessage(s.Settings.Player)
-	var partyBuffsClone *proto.PartyBuffs
-	if s.Settings.PartyBuffs != nil {
-		partyBuffsClone = cloneMessage(s.Settings.PartyBuffs)
-	} else {
-		partyBuffsClone = &proto.PartyBuffs{}
-	}
-
-	party := &proto.Party{
-		Players: []*proto.Player{playerClone},
-		Buffs:   partyBuffsClone,
-	}
-
-	var raidBuffsClone *proto.RaidBuffs
-	if s.Settings.RaidBuffs != nil {
-		raidBuffsClone = cloneMessage(s.Settings.RaidBuffs)
-	} else {
-		raidBuffsClone = &proto.RaidBuffs{}
-	}
-
-	var debuffsClone *proto.Debuffs
-	if s.Settings.Debuffs != nil {
-		debuffsClone = cloneMessage(s.Settings.Debuffs)
-	} else {
-		debuffsClone = &proto.Debuffs{}
-	}
-
-	var encounterClone *proto.Encounter
-	if s.Settings.Encounter != nil {
-		encounterClone = cloneMessage(s.Settings.Encounter)
-	} else {
-		encounterClone = &proto.Encounter{}
-	}
-
-	var tanks []*proto.UnitReference
-	for _, tank := range s.Settings.Tanks {
-		tanks = append(tanks, cloneMessage(tank))
-	}
+	raid, encounter := s.raidAndEncounter()
 
 	var randomSeed int64
 	if s.Settings.Settings != nil {
@@ -310,15 +294,9 @@ func (s *ImportedSettings) NewRequest(iterations int32) *proto.RaidSimRequest {
 	}
 
 	return &proto.RaidSimRequest{
-		Type: proto.SimType_SimTypeIndividual,
-		Raid: &proto.Raid{
-			Parties:       []*proto.Party{party},
-			Buffs:         raidBuffsClone,
-			Debuffs:       debuffsClone,
-			Tanks:         tanks,
-			TargetDummies: s.Settings.TargetDummies,
-		},
-		Encounter: encounterClone,
+		Type:      proto.SimType_SimTypeIndividual,
+		Raid:      raid,
+		Encounter: encounter,
 		SimOptions: &proto.SimOptions{
 			Iterations:          iterations,
 			RandomSeed:          randomSeed,
