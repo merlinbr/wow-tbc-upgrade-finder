@@ -163,6 +163,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .control-grid { display: grid; gap: 0.8rem 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .check-control { align-self: end; padding-bottom: 0.65rem; }
 .check-control label { color: var(--text); }
+.source-kind-group { display: flex; flex-wrap: wrap; gap: 4px 12px; border: 0; padding: 0; margin: 0; }
+.source-kind-group legend { float: left; }
 .button-row { margin-top: 1rem; }
 
 .report-header { align-items: center; }

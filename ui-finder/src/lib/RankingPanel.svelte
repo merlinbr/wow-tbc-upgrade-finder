@@ -1,11 +1,13 @@
 <script>
   import { cancelRanking, startRanking } from './stores.svelte.js';
+  import { sourceKinds } from './labels.js';
 
   let { imported, link, job, onValidationError = () => {} } = $props();
   let maxPhase = $state(0);
   let includeUnknown = $state(false);
   let screeningIterations = $state(300);
   let confirmationIterations = $state(1000);
+  let selectedKinds = $state([]);
   let initializedImport = $state(null);
   let submitting = $state(false);
 
@@ -17,6 +19,7 @@
     includeUnknown = Boolean(defaults.includeUnknown);
     screeningIterations = Number(defaults.screeningIterations ?? 300);
     confirmationIterations = Number(defaults.confirmationIterations ?? 1000);
+    selectedKinds = [];
   });
 
   function progressText(job) {
@@ -46,7 +49,7 @@
     await startRanking(link, {
       filters: {
         maxPhase: Number(maxPhase),
-        sourceKinds: [],
+        sourceKinds: [...selectedKinds],
         sourceNames: [],
         includeUnknown,
       },
@@ -80,6 +83,23 @@
           Include unknown-source items
         </label>
       </div>
+      <fieldset class="check-control source-kind-group" disabled={busy}>
+        <legend>Include sources</legend>
+        {#each sourceKinds.filter((kind) => kind.value !== 0) as kind}
+          <label>
+            <input
+              type="checkbox"
+              checked={selectedKinds.includes(kind.value)}
+              onchange={(event) => {
+                selectedKinds = event.currentTarget.checked
+                  ? [...selectedKinds, kind.value]
+                  : selectedKinds.filter((v) => v !== kind.value);
+              }}
+            />
+            {kind.label}
+          </label>
+        {/each}
+      </fieldset>
       <div>
         <label for="screening-iterations">Screening iterations</label>
         <input id="screening-iterations" name="screeningIterations" type="number" min="0" step="1" bind:value={screeningIterations} disabled={busy} />
