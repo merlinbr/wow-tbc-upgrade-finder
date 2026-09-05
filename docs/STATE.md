@@ -20,6 +20,8 @@ The 2026-08-31 follow-up work is implemented and verified:
 - `.github/workflows/upgrade_finder.yml` runs the Go, build, UI, and Chromium verification contract on pushes/PRs.
 - `Import` accepts current individual-sim exports that omit the optional simulation-settings message; the import API derives a bounded maximum phase from the simulated phase, then the highest equipped-item phase, and falls back to `5` only when neither is positive.
 
+The armory redesign is implemented: character-centered layout with Gear/Stats/Talents tabs, WoWSims-style item cards (ilvl badge, rarity-colored names, enchant effect lines, sockets/gems, details disclosures), a labeled 3D placeholder stage with per-spec backdrop art, and a read-only talents view driven by the newly exposed talents string.
+
 ## Working behavior
 
 ### Backend
@@ -80,7 +82,7 @@ gear slots.
 
 ## Intentional boundaries
 
-- No 3D model, talents tab, item hover tooltips, persistence, pricing, accounts, remote server, or ranking-domain rewrite.
+- No interactive 3D model (labeled placeholder stage only; viewer gated on renderer permission and browser asset access), no talent editing, no item hover tooltips, persistence, pricing, accounts, remote server, or ranking-domain rewrite.
 - The browser exposes the existing max-phase, unknown-source, screening, and confirmation controls. It does not search alternate gem/enchant policies or source-name filters.
 - The armory snapshot is not a simulation result; it shows the imported buffs, consumes, and talents but never runs iterations or applies fight-time item swaps.
 

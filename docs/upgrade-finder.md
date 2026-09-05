@@ -45,11 +45,16 @@ nothing is written to disk and no character data is cached between runs.
 
 ## Armory review
 
-After import, review the complete canonical armory before ranking: character
-header, all 17 gear slots, item names and phases, gems, enchants, socket-bonus
-status, and the deterministic **raid buffed (link settings)** raw and derived
-stat panels. This is a server-calculated armory view, not a decoded-link
-summary.
+After import, review the complete canonical armory before ranking: compact
+character header, all 17 gear slots around a labeled character-preview stage,
+and Gear / Stats / Talents tabs. Each equipped item card shows the item-level
+badge, rarity-colored name, enchant effect line (e.g. `+34 Attack Power and
++16 Hit Rating`), and socketed gems; item IDs, phase, set, and full stats are
+in the card's Details disclosure. Stats shows the deterministic **raid buffed
+(link settings)** snapshot. Talents renders the imported build read-only from
+the bundled TBC talent trees. The 3D character model is not available yet;
+the stage shows a labeled placeholder until the gated viewer integration
+lands (see `docs/armory-redesign-research.md`).
 
 The armory snapshot uses the imported baseline as-is — raid, party, and
 individual buffs, consumes, and talents — so the displayed stats match both
