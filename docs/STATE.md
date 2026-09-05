@@ -16,7 +16,7 @@ The 2026-08-31 follow-up work is implemented and verified:
 
 - The root README is a user-first landing page for the Upgrade Finder with upstream attribution.
 - `.github/workflows/upgrade_finder.yml` runs the Go, build, UI, and Chromium verification contract on pushes/PRs.
-- `Import` accepts current individual-sim exports that omit the optional simulation-settings message; the import API defaults the maximum phase to `5` when the export has no positive phase.
+- `Import` accepts current individual-sim exports that omit the optional simulation-settings message; the import API derives a bounded maximum phase from the simulated phase, then the highest equipped-item phase, and falls back to `5` only when neither is positive.
 
 ## Working behavior
 
@@ -35,7 +35,7 @@ The 2026-08-31 follow-up work is implemented and verified:
 ### HTTP server
 
 - `POST /api/import` preserves existing successful fields and adds only `gear`, `stats`, and `derivedStats`.
-- The import response defaults `maxPhase` to `5` when the imported phase is less than `1`; exports with a positive phase retain it.
+- The import response defaults `maxPhase` to the exported phase when positive, otherwise to the highest phase among equipped items, and falls back to `5` only if neither is available.
 - The server initializes one immutable catalog and passes it to import enrichment and the default ranking service.
 - `GET /` serves the embedded Vite entry document.
 - `GET /assets/{path...}` accepts only `fs.ValidPath` wildcards and reads only below embedded `upgrade_ui/assets/`. Unknown, empty, traversal, and nested-missing paths return structured `not_found` errors.
@@ -72,7 +72,7 @@ rtk node --test src/lib/api.test.js               2 passed
 Real-application import check: the rebuilt binary was started with
 `rank-upgrades --addr 127.0.0.1:43199 --no-browser`, the retribution fixture
 link was posted to `/api/import`, and the response carried class
-`ClassPaladin`, spec `RetributionPaladin`, `defaults.maxPhase` `5`, and all 17
+`ClassPaladin`, spec `RetributionPaladin`, `defaults.maxPhase` `2` (highest equipped-item phase), and all 17
 gear slots.
 
 ## Intentional boundaries

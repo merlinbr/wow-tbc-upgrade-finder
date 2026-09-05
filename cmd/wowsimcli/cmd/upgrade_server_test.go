@@ -175,8 +175,8 @@ func TestImportDefaultsPhaseWhenExportOmitsSimSettings(t *testing.T) {
 	}
 
 	defaults, ok := decodeBody(t, response)["defaults"].(map[string]any)
-	if !ok || defaults["maxPhase"] != float64(5) {
-		t.Fatalf("defaults = %#v, want maxPhase 5", defaults)
+	if !ok || defaults["maxPhase"] != float64(2) {
+		t.Fatalf("defaults = %#v, want maxPhase 2 (highest equipped-item phase)", defaults)
 	}
 }
 

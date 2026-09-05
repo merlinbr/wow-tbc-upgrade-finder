@@ -236,6 +236,15 @@ func (s *upgradeServer) handleImport(w http.ResponseWriter, r *http.Request) {
 
 	maxPhase := imported.Character.Phase
 	if maxPhase < 1 {
+		// Exports that omit simulation settings carry no phase; fall back to the
+		// highest phase among equipped items before the unbounded default.
+		for _, slot := range armory.Gear {
+			if slot.Phase > maxPhase {
+				maxPhase = slot.Phase
+			}
+		}
+	}
+	if maxPhase < 1 {
 		maxPhase = 5
 	}
 
