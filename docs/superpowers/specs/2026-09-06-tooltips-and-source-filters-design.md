@@ -20,10 +20,12 @@ carries only id, name, icon, quality, phase, type, slot.
 ### Armory tooltip (full)
 
 Hovering (or keyboard-focusing) a gear card's icon/name in `GearSlot.svelte`
-shows a popover styled after the classic Wowhead item tooltip (mockups
-approved 2026-09-06), top to bottom:
+shows a popover floating beside the trigger while the card content stays
+visible, styled after the classic Wowhead item tooltip (mockups approved
+2026-09-06), top to bottom:
 
 1. Header row: quality-colored item name; right-aligned `Phase N` badge.
+   No item icon in the tooltip header — the card already shows it.
 2. `Item Level N` in the item-level gold/orange.
 3. Slot line (`slotName`).
 4. Stat lines in white, humanized (`+32 Strength`, `+45 Stamina`) — proper
