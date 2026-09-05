@@ -1,6 +1,7 @@
 <script>
   import { copyReport } from './stores.svelte.js';
-  import { humanizeEnum } from './labels.js';
+  import { humanizeEnum, qualityLabel, sourceKindLabel, humanizeSourceKind } from './labels.js';
+  import ItemTooltip from './ItemTooltip.svelte';
 
   let { report, copyStatus = '' } = $props();
 
@@ -10,26 +11,11 @@
     6: 'Hands', 7: 'Waist', 8: 'Legs', 9: 'Feet', 10: 'Finger 1', 11: 'Finger 2',
     12: 'Trinket 1', 13: 'Trinket 2', 14: 'Main Hand', 15: 'Off Hand', 16: 'Ranged',
   };
-  const qualityNames = {
-    0: 'Junk', 1: 'Common', 2: 'Uncommon', 3: 'Rare',
-    4: 'Epic', 5: 'Legendary', 6: 'Artifact', 7: 'Heirloom',
-  };
-  const sourceKinds = {
-    0: 'Unknown source', 1: 'Crafting', 2: 'Quest', 3: 'Reputation', 4: 'PvP',
-    5: 'Dungeon', 6: 'Heroic dungeon', 7: 'Raid', 8: 'Heroic raid',
-    9: 'Raid finder', 10: 'Flexible raid', 11: 'Sold by vendor',
-  };
 
   function slotLabel(value) {
     return slotNames[value] ?? `Unknown slot (${value ?? '—'})`;
   }
 
-  function sourceKindLabel(value) {
-    return sourceKinds[value] ?? `Unknown source (${value ?? '—'})`;
-  }
-  function qualityLabel(value) {
-    return qualityNames[value] ?? `Unknown quality (${value ?? '—'})`;
-  }
 
   function signed(value, digits) {
     const number = Number(value);
@@ -84,7 +70,7 @@
     <div><dt>Screening / confirmation</dt><dd>{report.assumptions?.screeningIterations} / {report.assumptions?.confirmationIterations} iterations</dd></div>
     <div><dt>Maximum phase</dt><dd>{report.assumptions?.maxPhase}</dd></div>
     <div><dt>Unknown sources</dt><dd>{report.assumptions?.includeUnknown ? 'Included' : 'Excluded'}</dd></div>
-    <div><dt>Source filters</dt><dd>{report.assumptions?.sourceKinds?.join(', ') || 'All sources'}{report.assumptions?.sourceNames?.length ? ` · ${report.assumptions.sourceNames.join(', ')}` : ''}</dd></div>
+    <div><dt>Source filters</dt><dd>{report.assumptions?.sourceKinds?.map(humanizeSourceKind).join(', ') || 'All sources'}{report.assumptions?.sourceNames?.length ? ` · ${report.assumptions.sourceNames.join(', ')}` : ''}</dd></div>
   </dl>
 
   {#if report.capTruncatedTieRegion}
@@ -130,7 +116,7 @@
         {#each report.confirmed ?? [] as upgrade}
           <tr>
             <td class:too-close={upgrade.tooCloseToCall}>{upgrade.tooCloseToCall ? 'Too close to call' : upgrade.rank}</td>
-            <td>{upgrade.item?.name || 'Unknown'} ({upgrade.item?.id}) · Phase {upgrade.item?.phase ?? '—'} · {qualityLabel(upgrade.item?.quality)}</td>
+            <td><span class="report-item-trigger">{upgrade.item?.name || 'Unknown'} ({upgrade.item?.id}){#if upgrade.item?.name}<ItemTooltip item={upgrade.item} variant="summary" />{/if}</span> · Phase {upgrade.item?.phase ?? '—'} · {qualityLabel(upgrade.item?.quality)}</td>
             <td>
               {#if upgrade.assumptions}
                 <details class="report-details"><summary>View</summary><pre>{JSON.stringify(upgrade.assumptions, null, 2)}</pre></details>

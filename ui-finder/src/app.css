@@ -180,6 +180,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .report-table th, .report-table td { border-bottom: 1px solid var(--border); padding: 0.55rem; text-align: left; vertical-align: top; }
 .report-table th { color: var(--muted); font-size: 0.75rem; text-transform: uppercase; }
 .report-table td { overflow-wrap: anywhere; }
+.report-item-trigger { position: relative; cursor: help; }
+.report-item-trigger:hover .item-tooltip, .report-item-trigger:focus-within .item-tooltip { display: flex; }
 .too-close { color: var(--gold); }
 .report-details { margin-top: 1rem; }
 .report-details summary { color: var(--accent-strong); cursor: pointer; }
