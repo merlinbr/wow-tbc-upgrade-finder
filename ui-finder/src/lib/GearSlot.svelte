@@ -1,5 +1,5 @@
 <script>
-  let { slot } = $props();
+  let { slot, side = 'left' } = $props();
   let itemIconFailed = $state(false);
   let failedGemIcons = $state({});
 
@@ -30,30 +30,24 @@
   function handleGemImageError(index) {
     failedGemIcons[index] = true;
   }
+
   function slotInitial() {
     return slot.slotName?.trim()?.[0] || '?';
   }
 </script>
 
-<article class="gear-slot quality-{slot.quality ?? 0}" data-slot={slot.slotName}>
+<article class="gear-slot quality-{slot.quality ?? 0}" class:mirror={side === 'right'} data-slot={slot.slotName}>
   <div class="gear-icon-wrap">
+    {#if slot.ilvl}
+      <span class="item-ilvl">{slot.ilvl}</span>
+    {/if}
     {#if slot.icon && !itemIconFailed}
       <img class="gear-icon" src={iconUrl(slot.icon)} alt="{slot.itemName || 'Empty'} icon" onerror={handleItemImageError} />
     {:else}
       <span class="gear-icon-fallback" role="img" aria-label="{slot.slotName} icon unavailable">{slotInitial()}</span>
     {/if}
-  </div>
-  <div class="gear-copy">
-    <h3>{slot.slotName}</h3>
-    {#if slot.itemName}
-      <p class="item-name">{slot.itemName}</p>
-      <p class="item-meta">Item {slot.itemId} · Phase {slot.phase || '—'}{slot.setName ? ` · ${slot.setName}` : ''}</p>
-    {:else}
-      <p class="item-name muted">Empty slot</p>
-    {/if}
-    <p class="enchant">Enchant: {slot.enchant?.name || 'No Enchant'}</p>
     {#if slot.sockets?.length}
-      <div class="socket-row" aria-label={`${slot.slotName} sockets`}>
+      <div class="socket-strip" aria-label={`${slot.slotName} sockets`}>
         {#each slot.sockets as socket, index}
           <span class:empty-socket={!socket.gem} class="socket" title={`${socketColors[socket.color] || 'Unknown'} socket${socket.gem ? `: ${socket.gem.name}` : ': empty'}`}>
             {#if socket.gem?.icon && !failedGemIcons[index]}
@@ -65,10 +59,37 @@
         {/each}
       </div>
     {/if}
-    {#if slot.socketBonus}
-      <p class:bonus-active={slot.socketBonus.active} class:bonus-inactive={!slot.socketBonus.active} class="socket-bonus">
-        Socket bonus {slot.socketBonus.active ? 'active' : 'inactive'}{displayStats(slot.socketBonus.stats) ? ` · ${displayStats(slot.socketBonus.stats)}` : ''}
-      </p>
+  </div>
+  <div class="gear-copy">
+    {#if slot.itemName}
+      <h3 class="item-name quality-text-{slot.quality ?? 0}">{slot.itemName}</h3>
+      {#if slot.enchant}
+        <p class="enchant-effect">{slot.enchant.description || slot.enchant.name}</p>
+      {/if}
+    {:else}
+      <p class="slot-caption">{slot.slotName}</p>
+      <p class="item-name muted">Empty slot</p>
     {/if}
+    <details class="gear-details">
+      <summary>Details</summary>
+      <dl class="gear-detail-list">
+        <div><dt>Slot</dt><dd>{slot.slotName}</dd></div>
+        {#if slot.itemId}
+          <div><dt>Item</dt><dd>{slot.itemId} · Phase {slot.phase || '—'}</dd></div>
+        {/if}
+        {#if slot.setName}
+          <div><dt>Set</dt><dd>{slot.setName}</dd></div>
+        {/if}
+        {#if slot.enchant}
+          <div><dt>Enchant</dt><dd>{slot.enchant.name}</dd></div>
+        {/if}
+        {#if displayStats(slot.stats)}
+          <div><dt>Stats</dt><dd>{displayStats(slot.stats)}</dd></div>
+        {/if}
+        {#if slot.socketBonus?.stats}
+          <div><dt>Socket bonus</dt><dd class:bonus-active={slot.socketBonus.active} class:bonus-inactive={!slot.socketBonus.active}>{slot.socketBonus.active ? 'active' : 'inactive'}{displayStats(slot.socketBonus.stats) ? ` · ${displayStats(slot.socketBonus.stats)}` : ''}</dd></div>
+        {/if}
+      </dl>
+    </details>
   </div>
 </article>

@@ -16,7 +16,8 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(page.getByRole('heading', { name: 'TestMage', exact: true })).toBeVisible();
   await expect(page.locator('[data-slot]')).toHaveCount(17);
   await expect(page.getByLabel(/sockets$/i).first()).toBeVisible();
-  await expect(page.getByText(/^Enchant:/).first()).toBeVisible();
+  await expect(page.locator('.gear-details summary').first()).toBeVisible();
+  await expect(page.locator('.item-ilvl').first()).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Raw stats', exact: true })).toBeVisible();
   await expect(page.getByRole('heading', { name: 'Derived percentages', exact: true })).toBeVisible();
   await expect(page.getByText('raid buffed (link settings)', { exact: true })).toBeVisible();

@@ -101,7 +101,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .gear-grid { display: grid; grid-template-columns: minmax(0, 1fr) 7rem minmax(0, 1fr); gap: 1rem; margin-top: 1.5rem; }
 .gear-column { display: grid; align-content: start; gap: 0.7rem; }
 .gear-center { background: radial-gradient(ellipse, rgba(101, 183, 255, 0.12), transparent 70%); border-left: 1px solid rgba(83, 107, 138, 0.3); border-right: 1px solid rgba(83, 107, 138, 0.3); }
-.gear-slot { align-items: start; background: rgba(6, 10, 16, 0.65); border: 1px solid var(--border); border-left: 3px solid var(--border-bright); border-radius: 7px; display: flex; gap: 0.7rem; min-height: 6.5rem; padding: 0.65rem; }
+.gear-slot { align-items: start; background: rgba(6, 10, 16, 0.65); border: 1px solid var(--border); border-left: 3px solid var(--border-bright); border-radius: 7px; display: flex; gap: 0.7rem; min-height: 5rem; padding: 0.65rem; }
 .gear-slot.quality-0 { border-color: #9d9d9d; border-left-color: #9d9d9d; }
 .gear-slot.quality-1 { border-color: #ffffff; border-left-color: #ffffff; }
 .gear-slot.quality-2 { border-color: #1eff00; border-left-color: #1eff00; }
@@ -110,7 +110,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .gear-slot.quality-5 { border-color: #ff8000; border-left-color: #ff8000; }
 .gear-slot.quality-6 { border-color: #e6cc80; border-left-color: #e6cc80; }
 .gear-slot.quality-7 { border-color: #00ccff; border-left-color: #00ccff; }
-.gear-icon-wrap { flex: 0 0 3.4rem; height: 3.4rem; }
+.gear-slot.mirror { flex-direction: row-reverse; }
+.gear-icon-wrap { flex: 0 0 3.4rem; height: 3.4rem; position: relative; }
 .gear-icon, .gear-icon-fallback { border: 1px solid var(--border-bright); border-radius: 4px; display: block; height: 3.4rem; object-fit: cover; width: 3.4rem; }
 .gear-icon-fallback { align-items: center; background: #263247; color: var(--gold); display: flex; font-size: 1.3rem; justify-content: center; }
 .quality-0 .gear-icon-fallback { background: #454545; }
@@ -121,15 +122,31 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .quality-5 .gear-icon-fallback { background: #8c4900; }
 .quality-6 .gear-icon-fallback { background: #77652d; }
 .quality-7 .gear-icon-fallback { background: #126b80; }
-.gear-copy { min-width: 0; }
-.item-name { color: var(--accent-strong); font-weight: 700; margin-bottom: 0.12rem; overflow-wrap: anywhere; }
-.item-meta, .enchant, .socket-bonus { color: var(--muted); font-size: 0.78rem; margin: 0.12rem 0; overflow-wrap: anywhere; }
-.bonus-active { color: var(--success); }
-.bonus-inactive { color: #dcae78; }
-.socket-row { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 0.35rem; }
-.socket { align-items: center; background: #263247; border: 1px solid var(--border-bright); border-radius: 3px; display: inline-flex; height: 1.35rem; justify-content: center; overflow: hidden; width: 1.35rem; }
+.item-ilvl { background: #101826; border: 1px solid var(--gold); border-radius: 4px; color: var(--gold); font-size: 0.68rem; font-weight: 700; left: -6px; line-height: 1; padding: 2px 4px; position: absolute; top: -6px; z-index: 1; }
+.socket-strip { bottom: -5px; display: flex; gap: 2px; justify-content: center; left: 0; position: absolute; right: 0; }
+.socket { align-items: center; background: #263247; border: 1px solid var(--border-bright); border-radius: 3px; display: inline-flex; height: 1rem; justify-content: center; overflow: hidden; width: 1rem; }
 .socket img { height: 100%; object-fit: cover; width: 100%; }
 .empty-socket { background: transparent; border: 1px dashed var(--gold); color: var(--gold); }
+.gear-copy { min-width: 0; }
+.item-name { font-weight: 700; margin: 0 0 0.12rem; overflow-wrap: anywhere; }
+.quality-text-0 { color: #9d9d9d; }
+.quality-text-1 { color: #ffffff; }
+.quality-text-2 { color: #1eff00; }
+.quality-text-3 { color: #0070dd; }
+.quality-text-4 { color: #a335ee; }
+.quality-text-5 { color: #ff8000; }
+.quality-text-6 { color: #e6cc80; }
+.quality-text-7 { color: #00ccff; }
+.slot-caption { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.05em; margin: 0; text-transform: uppercase; }
+.enchant-effect { color: #1eff00; font-size: 0.8rem; margin: 0.1rem 0 0; overflow-wrap: anywhere; }
+.gear-details { color: var(--muted); font-size: 0.78rem; margin-top: 0.35rem; }
+.gear-details summary { cursor: pointer; }
+.gear-detail-list { display: grid; gap: 0.15rem; margin: 0.4rem 0 0; }
+.gear-detail-list div { display: flex; gap: 0.6rem; justify-content: space-between; }
+.gear-detail-list dt { color: var(--muted); }
+.gear-detail-list dd { margin: 0; overflow-wrap: anywhere; text-align: right; }
+.bonus-active { color: var(--success); }
+.bonus-inactive { color: #dcae78; }
 
 .stat-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .stat-panel { background: rgba(5, 9, 15, 0.55); border: 1px solid var(--border); border-radius: 7px; padding: 1rem; }
