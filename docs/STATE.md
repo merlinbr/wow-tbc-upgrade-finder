@@ -54,7 +54,8 @@ The 2026-08-31 follow-up work is implemented and verified:
 
 ### Repo and CI
 
-- `.github/workflows/upgrade_finder.yml` is independent of the upstream simulator's reusable `run_tests.yml`: one Ubuntu job installs Go `1.25.x` and Node `22`, runs `go test ./cmd/wowsimcli/cmd/upgrades -count=1`, `go test ./cmd/wowsimcli/cmd/... -count=1`, `go build`, `npm ci`, `npm run build`, installs Chromium, and runs `npm run test:e2e`.
+- `.github/workflows/upgrade_finder.yml` is a standalone upgrade-finder workflow: one Ubuntu job installs Go `1.25.x`, Protoc, `protoc-gen-go`, and Node `22`; generates the gitignored proto stubs with `make sim/core/proto/api.pb.go binary_dist/dist.go`; runs `go test ./cmd/wowsimcli/cmd/upgrades -count=1`, `go test ./cmd/wowsimcli/cmd/... -count=1`, `go build`, `npm ci`, `npm run build`; installs Chromium; and runs `npm run test:e2e`. Triggers on pushes and pull requests targeting `main`.
+- The inherited upstream simulator workflows (`run_tests.yml`, `deploy.yml`, `release.yml`, `scheduled_release.yml`) were removed from the fork; they target upstream publishing infrastructure and cannot pass on a forked repository.
 
 ## Verification
 
@@ -83,7 +84,7 @@ gear slots.
 
 ## Known follow-up risks
 
-- The repo workflows were retargeted from `master` to `main` to match the `origin` remote's default branch; CI has not yet executed on GitHub, so the first `main` push or PR validates it end to end.
+- The repo workflows were retargeted from `master` to `main` to match the `origin` remote's default branch; the Upgrade Finder CI validated end to end after the proto-generation fix (2026-09-05).
 - Simulator database attachment remains process-wide through the existing `sync.Once` path; concurrent first jobs should be serialized or attachment should become per-job-safe.
 - DELETE-failure recovery can briefly schedule duplicate polling timers while an already-fired poll request is in flight. Cancellation remains recoverable; this was recorded as a non-blocking review note.
 - The optional favicon remains a cosmetic 404.
