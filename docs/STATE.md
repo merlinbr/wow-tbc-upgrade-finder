@@ -83,7 +83,7 @@ gear slots.
 
 ## Known follow-up risks
 
-- The CI workflow triggers are pinned to `master`, while the `origin` remote's only branch is `main`; the workflow has not yet run on GitHub. Resolve the branch/trigger mismatch before relying on CI (tracked as open item).
+- The repo workflows were retargeted from `master` to `main` to match the `origin` remote's default branch; CI has not yet executed on GitHub, so the first `main` push or PR validates it end to end.
 - Simulator database attachment remains process-wide through the existing `sync.Once` path; concurrent first jobs should be serialized or attachment should become per-job-safe.
 - DELETE-failure recovery can briefly schedule duplicate polling timers while an already-fired poll request is in flight. Cancellation remains recoverable; this was recorded as a non-blocking review note.
 - The optional favicon remains a cosmetic 404.

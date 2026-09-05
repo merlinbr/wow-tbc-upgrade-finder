@@ -2,8 +2,8 @@ name: Run Tests
 on:
     pull_request:
         branches:
-            - master
-    # Reusable from other workflows (deploy, release). Their runs on master also
+            - main
+    # Reusable from other workflows (deploy, release). Their runs on main also
     # prime the Go/npm caches that pull request runs restore from.
     workflow_call:
         inputs:

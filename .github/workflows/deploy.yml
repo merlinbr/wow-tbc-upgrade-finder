@@ -2,7 +2,7 @@ name: Build and Deploy
 on:
     push:
         branches:
-            - master
+            - main
 jobs:
     tests:
         uses: ./.github/workflows/run_tests.yml
