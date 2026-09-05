@@ -113,6 +113,10 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .gear-slot.mirror { flex-direction: row-reverse; }
 .gear-slot.mirror .gear-copy { text-align: right; }
 .gear-icon-wrap { flex: 0 0 3.4rem; height: 3.4rem; position: relative; }
+.gear-trigger, .name-trigger { position: relative; display: inline-flex; background: none; border: 0; padding: 0; cursor: help; font: inherit; color: inherit; text-align: inherit; }
+.gear-trigger:hover .item-tooltip, .gear-trigger:focus-visible .item-tooltip,
+.name-trigger:hover .item-tooltip, .name-trigger:focus-visible .item-tooltip { display: flex; }
+.mirror .item-tooltip { left: auto; right: calc(100% + 10px); }
 .gear-icon, .gear-icon-fallback { border: 1px solid var(--border-bright); border-radius: 4px; display: block; height: 3.4rem; object-fit: cover; width: 3.4rem; }
 .gear-icon-fallback { align-items: center; background: #263247; color: var(--gold); display: flex; font-size: 1.3rem; justify-content: center; }
 .quality-0 .gear-icon-fallback { background: #454545; }

@@ -1,19 +1,10 @@
 <script>
+  import { socketColors } from './labels.js';
+  import ItemTooltip from './ItemTooltip.svelte';
+
   let { slot, side = 'left' } = $props();
   let itemIconFailed = $state(false);
   let failedGemIcons = $state({});
-
-  const socketColors = {
-    0: 'Unknown',
-    1: 'Meta',
-    2: 'Red',
-    3: 'Blue',
-    4: 'Yellow',
-    5: 'Green',
-    6: 'Orange',
-    7: 'Purple',
-    8: 'Prismatic',
-  };
 
   function iconUrl(icon) {
     return `https://wow.zamimg.com/images/wow/icons/large/${icon}.jpg`;
@@ -38,31 +29,39 @@
 
 <article class="gear-slot quality-{slot.quality ?? 0}" class:mirror={side === 'right'} data-slot={slot.slotName}>
   <div class="gear-icon-wrap">
-    {#if slot.ilvl}
-      <span class="item-ilvl">{slot.ilvl}</span>
-    {/if}
-    {#if slot.icon && !itemIconFailed}
-      <img class="gear-icon" src={iconUrl(slot.icon)} alt="{slot.itemName || 'Empty'} icon" onerror={handleItemImageError} />
-    {:else}
-      <span class="gear-icon-fallback" role="img" aria-label="{slot.slotName} icon unavailable">{slotInitial()}</span>
-    {/if}
-    {#if slot.sockets?.length}
-      <div class="socket-strip" aria-label={`${slot.slotName} sockets`}>
-        {#each slot.sockets as socket, index}
-          <span class:empty-socket={!socket.gem} class="socket" title={`${socketColors[socket.color] || 'Unknown'} socket${socket.gem ? `: ${socket.gem.name}` : ': empty'}`}>
-            {#if socket.gem?.icon && !failedGemIcons[index]}
-              <img src={iconUrl(socket.gem.icon)} alt="{socket.gem.name} gem" onerror={() => handleGemImageError(index)} />
-            {:else}
-              <span aria-hidden="true">◇</span>
-            {/if}
-          </span>
-        {/each}
-      </div>
-    {/if}
+    <button type="button" class="gear-trigger">
+      {#if slot.ilvl}
+        <span class="item-ilvl">{slot.ilvl}</span>
+      {/if}
+      {#if slot.icon && !itemIconFailed}
+        <img class="gear-icon" src={iconUrl(slot.icon)} alt="{slot.itemName || 'Empty'} icon" onerror={handleItemImageError} />
+      {:else}
+        <span class="gear-icon-fallback" role="img" aria-label="{slot.slotName} icon unavailable">{slotInitial()}</span>
+      {/if}
+      {#if slot.sockets?.length}
+        <div class="socket-strip" aria-label={`${slot.slotName} sockets`}>
+          {#each slot.sockets as socket, index}
+            <span class:empty-socket={!socket.gem} class="socket" title={`${socketColors[socket.color] || 'Unknown'} socket${socket.gem ? `: ${socket.gem.name}` : ': empty'}`}>
+              {#if socket.gem?.icon && !failedGemIcons[index]}
+                <img src={iconUrl(socket.gem.icon)} alt="{socket.gem.name} gem" onerror={() => handleGemImageError(index)} />
+              {:else}
+                <span aria-hidden="true">◇</span>
+              {/if}
+            </span>
+          {/each}
+        </div>
+      {/if}
+      {#if slot.itemName}
+        <ItemTooltip item={slot} variant="full" />
+      {/if}
+    </button>
   </div>
   <div class="gear-copy">
     {#if slot.itemName}
-      <h3 class="item-name quality-text-{slot.quality ?? 0}">{slot.itemName}</h3>
+      <span class="name-trigger">
+        <h3 class="item-name quality-text-{slot.quality ?? 0}">{slot.itemName}</h3>
+        <ItemTooltip item={slot} variant="full" />
+      </span>
       {#if slot.enchant}
         <p class="enchant-effect">{slot.enchant.description || slot.enchant.name}</p>
       {/if}
