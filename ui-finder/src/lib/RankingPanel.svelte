@@ -77,12 +77,6 @@
         <label for="max-phase">Maximum phase</label>
         <input id="max-phase" name="maxPhase" type="number" min="1" step="1" bind:value={maxPhase} disabled={busy} />
       </div>
-      <div class="check-control">
-        <label>
-          <input id="include-unknown" name="includeUnknown" type="checkbox" bind:checked={includeUnknown} disabled={busy} />
-          Include unknown-source items
-        </label>
-      </div>
       <div>
         <label for="screening-iterations">Screening iterations</label>
         <input id="screening-iterations" name="screeningIterations" type="number" min="0" step="1" bind:value={screeningIterations} disabled={busy} />
@@ -92,7 +86,7 @@
         <input id="confirmation-iterations" name="confirmationIterations" type="number" min="0" step="1" bind:value={confirmationIterations} disabled={busy} />
       </div>
     </div>
-      <fieldset class="check-control source-kind-group" disabled={busy}>
+      <fieldset class="source-kind-group" disabled={busy}>
         <legend>Include sources</legend>
         {#each sourceKinds.filter((kind) => kind.value !== 0) as kind}
           <label>
@@ -108,6 +102,10 @@
             {kind.label}
           </label>
         {/each}
+        <label>
+          <input id="include-unknown" name="includeUnknown" type="checkbox" bind:checked={includeUnknown} disabled={busy} />
+          Include unknown-source items
+        </label>
       </fieldset>
     <p class="progress-status" role="status" aria-live="polite">{progressText(job)}</p>
     <div class="button-row">

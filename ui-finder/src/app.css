@@ -160,11 +160,17 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .stat-list dd { color: var(--accent-strong); font-variant-numeric: tabular-nums; }
 .muted, .report-muted { color: var(--muted); }
 
-.control-grid { display: grid; gap: 0.8rem 1rem; grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.check-control { align-self: end; padding-bottom: 0.65rem; }
-.check-control label { color: var(--text); }
-.source-kind-group { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 1rem; border: 0; padding: 0; margin: 0.2rem 0 0; }
-.source-kind-group legend { float: left; margin-right: 0.5rem; }
+.control-grid { display: grid; gap: 0.8rem 1rem; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.source-kind-group {
+  border: 0;
+  display: grid;
+  gap: 0.4rem 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  margin: 1.1rem 0 0;
+  padding: 0;
+}
+.source-kind-group legend { grid-column: 1 / -1; margin: 0 0 0.4rem; padding: 0; }
+.source-kind-group label { align-items: center; color: var(--text); display: inline-flex; margin: 0; }
 .button-row { margin-top: 1rem; }
 
 .report-header { align-items: center; }
