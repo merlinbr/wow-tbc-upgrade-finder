@@ -1,7 +1,7 @@
 <script>
   import { copyReport } from './stores.svelte.js';
   import { humanizeEnum, qualityLabel, sourceKindLabel, humanizeSourceKind } from './labels.js';
-  import ItemTooltip from './ItemTooltip.svelte';
+  import ItemTooltipTrigger from './ItemTooltipTrigger.svelte';
 
   let { report, copyStatus = '' } = $props();
 
@@ -116,7 +116,26 @@
         {#each report.confirmed ?? [] as upgrade}
           <tr>
             <td class:too-close={upgrade.tooCloseToCall}>{upgrade.tooCloseToCall ? 'Too close to call' : upgrade.rank}</td>
-            <td><span class="report-item-trigger">{upgrade.item?.name || 'Unknown'} ({upgrade.item?.id}){#if upgrade.item?.name}<ItemTooltip item={upgrade.item} variant="summary" />{/if}</span> · Phase {upgrade.item?.phase ?? '—'} · {qualityLabel(upgrade.item?.quality)}</td>
+            <td>
+              {#if upgrade.item?.name}
+                <ItemTooltipTrigger item={upgrade.item} variant="summary" preferredSide="right">
+                  {#snippet children({ id, onpointerenter, onpointerleave, onfocus, onblur })}
+                    <button
+                      type="button"
+                      class="report-item-trigger"
+                      aria-describedby={id}
+                      onpointerenter={onpointerenter}
+                      onpointerleave={onpointerleave}
+                      onfocus={onfocus}
+                      onblur={onblur}
+                    >{upgrade.item.name} ({upgrade.item.id})</button>
+                  {/snippet}
+                </ItemTooltipTrigger>
+              {:else}
+                <span>Unknown ({upgrade.item?.id})</span>
+              {/if}
+              · Phase {upgrade.item?.phase ?? '—'} · {qualityLabel(upgrade.item?.quality)}
+            </td>
             <td>
               {#if upgrade.assumptions}
                 <details class="report-details"><summary>View</summary><pre>{JSON.stringify(upgrade.assumptions, null, 2)}</pre></details>

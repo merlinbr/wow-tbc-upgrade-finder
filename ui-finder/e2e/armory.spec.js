@@ -46,8 +46,9 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   // Full tooltip on the armory (hover the first gear icon).
   const firstTrigger = page.locator('.gear-trigger').first();
   await firstTrigger.hover();
-  const tooltip = page.locator('.item-tooltip').first();
+  const tooltip = page.getByRole('tooltip');
   await expect(tooltip).toBeVisible();
+  await expect(tooltip).toHaveAttribute('id', await firstTrigger.getAttribute('aria-describedby'));
   await expect(tooltip).toContainText(/Item Level/i);
   await expect(tooltip.locator('.tooltip-enchant, .tooltip-socket').first()).toBeAttached();
 
@@ -78,7 +79,7 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(page.locator('.report-summary dd').filter({ hasText: 'Sold by vendor' })).toBeVisible();
   const reportTrigger = page.locator('.report-item-trigger').first();
   await reportTrigger.hover();
-  await expect(reportTrigger.locator('.item-tooltip')).toBeVisible();
+  await expect(page.getByRole('tooltip')).toBeVisible();
 
   await page.getByRole('button', { name: 'Copy JSON', exact: true }).click();
   await expect(page.getByText('Report copied to clipboard.', { exact: true })).toBeVisible();

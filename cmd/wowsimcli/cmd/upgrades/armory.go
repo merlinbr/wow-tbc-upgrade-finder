@@ -139,6 +139,16 @@ func enrichItem(spec *proto.ItemSpec, item *proto.UIItem, catalog *Catalog) (Gea
 	data.SetName = item.GetSetName()
 	data.Ilvl = itemIlvl(item)
 	data.Stats = statValuesMap(itemBaseStats(item))
+	data.ArmorType = item.GetArmorType()
+	data.WeaponType = item.GetWeaponType()
+	data.HandType = item.GetHandType()
+	data.RangedWeaponType = item.GetRangedWeaponType()
+	data.WeaponDamageMin = item.GetWeaponDamageMin()
+	data.WeaponDamageMax = item.GetWeaponDamageMax()
+	data.WeaponSpeed = item.GetWeaponSpeed()
+	data.ClassAllowlist = append([]proto.Class(nil), item.GetClassAllowlist()...)
+	data.RequiredProfession = item.GetRequiredProfession()
+	data.Unique = item.GetUnique()
 
 	if suffixID := spec.GetRandomSuffix(); suffixID != 0 {
 		suffix := catalog.RandomSuffixes[suffixID]

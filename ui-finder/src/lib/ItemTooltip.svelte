@@ -1,120 +1,164 @@
 <script>
-  import { formatStatLine, qualityLabel, socketColors } from './labels.js';
+  import { buildItemTooltip } from './itemTooltip.js';
+  import TooltipIcon from './TooltipIcon.svelte';
 
-  let { item, variant = 'full' } = $props();
+  let { item, variant = 'full', id = '' } = $props();
 
-  let iconFailed = $state(false);
-  let summary = $derived(variant === 'summary');
-  let name = $derived(item?.itemName ?? item?.name ?? '');
-  let statEntries = $derived(Object.entries(item?.stats ?? {}));
-  let suffixEntries = $derived(item?.randomSuffix ? Object.entries(item.randomSuffix.stats ?? {}) : []);
-
-  function iconUrl(icon) {
-    return `https://wow.zamimg.com/images/wow/icons/large/${icon}.jpg`;
-  }
-
-  function gemText(gem) {
-    const lines = Object.entries(gem?.stats ?? {}).map(([key, value]) => formatStatLine(key, value));
-    return lines.length ? lines.join(', ') : (gem?.name ?? '');
-  }
+  let vm = $derived.by(() => buildItemTooltip(item ?? {}, variant));
 </script>
 
-{#if name}
-  <span class="item-tooltip" role="tooltip">
-    {#if summary}
-      <span class="tooltip-summary">
-        <span class="tooltip-name quality-text-{item.quality ?? 0}">
-          {#if item.icon && !iconFailed}
-            <img class="tooltip-icon" src={iconUrl(item.icon)} alt={name} onerror={() => (iconFailed = true)} />
-          {/if}
-          {name}
-        </span>
-        {#if item.phase}<span class="tooltip-phase">Phase {item.phase}</span>{/if}
-      </span>
-      <span class="tooltip-meta">{qualityLabel(item.quality)}</span>
-    {:else}
-      <span class="tooltip-header">
-        <span class="tooltip-name quality-text-{item.quality ?? 0}">{name}</span>
-        {#if item.phase}<span class="tooltip-phase">Phase {item.phase}</span>{/if}
-      </span>
-      {#if item.ilvl}<span class="tooltip-ilvl">Item Level {item.ilvl}</span>{/if}
-      <span class="tooltip-meta">{item.slotName}</span>
-      {#each statEntries as [key, value]}
-        <span class="tooltip-stat">{formatStatLine(key, value)}</span>
-      {/each}
-      {#if item.randomSuffix}
-        <span class="tooltip-meta">{item.randomSuffix.name}</span>
-        {#each suffixEntries as [key, value]}
-          <span class="tooltip-stat">{formatStatLine(key, value)}</span>
-        {/each}
+{#if vm.name}
+  <div class="item-tooltip" role="tooltip" {id}>
+    <div class="tooltip-icon-slot">
+      <TooltipIcon icon={vm.icon} name={vm.name} size={38} />
+    </div>
+    <div class="tooltip-body">
+      <div class="tooltip-header">
+        <div class="tooltip-inline-icon" aria-hidden="true">
+          <TooltipIcon icon={vm.icon} name={vm.name} size={38} />
+        </div>
+        <div class="tooltip-name">
+          <span class="tooltip-name-text quality-text-{vm.quality}">{vm.name}</span>
+          {#if vm.suffixLabel}<span class="tooltip-suffix">{vm.suffixLabel}</span>{/if}
+        </div>
+        {#if vm.phase}<span class="tooltip-phase">Phase {vm.phase}</span>{/if}
+      </div>
+      {#if variant === 'summary'}
+        <div class="tooltip-section"><span class="tooltip-muted">{vm.qualityLabel}</span></div>
+      {:else}
+        {#if vm.ilvl}
+          <div class="tooltip-section"><span class="tooltip-ilvl">Item Level {vm.ilvl}</span></div>
+        {/if}
+        {#if vm.slotLabel || vm.typeLabel}
+          <div class="tooltip-section tooltip-slot-row">
+            <span class="tooltip-muted">{vm.slotLabel}</span>
+            {#if vm.typeLabel}<span class="tooltip-muted">{vm.typeLabel}</span>{/if}
+          </div>
+        {/if}
+        {#if vm.weaponLines.length}
+          <div class="tooltip-section tooltip-weapon">
+            {#each vm.weaponLines as line, index (index)}
+              <span>{line}</span>
+            {/each}
+          </div>
+        {/if}
+        {#if vm.baseLines.length}
+          <div class="tooltip-section">
+            {#each vm.baseLines as line, index (index)}
+              <span class="tooltip-stat">{line.text}</span>
+            {/each}
+          </div>
+        {/if}
+        {#if vm.enchantLine}
+          <div class="tooltip-section"><span class="tooltip-enchant">{vm.enchantLine}</span></div>
+        {/if}
+        {#if vm.sockets.length}
+          <div class="tooltip-section">
+            {#each vm.sockets as socket, index (index)}
+              <div class="tooltip-socket" data-gem-id={socket.gem?.id ?? ''}>
+                {#if socket.gem}
+                  <TooltipIcon icon={socket.gem.icon} name={socket.gem.name} size={16} />
+                  <span class="tooltip-gem">{socket.text}</span>
+                {:else}
+                  <span class="empty-socket-icon socket-{socket.color}" aria-hidden="true"></span>
+                  <span class="tooltip-muted">{socket.text}</span>
+                {/if}
+              </div>
+            {/each}
+          </div>
+        {/if}
+        {#if vm.socketBonus}
+          <div class="tooltip-section">
+            <span class="tooltip-socket-bonus" class:inactive={!vm.socketBonus.active}>Socket Bonus: {vm.socketBonus.text}</span>
+          </div>
+        {/if}
+        {#if vm.restrictionLines.length}
+          <div class="tooltip-section">
+            {#each vm.restrictionLines as line, index (index)}
+              <span class="tooltip-restriction">{line}</span>
+            {/each}
+          </div>
+        {/if}
+        {#if vm.equipLines.length}
+          <div class="tooltip-section">
+            {#each vm.equipLines as line, index (index)}
+              <span class="tooltip-equip">{line.text}</span>
+            {/each}
+          </div>
+        {/if}
+        {#if vm.setName}
+          <div class="tooltip-section"><span class="tooltip-set">{vm.setName}</span></div>
+        {/if}
       {/if}
-      {#if item.sockets?.length}
-        <span class="tooltip-sockets">
-          {#each item.sockets as socket}
-            <span class="tooltip-socket">
-              <span class="socket-dot socket-{socket.color}" title="{socketColors[socket.color] ?? 'Unknown'} socket"></span>
-              {#if socket.gem}
-                <span class="tooltip-gem">{gemText(socket.gem)}</span>
-              {:else}
-                <span class="tooltip-gem empty">{socketColors[socket.color] ?? 'Unknown'} socket (empty)</span>
-              {/if}
-            </span>
-          {/each}
-        </span>
-      {/if}
-      {#if item.socketBonus?.stats && Object.keys(item.socketBonus.stats).length}
-        <span class="tooltip-socket-bonus" class:inactive={!item.socketBonus.active}>
-          Socket Bonus: {Object.entries(item.socketBonus.stats).map(([key, value]) => formatStatLine(key, value)).join(', ')}
-        </span>
-      {/if}
-      {#if item.enchant}
-        <span class="tooltip-enchant">Equip: {item.enchant.description || item.enchant.name}</span>
-      {/if}
-    {/if}
-  </span>
+    </div>
+  </div>
 {/if}
 
 <style>
   .item-tooltip {
-    display: none;
-    position: absolute;
-    z-index: 30;
-    top: 0;
-    left: calc(100% + 10px);
+    display: grid;
+    grid-template-columns: 38px minmax(0, 320px);
+    gap: 5px;
+    text-align: left;
     width: max-content;
-    max-width: 280px;
-    flex-direction: column;
-    gap: 2px;
-    padding: 8px 10px;
-    background: #0a0d14;
-    border: 1px solid #2b3444;
-    border-radius: 6px;
-    color: #f2f4f8;
-    font-size: 0.85rem;
-    line-height: 1.35;
-    pointer-events: none;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.55);
+    max-width: calc(100vw - 16px);
   }
-  .tooltip-header { display: flex; justify-content: space-between; gap: 12px; }
-  .tooltip-icon { border: 1px solid #2b3444; border-radius: 3px; height: 18px; object-fit: cover; vertical-align: middle; width: 18px; }
-  .tooltip-phase { color: #b8c0cc; white-space: nowrap; }
-  .tooltip-ilvl { color: #e6b23c; }
-  .tooltip-meta { color: #d5dae2; }
-  .tooltip-stat { color: #ffffff; }
-  .tooltip-sockets { display: flex; flex-direction: column; gap: 2px; }
-  .tooltip-socket { display: flex; align-items: center; gap: 6px; }
-  .tooltip-gem { color: #3fd13f; }
-  .tooltip-gem.empty { color: #8a93a3; }
-  .socket-dot { width: 10px; height: 10px; border-radius: 2px; display: inline-block; border: 1px solid rgba(255, 255, 255, 0.35); }
-  .socket-dot.socket-1 { background: #4a3a6b; }
-  .socket-dot.socket-2 { background: #b32424; }
-  .socket-dot.socket-3 { background: #2456b3; }
-  .socket-dot.socket-4 { background: #d6c520; }
-  .socket-dot.socket-5 { background: #2e9e44; }
-  .socket-dot.socket-6 { background: #d67a20; }
-  .socket-dot.socket-7 { background: #7a2e9e; }
-  .socket-dot.socket-8 { background: #c8ccd4; }
-  .tooltip-socket-bonus { color: #3fd13f; }
-  .tooltip-socket-bonus.inactive { color: #8a93a3; }
-  .tooltip-enchant { color: #3fd13f; }
+  .tooltip-icon-slot { align-self: start; }
+  .tooltip-body {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 8px 10px;
+    color: #f2f2f4;
+    background: rgba(18, 21, 38, 0.98);
+    border: 1px solid #85848b;
+    border-radius: 3px;
+    box-shadow: 0 4px 14px #0008;
+    font-size: 13px;
+    line-height: 1.25;
+    max-height: calc(100vh - 16px);
+    overflow-y: auto;
+  }
+  .tooltip-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 12px;
+  }
+  .tooltip-inline-icon { display: none; }
+  .tooltip-name { min-width: 0; overflow-wrap: anywhere; }
+  .tooltip-name-text { font-size: 15px; }
+  .tooltip-suffix { color: #d5dae2; }
+  .tooltip-phase { color: #aaaab4; white-space: nowrap; }
+  .tooltip-ilvl, .tooltip-set { color: #ffd100; }
+  .tooltip-enchant, .tooltip-gem, .tooltip-equip, .tooltip-socket-bonus { color: #1eff00; }
+  .tooltip-muted, .tooltip-restriction, .tooltip-socket-bonus.inactive { color: #9d9da8; }
+  .tooltip-section + .tooltip-section { margin-top: 8px; }
+  .tooltip-section { display: grid; gap: 2px; }
+  .tooltip-weapon { display: flex; gap: 8px; }
+  .tooltip-slot-row { display: flex; gap: 8px; justify-content: space-between; }
+  .tooltip-socket { display: flex; align-items: flex-start; gap: 4px; }
+  .empty-socket-icon {
+    border-radius: 2px;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+  }
+  .empty-socket-icon.socket-0 { background: transparent; }
+  .empty-socket-icon.socket-1 { background: #4a3a6b; }
+  .empty-socket-icon.socket-2 { background: #b32424; }
+  .empty-socket-icon.socket-3 { background: #2456b3; }
+  .empty-socket-icon.socket-4 { background: #d6c520; }
+  .empty-socket-icon.socket-5 { background: #2e9e44; }
+  .empty-socket-icon.socket-6 { background: #d67a20; }
+  .empty-socket-icon.socket-7 { background: #7a2e9e; }
+  .empty-socket-icon.socket-8 { background: #c8ccd4; }
+
+  @media (max-width: 420px) {
+    .item-tooltip { display: block; max-width: calc(100vw - 16px); }
+    .tooltip-icon-slot { display: none; }
+    .tooltip-header {
+      grid-template-columns: 38px minmax(0, 1fr) auto;
+    }
+    .tooltip-inline-icon { display: block; }
+  }
 </style>

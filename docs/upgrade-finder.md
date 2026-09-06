@@ -74,7 +74,21 @@ in the card's Details disclosure. Stats shows the deterministic **raid buffed
 the bundled TBC talent trees. The 3D character model is not available yet;
 the stage shows a labeled placeholder until the gated viewer integration
 lands (see `docs/armory-redesign-research.md`).
-Hovering or keyboard-focusing an item icon or name shows a tooltip with the item's stats, gems, socket bonus, and enchant.
+Hovering or keyboard-focusing an item icon or name shows a compact WoW-style
+tooltip beside the slot: a small external item icon, rarity-colored name with
+phase and item level, slot/type, weapon damage and speed, base stats,
+enchant, the actual socketed gem artwork and effects (mismatched-color gems
+are still shown; genuinely empty sockets stay visibly empty), the socket
+bonus in its active/inactive state, class/profession restrictions, secondary
+"Equip:" effects, and the item set name. The tooltip opens after roughly
+120 ms on pointer hover and immediately on keyboard focus; it stays open
+while hovered, Escape dismisses it (until the trigger is left or refocused),
+and only one tooltip is visible across all triggers. Report summary tooltips
+show the candidate item without inventing gem details. The full Details
+disclosure per slot remains keyboard/touch accessible and exposes the same
+type, weapon, gem, suffix, and restriction information.
+Bindings, required level, durability, vendor value, proc/use descriptions,
+and full set-bonus text are not part of the imported data and are not shown.
 
 The armory snapshot uses the imported baseline as-is — raid, party, and
 individual buffs, consumes, and talents — so the displayed stats match both

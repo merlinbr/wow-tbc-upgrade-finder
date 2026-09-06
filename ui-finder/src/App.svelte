@@ -1,12 +1,22 @@
 <script>
+  import { onDestroy, setContext } from 'svelte';
   import ArmoryView from './lib/ArmoryView.svelte';
   import ImportPanel from './lib/ImportPanel.svelte';
+  import ItemTooltipLayer from './lib/ItemTooltipLayer.svelte';
   import RankingPanel from './lib/RankingPanel.svelte';
   import ReportView from './lib/ReportView.svelte';
+  import { createTooltipController, ITEM_TOOLTIP_CONTEXT } from './lib/tooltipController.js';
   import { state as uiState } from './lib/stores.svelte.js';
 
   let originalLink = $state('');
   let importing = $state(false);
+  let activeTooltip = $state(null);
+
+  const tooltipController = createTooltipController((value) => {
+    activeTooltip = value;
+  });
+  setContext(ITEM_TOOLTIP_CONTEXT, tooltipController);
+  onDestroy(() => tooltipController.destroy());
 
   function importPending() {
     importing = true;
@@ -54,3 +64,5 @@
     Rankings are local single-item DPS comparisons, not acquisition pricing or multi-item optimization.
   </p>
 </footer>
+
+<ItemTooltipLayer active={activeTooltip} controller={tooltipController} />

@@ -41,20 +41,30 @@ type ArmoryData struct {
 }
 
 type GearSlotData struct {
-	Slot         proto.ItemSlot     `json:"slot"`
-	SlotName     string             `json:"slotName"`
-	ItemID       int32              `json:"itemId"`
-	ItemName     string             `json:"itemName"`
-	Quality      proto.ItemQuality  `json:"quality"`
-	Icon         string             `json:"icon"`
-	Phase        int32              `json:"phase"`
-	Ilvl         int32              `json:"ilvl"`
-	SetName      string             `json:"setName"`
-	Stats        map[string]float64 `json:"stats"`
-	RandomSuffix *RandomSuffixData  `json:"randomSuffix"`
-	Sockets      []SocketData       `json:"sockets"`
-	SocketBonus  SocketBonusData    `json:"socketBonus"`
-	Enchant      *EnchantData       `json:"enchant"`
+	Slot               proto.ItemSlot         `json:"slot"`
+	SlotName           string                 `json:"slotName"`
+	ItemID             int32                  `json:"itemId"`
+	ItemName           string                 `json:"itemName"`
+	Quality            proto.ItemQuality      `json:"quality"`
+	Icon               string                 `json:"icon"`
+	Phase              int32                  `json:"phase"`
+	Ilvl               int32                  `json:"ilvl"`
+	SetName            string                 `json:"setName"`
+	Stats              map[string]float64     `json:"stats"`
+	RandomSuffix       *RandomSuffixData      `json:"randomSuffix"`
+	Sockets            []SocketData           `json:"sockets"`
+	SocketBonus        SocketBonusData        `json:"socketBonus"`
+	Enchant            *EnchantData           `json:"enchant"`
+	ArmorType          proto.ArmorType        `json:"armorType"`
+	WeaponType         proto.WeaponType       `json:"weaponType"`
+	HandType           proto.HandType         `json:"handType"`
+	RangedWeaponType   proto.RangedWeaponType `json:"rangedWeaponType"`
+	WeaponDamageMin    float64                `json:"weaponDamageMin"`
+	WeaponDamageMax    float64                `json:"weaponDamageMax"`
+	WeaponSpeed        float64                `json:"weaponSpeed"`
+	ClassAllowlist     []proto.Class          `json:"classAllowlist"`
+	RequiredProfession proto.Profession       `json:"requiredProfession"`
+	Unique             bool                   `json:"unique"`
 }
 
 type RandomSuffixData struct {

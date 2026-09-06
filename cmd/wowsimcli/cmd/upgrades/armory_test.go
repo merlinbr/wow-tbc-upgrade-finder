@@ -2,6 +2,7 @@ package upgrades
 
 import (
 	"bytes"
+	"encoding/json"
 	"reflect"
 	"testing"
 
@@ -23,6 +24,58 @@ func cloneImportedSettings(t *testing.T) (*ImportedSettings, *Catalog, []byte) {
 func TestEnrichArmoryStatKeysPreserveAcronyms(t *testing.T) {
 	if got, want := statKey(stats.MP5.StatName()), "mp5"; got != want {
 		t.Fatalf("stat key = %q, want %q", got, want)
+	}
+}
+
+func TestEnrichItemExposesTooltipMetadataWithoutMutatingSpec(t *testing.T) {
+	spec := &proto.ItemSpec{Id: 900001}
+	before := mustMarshal(t, spec)
+	item := &proto.UIItem{
+		Id: 900001, Name: "Tooltip fixture", ArmorType: proto.ArmorType_ArmorTypePlate,
+		WeaponType:      proto.WeaponType_WeaponTypeSword,
+		HandType:        proto.HandType_HandTypeTwoHand,
+		WeaponDamageMin: 100, WeaponDamageMax: 200, WeaponSpeed: 3.5,
+		ClassAllowlist:     []proto.Class{proto.Class_ClassPaladin},
+		RequiredProfession: proto.Profession_Blacksmithing, Unique: true,
+	}
+	got, err := enrichItem(spec, item, NewCatalog(database.Load()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.ArmorType != item.ArmorType || got.WeaponType != item.WeaponType ||
+		got.HandType != item.HandType || got.WeaponDamageMin != 100 ||
+		got.WeaponDamageMax != 200 || got.WeaponSpeed != 3.5 ||
+		!reflect.DeepEqual(got.ClassAllowlist, item.ClassAllowlist) ||
+		got.RequiredProfession != item.RequiredProfession || !got.Unique {
+		t.Fatalf("tooltip metadata: %#v", got)
+	}
+	if !bytes.Equal(before, mustMarshal(t, spec)) {
+		t.Fatal("spec mutated")
+	}
+	raw, err := json.Marshal(got)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, key := range []string{
+		`"armorType"`, `"weaponType"`, `"handType"`, `"rangedWeaponType"`,
+		`"weaponDamageMin"`, `"weaponDamageMax"`, `"weaponSpeed"`,
+		`"classAllowlist"`, `"requiredProfession"`, `"unique"`,
+	} {
+		if !bytes.Contains(raw, []byte(key)) {
+			t.Fatalf("json field %s missing from %s", key, raw)
+		}
+	}
+}
+
+func TestEnrichItemExposesRangedType(t *testing.T) {
+	spec := &proto.ItemSpec{Id: 900002}
+	item := &proto.UIItem{Id: 900002, Name: "Ranged fixture", RangedWeaponType: proto.RangedWeaponType_RangedWeaponTypeBow}
+	got, err := enrichItem(spec, item, NewCatalog(database.Load()))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.RangedWeaponType != proto.RangedWeaponType_RangedWeaponTypeBow {
+		t.Fatalf("ranged weapon type = %v, want Bow", got.RangedWeaponType)
 	}
 }
 
@@ -89,6 +142,13 @@ func TestEnrichArmoryUsesEngineSocketMatchingAndPreservesImport(t *testing.T) {
 	}
 	if len(slot.Sockets) != 1 || slot.Sockets[0].Gem == nil {
 		t.Fatalf("socket metadata = %#v", slot.Sockets)
+	}
+	gem := slot.Sockets[0].Gem
+	if gem.ID != targetGem.GetId() || gem.Icon != targetGem.GetIcon() || gem.Color != targetGem.GetColor() {
+		t.Fatalf("gem metadata = %#v, target = %#v", gem, targetGem)
+	}
+	if want := statMap(targetGem.GetStats()); !reflect.DeepEqual(gem.Stats, want) {
+		t.Fatalf("gem stats = %#v, want %#v", gem.Stats, want)
 	}
 	wantActive := core.ColorIntersects(slot.Sockets[0].Color, targetGem.GetColor())
 	if slot.SocketBonus.Active != wantActive {

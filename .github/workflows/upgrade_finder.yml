@@ -50,6 +50,10 @@ jobs:
         working-directory: ui-finder
         run: npm ci
 
+      - name: Test UI helpers
+        working-directory: ui-finder
+        run: npm run test:unit
+
       - name: Build UI
         working-directory: ui-finder
         run: npm run build
