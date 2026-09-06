@@ -69,7 +69,7 @@ character header, all 17 gear slots around a labeled character-preview stage,
 and Gear / Stats / Talents tabs. Each equipped item card shows the item-level
 badge, rarity-colored name, enchant effect line (e.g. `+34 Attack Power and
 +16 Hit Rating`), and socketed gems; item IDs, phase, set, and full stats are
-in the card's Details disclosure. Stats shows the deterministic **raid buffed
+in the hover tooltip. Stats shows the deterministic **raid buffed
 (link settings)** snapshot. Talents renders the imported build read-only from
 the bundled TBC talent trees. The 3D character model is not available yet;
 the stage shows a labeled placeholder until the gated viewer integration

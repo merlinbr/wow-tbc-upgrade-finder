@@ -1,21 +1,15 @@
 <script>
   import { socketColors } from './labels.js';
-  import { buildItemTooltip } from './itemTooltip.js';
   import ItemTooltipTrigger from './ItemTooltipTrigger.svelte';
 
   let { slot, side = 'left' } = $props();
   let itemIconFailed = $state(false);
   let failedGemIcons = $state({});
 
-  let vm = $derived.by(() => buildItemTooltip(slot ?? {}));
   let preferredSide = $derived(side === 'left' ? 'right' : 'left');
 
   function iconUrl(icon) {
     return `https://wow.zamimg.com/images/wow/icons/large/${icon}.jpg`;
-  }
-
-  function displayStats(stats) {
-    return Object.entries(stats ?? {}).map(([key, value]) => `${key.replaceAll('_', ' ')} ${Number(value).toFixed(2).replace(/\.00$/, '')}`).join(', ');
   }
 
   function handleItemImageError() {
@@ -92,45 +86,6 @@
           {#if slot.enchant}
             <p class="enchant-effect">{slot.enchant.description || slot.enchant.name}</p>
           {/if}
-          <details class="gear-details">
-            <summary>Details</summary>
-            <dl class="gear-detail-list">
-              <div><dt>Slot</dt><dd>{slot.slotName}</dd></div>
-              {#if vm.typeLabel}
-                <div><dt>Type</dt><dd>{vm.typeLabel}</dd></div>
-              {/if}
-              {#if slot.itemId}
-                <div><dt>Item</dt><dd>{slot.itemId} · Phase {slot.phase || '—'}</dd></div>
-              {/if}
-              {#if vm.suffixLabel}
-                <div><dt>Suffix</dt><dd>{vm.suffixLabel}</dd></div>
-              {/if}
-              {#if vm.weaponLines.length}
-                <div><dt>Weapon</dt><dd>{vm.weaponLines.join(' · ')}</dd></div>
-              {/if}
-              {#if slot.setName}
-                <div><dt>Set</dt><dd>{slot.setName}</dd></div>
-              {/if}
-              {#if slot.enchant}
-                <div><dt>Enchant</dt><dd>{slot.enchant.name}</dd></div>
-              {/if}
-              {#if displayStats(slot.stats)}
-                <div><dt>Stats</dt><dd>{displayStats(slot.stats)}</dd></div>
-              {/if}
-              {#each vm.sockets as socket, index}
-                <div>
-                  <dt>{socket.gem ? `Gem ${index + 1}: ${socket.gem.name}` : `Socket ${socketColors[socket.color] ?? 'Unknown'}`}</dt>
-                  <dd>{socket.text}</dd>
-                </div>
-              {/each}
-              {#if slot.socketBonus?.stats}
-                <div><dt>Socket bonus</dt><dd class:bonus-active={slot.socketBonus.active} class:bonus-inactive={!slot.socketBonus.active}>{slot.socketBonus.active ? 'active' : 'inactive'}{displayStats(slot.socketBonus.stats) ? ` · ${displayStats(slot.socketBonus.stats)}` : ''}</dd></div>
-              {/if}
-              {#if vm.restrictionLines.length}
-                <div><dt>Restrictions</dt><dd>{vm.restrictionLines.join('; ')}</dd></div>
-              {/if}
-            </dl>
-          </details>
         </div>
       </article>
     {/snippet}

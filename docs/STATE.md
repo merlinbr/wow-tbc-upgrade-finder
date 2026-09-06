@@ -20,7 +20,7 @@ The 2026-08-31 follow-up work is implemented and verified:
 - `.github/workflows/upgrade_finder.yml` runs the Go, build, UI, and Chromium verification contract on pushes/PRs.
 - `Import` accepts current individual-sim exports that omit the optional simulation-settings message; the import API derives a bounded maximum phase from the simulated phase, then the highest equipped-item phase, and falls back to `5` only when neither is positive.
 
-The armory redesign is implemented: character-centered layout with Gear/Stats/Talents tabs, WoWSims-style item cards (ilvl badge, rarity-colored names, enchant effect lines, sockets/gems, details disclosures), a labeled 3D placeholder stage with per-spec backdrop art, and a read-only talents view driven by the newly exposed talents string.
+The armory redesign is implemented: character-centered layout with Gear/Stats/Talents tabs, WoWSims-style item cards (ilvl badge, rarity-colored names, enchant effect lines, sockets/gems), a labeled 3D placeholder stage with per-spec backdrop art, and a read-only talents view driven by the newly exposed talents string.
 
 ## Working behavior
 

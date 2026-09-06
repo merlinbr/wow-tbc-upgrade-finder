@@ -142,15 +142,6 @@ button.gear-trigger:hover, button.name-trigger:hover, button.report-item-trigger
 .quality-text-7 { color: #00ccff; }
 .slot-caption { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.05em; margin: 0; text-transform: uppercase; }
 .enchant-effect { color: #1eff00; font-size: 0.8rem; margin: 0.1rem 0 0; overflow-wrap: anywhere; }
-.gear-details { color: var(--muted); font-size: 0.78rem; margin-top: 0.35rem; }
-.gear-details summary { cursor: pointer; }
-.gear-detail-list { display: grid; gap: 0.15rem; margin: 0.4rem 0 0; }
-.gear-detail-list div { display: flex; gap: 0.6rem; justify-content: space-between; }
-.gear-detail-list dt { color: var(--muted); }
-.gear-detail-list dd { margin: 0; overflow-wrap: anywhere; text-align: right; }
-.bonus-active { color: var(--success); }
-.bonus-inactive { color: #dcae78; }
-
 .stat-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1.5rem; }
 .stat-panel { background: rgba(5, 9, 15, 0.55); border: 1px solid var(--border); border-radius: 7px; padding: 1rem; }
 .stat-list { display: grid; gap: 0.35rem; margin: 0; }
