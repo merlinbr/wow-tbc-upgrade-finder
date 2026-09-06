@@ -37,7 +37,7 @@
 </script>
 
 <section class="panel armory-panel" aria-labelledby="armory-heading" data-region="armory-view">
-  <CharacterHeader {character} {phase} settingsDigest={imported?.settingsDigest} simulatorRevision={imported?.simulatorRevision} databaseRevision={imported?.databaseRevision} />
+  <CharacterHeader {character} {phase} {gear} settingsDigest={imported?.settingsDigest} simulatorRevision={imported?.simulatorRevision} databaseRevision={imported?.databaseRevision} />
 
   <div class="armory-tabs" role="tablist" aria-label="Armory views">
     {#each tabs as tab}
