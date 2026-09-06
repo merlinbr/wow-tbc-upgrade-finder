@@ -83,6 +83,15 @@
           Include unknown-source items
         </label>
       </div>
+      <div>
+        <label for="screening-iterations">Screening iterations</label>
+        <input id="screening-iterations" name="screeningIterations" type="number" min="0" step="1" bind:value={screeningIterations} disabled={busy} />
+      </div>
+      <div>
+        <label for="confirmation-iterations">Confirmation iterations</label>
+        <input id="confirmation-iterations" name="confirmationIterations" type="number" min="0" step="1" bind:value={confirmationIterations} disabled={busy} />
+      </div>
+    </div>
       <fieldset class="check-control source-kind-group" disabled={busy}>
         <legend>Include sources</legend>
         {#each sourceKinds.filter((kind) => kind.value !== 0) as kind}
@@ -100,15 +109,6 @@
           </label>
         {/each}
       </fieldset>
-      <div>
-        <label for="screening-iterations">Screening iterations</label>
-        <input id="screening-iterations" name="screeningIterations" type="number" min="0" step="1" bind:value={screeningIterations} disabled={busy} />
-      </div>
-      <div>
-        <label for="confirmation-iterations">Confirmation iterations</label>
-        <input id="confirmation-iterations" name="confirmationIterations" type="number" min="0" step="1" bind:value={confirmationIterations} disabled={busy} />
-      </div>
-    </div>
     <p class="progress-status" role="status" aria-live="polite">{progressText(job)}</p>
     <div class="button-row">
       <button id="rank-button" type="submit" disabled={busy} data-action="start-ranking">{busy ? 'Ranking…' : 'Start ranking'}</button>
