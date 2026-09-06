@@ -141,8 +141,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
   text-transform: uppercase;
 }
 .identity-note { color: var(--muted); font-size: 0.85rem; margin: 0.6rem 0 0; }
-.character-facts dt, .report-summary dt, .stat-list dt { color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; }
-.character-facts dd, .report-summary dd, .stat-list dd { margin: 0; overflow-wrap: anywhere; }
+.report-summary dt, .stat-list dt { color: var(--muted); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.06em; }
+.report-summary dd, .stat-list dd { margin: 0; overflow-wrap: anywhere; }
 
 .gear-grid { align-items: start; display: grid; gap: 1rem; grid-template-columns: minmax(0, 1fr) minmax(16rem, 30rem) minmax(0, 1fr); margin-top: 1rem; }
 .gear-column { align-self: stretch; display: grid; align-content: start; gap: 0.7rem; grid-auto-rows: minmax(auto, 1fr); }

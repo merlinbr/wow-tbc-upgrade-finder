@@ -43,7 +43,7 @@
       <div class="section-kicker">Imported character</div>
       <h2 id="armory-heading" class="character-name" style:color={color || 'var(--text)'}>{character.name || 'Unnamed character'}</h2>
       <p class="character-subtitle">Level 70 {humanizeEnum(character.race, 'Race') || 'Unknown race'} · {character.spec ? humanizeEnum(character.spec) : humanizeEnum(character.class, 'Class') || 'Unknown class'}</p>
-      <div class="identity-chips" aria-label="Character facts">
+      <div class="identity-chips" role="group" aria-label="Character facts">
         <span class="chip"><span class="chip-label">Avg ilvl</span>{' '}<strong>{itemLevel > 0 ? itemLevel : '—'}</strong></span>
         <span class="chip"><span class="chip-label">Phase</span>{' '}<strong>{phase || '—'}</strong></span>
         <span class="chip"><span class="chip-label">Professions</span>{' '}<strong>{professions.length ? professions.join(', ') : 'None'}</strong></span>
