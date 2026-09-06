@@ -59,6 +59,11 @@ type upgradeServer struct {
 	ranker  Ranker
 	catalog *upgrades.Catalog
 
+	// visualsEnabled gates the equipped 3D preview integration. It requires an
+	// authorized ZAM/Wowhead arrangement; off by default.
+	visualsEnabled bool
+	visuals        *visualResolver
+
 	mu   sync.Mutex
 	jobs map[string]*rankJob
 }
@@ -67,6 +72,7 @@ func newUpgradeServer(version string) *upgradeServer {
 	return &upgradeServer{
 		version: version,
 		catalog: upgrades.NewCatalog(database.Load()),
+		visuals: newVisualResolver(),
 		jobs:    make(map[string]*rankJob),
 	}
 }
@@ -152,6 +158,16 @@ func (s *upgradeServer) routes() http.Handler {
 			methodNotAllowed(w, http.MethodGet+", "+http.MethodDelete)
 		}
 	})
+	if s.visualsEnabled {
+		mux.HandleFunc("/api/visuals/resolve", func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != http.MethodPost {
+				methodNotAllowed(w, http.MethodPost)
+				return
+			}
+			s.handleResolveVisualItems(w, r)
+		})
+		mux.HandleFunc("/visuals/zam/modelviewer/tbc/{path...}", s.handleZamAsset)
+	}
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusNotFound, "not_found", "unknown path")
 	})
@@ -217,6 +233,7 @@ type importResponse struct {
 	Stats             map[string]float64        `json:"stats"`
 	DerivedStats      map[string]float64        `json:"derivedStats"`
 	TalentsString     string                    `json:"talentsString"`
+	VisualsEnabled    bool                      `json:"visualsEnabled"`
 }
 
 func (s *upgradeServer) handleImport(w http.ResponseWriter, r *http.Request) {
@@ -266,6 +283,7 @@ func (s *upgradeServer) handleImport(w http.ResponseWriter, r *http.Request) {
 		Stats:         armory.Stats,
 		DerivedStats:  armory.DerivedStats,
 		TalentsString: imported.Settings.Player.GetTalentsString(),
+		VisualsEnabled: s.visualsEnabled,
 	})
 }
 

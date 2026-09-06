@@ -328,10 +328,12 @@ test.describe('item tooltip', () => {
     expect(box.x + box.width).toBeLessThanOrEqual(390 - 8);
     expect(box.y + box.height).toBeLessThanOrEqual(844 - 8);
 
-    // Details remain readable at touch size via the existing disclosure.
-    const details = page.locator('[data-slot="Neck"] details');
-    await details.locator('summary').click();
-    await expect(details.locator('dd').filter({ hasText: 'Leather' })).toBeVisible();
+    // The tooltip replaces the old disclosure and keeps item details available
+    // through the focusable name button at a mobile-sized viewport.
+    await page.locator('[data-slot="Neck"] .name-trigger').focus();
+    await expect(tip).toBeVisible();
+    await expect(tip).toContainText('Leather');
+    await expect(tip).toContainText('+41 Intellect');
   });
 
   test('report summary tooltip uses the shared shell without inventing gems', async ({ page }) => {

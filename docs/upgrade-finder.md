@@ -71,9 +71,9 @@ badge, rarity-colored name, enchant effect line (e.g. `+34 Attack Power and
 +16 Hit Rating`), and socketed gems; item IDs, phase, set, and full stats are
 in the hover tooltip. Stats shows the deterministic **raid buffed
 (link settings)** snapshot. Talents renders the imported build read-only from
-the bundled TBC talent trees. The 3D character model is not available yet;
-the stage shows a labeled placeholder until the gated viewer integration
-lands (see `docs/armory-redesign-research.md`).
+the bundled TBC talent trees. The center stage raises the equipped 3D
+character preview when the operator enables it (see the following section);
+with the integration unavailable it shows a labeled placeholder.
 Hovering or keyboard-focusing an item icon or name shows a compact WoW-style
 tooltip beside the slot: a small external item icon, rarity-colored name with
 phase and item level, slot/type, weapon damage and speed, base stats,
@@ -84,9 +84,9 @@ bonus in its active/inactive state, class/profession restrictions, secondary
 120 ms on pointer hover and immediately on keyboard focus; it stays open
 while hovered, Escape dismisses it (until the trigger is left or refocused),
 and only one tooltip is visible across all triggers. Report summary tooltips
-show the candidate item without inventing gem details. The full Details
-disclosure per slot remains keyboard/touch accessible and exposes the same
-type, weapon, gem, suffix, and restriction information.
+show the candidate item without inventing gem details. Item icons and names
+are focusable buttons; the tooltip replaces the former per-slot Details
+disclosure and exposes type, weapon, gem, suffix, and restriction information.
 Bindings, required level, durability, vendor value, proc/use descriptions,
 and full set-bonus text are not part of the imported data and are not shown.
 
@@ -98,6 +98,31 @@ Improved Seal of the Crusader crit, Hunter's Mark, and Expose Weakness). It
 still follows the simulator engine for racial effects, stat dependencies,
 random suffixes, socket rules, set bonuses, and static gear effects. The
 imported baseline remains unchanged while candidates are tested.
+
+### Equipped 3D character preview
+
+The center stage can render the imported character in 3D (assets from the
+ZAM/Wowhead TBC viewer pipeline, served same-origin through the local server;
+feasibility account: `docs/superpowers/experiments/2026-09-06-equipped-character-feasibility.md`).
+
+Because the pipeline's viewer and model assets are not a public SDK and carry
+usage restrictions, the integration is **off by default** and must be enabled
+explicitly when the operator has an appropriate arrangement:
+
+```bash
+rtk go run ./cmd/wowsimcli rank-upgrades --enable-3d
+```
+
+With the flag off, the stage shows a labeled "3D preview unavailable" state.
+With it on, *Activate 3D* appears on the stage: activation lazy-loads the
+viewer, resolves the imported items to versioned display IDs (server-side,
+bounded cache), and renders the character with default appearance plus
+"Default appearance · imported gear" labeling. The stage supports a body
+preset (female/male), rotate, reset, and pause; gear-tab unmount stops
+rendering. Imported gear with no visual model (relics, unresolvable
+displays) yields an explicit partial preview, never a substituted character.
+The 3D preview never affects import success, ranking, or the assumptions
+fingerprint, and cosmetic settings stay local to the preview.
 
 ## Workflow
 

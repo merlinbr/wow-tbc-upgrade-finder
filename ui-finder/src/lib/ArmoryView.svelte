@@ -53,7 +53,7 @@
             <GearSlot {slot} side="left" />
           {/each}
         </div>
-        <CharacterStage race={character.race} class={character.class} spec={character.spec} />
+        <CharacterStage race={character.race} class={character.class} spec={character.spec} gear={gear} visualsEnabled={imported?.visualsEnabled ?? false} />
         <div class="gear-column gear-column-right">
           {#each slotsFor(rightColumn) as slot (gearKey(slot))}
             <GearSlot {slot} side="right" />

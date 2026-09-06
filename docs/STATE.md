@@ -1,6 +1,6 @@
 # Project State — TBC Upgrade Finder
 
-Updated: 2026-09-05
+Updated: 2026-09-06
 
 Authoritative operator instructions: `docs/upgrade-finder.md`.
 Approved armory design: `docs/superpowers/specs/2026-08-29-svelte-armory-design.md`.
@@ -21,6 +21,17 @@ The 2026-08-31 follow-up work is implemented and verified:
 - `Import` accepts current individual-sim exports that omit the optional simulation-settings message; the import API derives a bounded maximum phase from the simulated phase, then the highest equipped-item phase, and falls back to `5` only when neither is positive.
 
 The armory redesign is implemented: character-centered layout with Gear/Stats/Talents tabs, WoWSims-style item cards (ilvl badge, rarity-colored names, enchant effect lines, sockets/gems), a labeled 3D placeholder stage with per-spec backdrop art, and a read-only talents view driven by the newly exposed talents string.
+
+The equipped 3D character preview is implemented per
+`docs/superpowers/plans/2026-09-06-equipped-character-preview.md`: the
+feasibility experiment (milestone 1) succeeded — a correctly equipped TBC
+character renders from a loopback app origin through a same-origin asset
+transport with the ZAM/Wowhead live viewer + TBC content path. The mapping
+resolver, ZAM adapter, stage integration and tests are in place, but the
+integration is **disabled by default** (`--enable-3d` opt-in): the provider's
+viewer/model assets are not a public SDK and their usage requires an
+authorized arrangement the operator must confirm. Full account:
+`docs/superpowers/experiments/2026-09-06-equipped-character-feasibility.md`.
 
 ## Working behavior
 
@@ -64,7 +75,18 @@ The armory redesign is implemented: character-centered layout with Gear/Stats/Ta
 
 ## Verification
 
-Final required checks passed (2026-09-05):
+Current checkout verification (2026-09-06): Go upgrade tests, CLI package tests,
+Go build, the Vite production build, all UI unit tests, and the Chromium E2E
+suite passed. The 3D-preview additions added 9 mapping unit tests, 9 Go
+resolver/route tests, and 2 E2E tests (default-build unavailable state and
+fake-adapter activation flow). Real-provider smoke (this checkout): the
+embedded binary with `--enable-3d` rendered the imported Retribution paladin
+in Chromium through the same-origin proxy (57 `/visuals/zam/` asset requests,
+1 resolve request, zero errors), with the expected "Partial preview: Ranged
+(no visible model)" for the relic, and verified rotate, pause/resume, gear-tab
+cleanup, and re-import remount behavior.
+
+Earlier milestone checks (2026-09-05):
 
 ```text
 go test ./cmd/wowsimcli/cmd/upgrades -count=1    ok
@@ -83,13 +105,33 @@ gear slots.
 
 ## Intentional boundaries
 
-- No interactive 3D model (labeled placeholder stage only; viewer gated on renderer permission and browser asset access), no talent editing, no item hover tooltips, persistence, pricing, accounts, remote server, or ranking-domain rewrite.
-- The browser exposes the existing max-phase, unknown-source, screening, and confirmation controls. It does not search alternate gem/enchant policies or source-name filters.
-- The armory snapshot is not a simulation result; it shows the imported buffs, consumes, and talents but never runs iterations or applies fight-time item swaps.
+- The 3D character preview is opt-in via `--enable-3d` (off by default; the
+  provider arrangement is an operator gate). The stage still never blocks
+  import, ranking, or the assumptions fingerprint; preview settings stay
+  local. Exact in-game cosmetics (face, hair matching a live character),
+  shirt/tabard inputs, and ranked-upgrade visual previews remain future work.
+- The viewer's own `setAnimPaused` is a no-op on the current distribution, so
+  the stage pause/visibility control destroys and lazily recreates the viewer
+  (HTTP-cached assets); there is no full renderer pause API.
+- No interactive 3D model by default, talent editing, persistence, pricing,
+  accounts, remote server, or ranking-domain rewrite. Item hover/focus
+  tooltips are implemented and replace the former per-slot Details
+  disclosure.
+- The browser exposes the existing max-phase, unknown-source, screening, and
+  confirmation controls. It does not search alternate gem/enchant policies or
+  source-name filters.
+- The armory snapshot is not a simulation result; it shows the imported buffs,
+  consumes, and talents but never runs iterations or applies fight-time item
+  swaps.
 
 ## Known follow-up risks
 
+- The 3D provider integration is authorized-arrangement-gated: flipping
+  `--enable-3d` on requires confirming the ZAM/Wowhead usage arrangement
+  before production use; the transport and a request-origin inventory are
+  documented in the feasibility account.
 - The repo workflows were retargeted from `master` to `main` to match the `origin` remote's default branch; the Upgrade Finder CI validated end to end after the proto-generation fix (2026-09-05).
 - Simulator database attachment remains process-wide through the existing `sync.Once` path; concurrent first jobs should be serialized or attachment should become per-job-safe.
 - DELETE-failure recovery can briefly schedule duplicate polling timers while an already-fired poll request is in flight. Cancellation remains recoverable; this was recorded as a non-blocking review note.
 - The optional favicon remains a cosmetic 404.
+- The unresolved-detail-consent/performance measurement items from the plan (slow network, offline mode, WebGL-unavailable handling, frame/load measurements) were verified only as far as the real-provider smoke; the remaining measurements belong before shipping the integration.

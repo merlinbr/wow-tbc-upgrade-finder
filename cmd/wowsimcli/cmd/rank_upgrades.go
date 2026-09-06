@@ -12,6 +12,7 @@ import (
 type rankUpgradesOptions struct {
 	addr      string
 	noBrowser bool
+	enable3D  bool
 }
 
 func newRankUpgradesCommand(version string) *cobra.Command {
@@ -24,12 +25,14 @@ func newRankUpgradesCommand(version string) *cobra.Command {
 			defer cancel()
 
 			server := newUpgradeServer(version)
+			server.visualsEnabled = opts.enable3D
 			return server.Serve(ctx, opts.addr, !opts.noBrowser)
 		},
 	}
 
 	cmd.Flags().StringVar(&opts.addr, "addr", "127.0.0.1:0", "address to bind server to")
 	cmd.Flags().BoolVar(&opts.noBrowser, "no-browser", false, "do not open browser automatically")
+	cmd.Flags().BoolVar(&opts.enable3D, "enable-3d", false, "enable the equipped 3D character preview (requires an authorized ZAM/Wowhead integration)")
 
 	return cmd
 }
