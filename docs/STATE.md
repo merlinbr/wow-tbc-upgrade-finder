@@ -67,6 +67,7 @@ authorized arrangement the operator must confirm. Full account:
 - Reports display baseline/assumptions/exclusions/failures/confirmed upgrades, human-readable target slots and sources, per-upgrade assumptions, and JSON clipboard copy status.
 - The generated Vite bundle is committed under `cmd/wowsimcli/cmd/upgrade_ui/`; Go builds and Go tests do not require Node.
 - UI iteration uses the Vite dev server with HMR (`ui-finder/` `npm run dev`, proxying `/api` to the Go server on port `43123`); the embedded bundle only updates on `npm run build` plus Go restart. Workflow: `docs/upgrade-finder.md` "UI development (hot reload)".
+- Character identity header: the armory renders the imported character as an identity card with a class-icon avatar (ZAM medium icon), a class-colored name, a level / race·spec meta line, an Avg ilvl / Phase / Professions chip row, and a muted `No ratings — local simulation import` note; the Gear/Stats/Talents views are a pill tab bar with the active tab highlighted.
 
 ### Repo and CI
 
