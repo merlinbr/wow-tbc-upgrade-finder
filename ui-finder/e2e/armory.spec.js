@@ -28,7 +28,7 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(page.getByRole('heading', { name: 'TestMage', exact: true })).toBeVisible();
   await expect(page.locator('.identity-avatar img')).toHaveAttribute('src', expect.stringContaining('class_mage.jpg'));
   await expect(page.getByRole('heading', { name: 'TestMage', exact: true })).toHaveCSS('color', 'rgb(105, 204, 240)');
-  await expect(page.locator('.identity-chips .chip').first()).toContainText(/Avg ilvl\s*\d+/);
+  await expect(page.locator('.identity-chips .chip').first()).toContainText(/Avg ilvl \d+/);
   await expect(page.getByText('No ratings — local simulation import', { exact: true })).toBeVisible();
   await expect(page.locator('.armory-tab.active')).toHaveText('Gear');
   await expect(page.locator('[data-slot]')).toHaveCount(17);
