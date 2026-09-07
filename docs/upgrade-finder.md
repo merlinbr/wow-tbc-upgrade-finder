@@ -70,8 +70,16 @@ and Gear / Stats / Talents tabs. Each equipped item card shows the item-level
 badge, rarity-colored name, enchant effect line (e.g. `+34 Attack Power and
 +16 Hit Rating`), and socketed gems; item IDs, phase, set, and full stats are
 in the hover tooltip. Stats shows the deterministic **raid buffed
-(link settings)** snapshot. Talents renders the imported build read-only from
-the bundled TBC talent trees. The center stage raises the equipped 3D
+(link settings)** snapshot. Talents presents the imported build read-only in
+a reference-style view: an `Imported build · Read-only` summary with per-tree
+totals, three illustrated portrait trees side by side on wide screens
+(stacked on narrow ones), sparse square talent icons with lime allocation
+borders and numerical `N/M` rank badges. Hover, keyboard focus, tap or click
+shows a compact detail popup (talent name, tree, rank/max, allocation state);
+full spell-effect text is not part of the imported data and is not shown.
+Icon metadata comes from a generated projection of the bundled database
+(regenerate with `node scripts/generate-talent-icons.mjs` from `ui-finder/`;
+`npm run build` checks it). The center stage raises the equipped 3D
 character preview when the operator enables it (see the following section);
 with the integration unavailable it shows a labeled placeholder.
 Hovering or keyboard-focusing an item icon or name shows a compact WoW-style
