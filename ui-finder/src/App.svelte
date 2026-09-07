@@ -2,10 +2,10 @@
   import { onDestroy, setContext } from 'svelte';
   import ArmoryView from './lib/ArmoryView.svelte';
   import ImportPanel from './lib/ImportPanel.svelte';
-  import ItemTooltipLayer from './lib/ItemTooltipLayer.svelte';
+  import TooltipLayer from './lib/TooltipLayer.svelte';
   import RankingPanel from './lib/RankingPanel.svelte';
   import ReportView from './lib/ReportView.svelte';
-  import { createTooltipController, ITEM_TOOLTIP_CONTEXT } from './lib/tooltipController.js';
+  import { createTooltipController, TOOLTIP_CONTEXT } from './lib/tooltipController.js';
   import { state as uiState } from './lib/stores.svelte.js';
 
   let originalLink = $state('');
@@ -15,7 +15,7 @@
   const tooltipController = createTooltipController((value) => {
     activeTooltip = value;
   });
-  setContext(ITEM_TOOLTIP_CONTEXT, tooltipController);
+  setContext(TOOLTIP_CONTEXT, tooltipController);
   onDestroy(() => tooltipController.destroy());
 
   function importPending() {
@@ -65,4 +65,4 @@
   </p>
 </footer>
 
-<ItemTooltipLayer active={activeTooltip} controller={tooltipController} />
+<TooltipLayer active={activeTooltip} controller={tooltipController} />

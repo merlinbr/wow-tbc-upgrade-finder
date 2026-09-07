@@ -1,6 +1,6 @@
 <script>
   import { socketColors } from './labels.js';
-  import ItemTooltipTrigger from './ItemTooltipTrigger.svelte';
+  import TooltipTrigger from './TooltipTrigger.svelte';
 
   let { slot, side = 'left' } = $props();
   let itemIconFailed = $state(false);
@@ -26,8 +26,8 @@
 </script>
 
 {#if slot.itemName}
-  <ItemTooltipTrigger item={slot} preferredSide={preferredSide}>
-    {#snippet children({ id, onpointerenter, onpointerleave, onfocus, onblur })}
+  <TooltipTrigger content={{ kind: 'item', item: slot, variant: 'full' }} preferredSide={preferredSide}>
+    {#snippet children({ id, onpointerenter, onpointerleave, onfocus, onblur, onactivate })}
       <article class="gear-slot quality-{slot.quality ?? 0}" class:mirror={side === 'right'} data-slot={slot.slotName}>
         <div class="gear-icon-wrap">
           <button
@@ -38,6 +38,7 @@
             onpointerleave={onpointerleave}
             onfocus={onfocus}
             onblur={onblur}
+            onclick={onactivate}
           >
             {#if slot.ilvl}
               <span class="item-ilvl">{slot.ilvl}</span>
@@ -81,6 +82,7 @@
               onpointerleave={onpointerleave}
               onfocus={onfocus}
               onblur={onblur}
+              onclick={onactivate}
             >{slot.itemName}</button>
           </h3>
           {#if slot.enchant}
@@ -89,7 +91,7 @@
         </div>
       </article>
     {/snippet}
-  </ItemTooltipTrigger>
+  </TooltipTrigger>
 {:else}
   <article class="gear-slot quality-0" data-slot={slot.slotName}>
     <div class="gear-copy">

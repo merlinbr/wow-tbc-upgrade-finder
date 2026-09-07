@@ -22,6 +22,8 @@ The 2026-08-31 follow-up work is implemented and verified:
 
 The armory redesign is implemented: character-centered layout with Gear/Stats/Talents tabs, WoWSims-style item cards (ilvl badge, rarity-colored names, enchant effect lines, sockets/gems), a labeled 3D placeholder stage with per-spec backdrop art, and a read-only talents view driven by the newly exposed talents string.
 
+The talents view is reference-styled: `Imported build · Read-only` summary with per-tree totals, three illustrated portrait trees (side by side at container ≥888 px, stacked below), sparse square talent icons with lime allocation borders and numerical `N/M` rank badges, and shared hover/focus/click inspection details (name, tree, rank/max, allocation state). Talent icons come from a generated first-rank spell-ID projection (`ui-finder/scripts/generate-talent-icons.mjs`, checked into `ui-finder/src/lib/talentIcons.json` and verified by `npm run build`). Full talent effect descriptions remain unavailable and are not shown.
+
 The equipped 3D character preview is implemented per
 `docs/superpowers/plans/2026-09-06-equipped-character-preview.md`: the
 feasibility experiment (milestone 1) succeeded — a correctly equipped TBC

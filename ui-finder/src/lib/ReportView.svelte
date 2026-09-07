@@ -1,7 +1,7 @@
 <script>
   import { copyReport } from './stores.svelte.js';
   import { humanizeEnum, qualityLabel, sourceKindLabel, humanizeSourceKind } from './labels.js';
-  import ItemTooltipTrigger from './ItemTooltipTrigger.svelte';
+  import TooltipTrigger from './TooltipTrigger.svelte';
 
   let { report, copyStatus = '' } = $props();
 
@@ -118,8 +118,8 @@
             <td class:too-close={upgrade.tooCloseToCall}>{upgrade.tooCloseToCall ? 'Too close to call' : upgrade.rank}</td>
             <td>
               {#if upgrade.item?.name}
-                <ItemTooltipTrigger item={upgrade.item} variant="summary" preferredSide="right">
-                  {#snippet children({ id, onpointerenter, onpointerleave, onfocus, onblur })}
+                <TooltipTrigger content={{ kind: 'item', item: upgrade.item, variant: 'summary' }} preferredSide="right">
+                  {#snippet children({ id, onpointerenter, onpointerleave, onfocus, onblur, onactivate })}
                     <button
                       type="button"
                       class="report-item-trigger"
@@ -128,9 +128,10 @@
                       onpointerleave={onpointerleave}
                       onfocus={onfocus}
                       onblur={onblur}
+                      onclick={onactivate}
                     >{upgrade.item.name} ({upgrade.item.id})</button>
                   {/snippet}
-                </ItemTooltipTrigger>
+                </TooltipTrigger>
               {:else}
                 <span>Unknown ({upgrade.item?.id})</span>
               {/if}

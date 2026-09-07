@@ -1,5 +1,8 @@
 <script>
   import { decodeTalentsString, rankAt, treePoints } from './talents.js';
+  import talentIcons from './talentIcons.json';
+  import TooltipIcon from './TooltipIcon.svelte';
+  import TooltipTrigger from './TooltipTrigger.svelte';
   import druidTrees from '../../../ui/core/talents/trees/druid.json';
   import hunterTrees from '../../../ui/core/talents/trees/hunter.json';
   import mageTrees from '../../../ui/core/talents/trees/mage.json';
@@ -28,56 +31,78 @@
 
   let treeData = $derived((treesByClass[playerClass] ?? []).map((tree, treeIndex) => {
     const ranks = ranksByTree[treeIndex] ?? '';
-    const maxRow = Math.max(...tree.talents.map((talent) => talent.location.rowIdx), 0);
-    const maxCol = Math.max(...tree.talents.map((talent) => talent.location.colIdx), 0);
-    const byLocation = new Map(
-      tree.talents.map((talent, index) => [
-        `${talent.location.rowIdx}:${talent.location.colIdx}`,
-        { ...talent, index, points: rankAt(ranks, index) },
-      ]),
-    );
-    const cells = [];
-    for (let row = 0; row <= maxRow; row++) {
-      for (let col = 0; col <= maxCol; col++) {
-        cells.push(byLocation.get(`${row}:${col}`) ?? null);
-      }
-    }
     return {
-      name: tree.name,
-      backgroundUrl: tree.backgroundUrl,
+      ...tree,
+      ranks,
       points: treePoints(ranks),
-      cols: maxCol + 1,
-      cells,
+      rows: Math.max(...tree.talents.map((talent) => talent.location.rowIdx), 0) + 1,
+      cols: Math.max(...tree.talents.map((talent) => talent.location.colIdx), 0) + 1,
+      headerIcon: talentIcons[tree.talents.at(-1)?.spellIds[0]] ?? '',
     };
   }));
 </script>
 
 {#if treeData.length}
-  <div class="talent-trees" data-region="talent-trees">
-    {#each treeData as tree}
-      <section class="talent-tree" style="--talent-cols: {tree.cols}" aria-label="{tree.name} talents">
-        <div class="talent-tree-header">
-          <h3>{tree.name}</h3>
-          <span class="talent-tree-points">{tree.points} points</span>
-        </div>
-        <div class="talent-tree-body" style:background-image={tree.backgroundUrl ? `url('${tree.backgroundUrl}')` : 'none'}>
-          {#each tree.cells as cell, cellIndex (cell?.index ?? `empty-${cellIndex}`)}
-            {#if cell}
-              <div class="talent-cell" class:empty-rank={cell.points === 0} title="{cell.fancyName} {cell.points}/{cell.maxPoints}">
-                <span class="talent-name">{cell.fancyName}</span>
-                <span class="rank-pips" aria-label="{cell.points} of {cell.maxPoints} points">
-                  {#each Array(cell.maxPoints) as _, pipIndex}
-                    <span class:filled={pipIndex < cell.points} class="rank-pip" aria-hidden="true"></span>
-                  {/each}
-                </span>
-              </div>
-            {:else}
-              <div class="talent-cell talent-cell-empty" aria-hidden="true"></div>
-            {/if}
-          {/each}
-        </div>
-      </section>
-    {/each}
+  <div class="talent-view">
+    <div class="talent-build-summary">
+      <strong>Imported build</strong>
+      <span class="talent-readonly">Read-only</span>
+      <span role="group" aria-label={treeData.map((tree) => `${tree.name}: ${tree.points} points`).join(', ')}>
+        {treeData.map((tree) => tree.points).join(' / ')}
+      </span>
+    </div>
+    <div class="talent-trees" data-region="talent-trees">
+      {#each treeData as tree}
+        <section
+          class="talent-tree"
+          style="--talent-cols: {tree.cols}; --talent-rows: {tree.rows}"
+          aria-label="{tree.name} talents"
+        >
+          <header class="talent-tree-header">
+            <span aria-hidden="true"><TooltipIcon icon={tree.headerIcon} name={tree.name} size={32} /></span>
+            <h3>{tree.name}</h3>
+            <span class="talent-tree-points">{tree.points} points</span>
+          </header>
+          <div
+            class="talent-tree-body"
+            style:background-image={tree.backgroundUrl
+              ? `linear-gradient(rgba(5, 8, 12, .18), rgba(5, 8, 12, .40)), url('${tree.backgroundUrl}'), linear-gradient(#182130, #080d16)`
+              : 'linear-gradient(#182130, #080d16)'}
+          >
+            {#each tree.talents as talent, index (talent.spellIds[0])}
+              {@const points = rankAt(tree.ranks, index)}
+              <TooltipTrigger
+                content={{ kind: 'talent', talent: { name: talent.fancyName, treeName: tree.name, points, maxPoints: talent.maxPoints } }}
+              >
+                {#snippet children({ id, onpointerenter, onpointerleave, onfocus, onblur, onactivate })}
+                  <button
+                    type="button"
+                    class="talent-node"
+                    class:unallocated={points === 0}
+                    class:allocated={points > 0}
+                    class:maxed={points === talent.maxPoints}
+                    style:grid-row={talent.location.rowIdx + 1}
+                    style:grid-column={talent.location.colIdx + 1}
+                    aria-label={`Inspect ${talent.fancyName}, rank ${points} of ${talent.maxPoints}`}
+                    aria-describedby={id}
+                    {onpointerenter}
+                    {onpointerleave}
+                    {onfocus}
+                    {onblur}
+                    onclick={onactivate}
+                  >
+                    <span class="talent-node-art" aria-hidden="true">
+                      <TooltipIcon icon={talentIcons[talent.spellIds[0]] ?? ''} name={talent.fancyName} size={40} />
+                    </span>
+                    <span class="talent-rank" aria-hidden="true">{points}/{talent.maxPoints}</span>
+                  </button>
+                {/snippet}
+              </TooltipTrigger>
+            {/each}
+          </div>
+        </section>
+      {/each}
+    </div>
   </div>
 {:else}
   <p class="muted">No talent data for this class.</p>
