@@ -1,9 +1,9 @@
-export const ITEM_TOOLTIP_CONTEXT = Symbol('item-tooltip');
+export const TOOLTIP_CONTEXT = Symbol('tooltip');
 
-// App-scoped hover/focus coordination for the armory item tooltip.
+// App-scoped hover/focus coordination for item and talent tooltips.
 //
 // onChange receives null (closed) or the active record:
-//   { owner, id, item, variant, preferredSide, anchor }
+//   { owner, id, content, preferredSide, anchor }
 // owner is a Symbol per trigger wrapper; anchor is the actual hovered or
 // focused element used for positioning.
 //
@@ -79,7 +79,7 @@ export function createTooltipController(onChange, timing = {}) {
         pointerOwner = record.owner;
         if (suppressed.has(record.owner)) return;
         if (active && active.owner === record.owner) {
-          // Same item via icon or name: keep one panel, use the latest anchor.
+          // Same owner via multiple triggers: keep one panel, use the latest anchor.
           active = record;
           emit(active);
           return;

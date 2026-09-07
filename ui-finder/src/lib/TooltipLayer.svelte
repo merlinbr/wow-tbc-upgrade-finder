@@ -1,6 +1,7 @@
 <script>
   import { positionTooltip } from './tooltipPosition.js';
   import ItemTooltip from './ItemTooltip.svelte';
+  import TalentTooltip from './TalentTooltip.svelte';
 
   let { active, controller } = $props();
 
@@ -96,7 +97,11 @@
     onpointerleave={() => controller.leavePanel(active.owner)}
   >
     {#key active.owner}
-      <ItemTooltip item={active.item} variant={active.variant} id={active.id} />
+      {#if active.content.kind === 'talent'}
+        <TalentTooltip talent={active.content.talent} id={active.id} />
+      {:else}
+        <ItemTooltip item={active.content.item} variant={active.content.variant} id={active.id} />
+      {/if}
     {/key}
   </div>
 {/if}
