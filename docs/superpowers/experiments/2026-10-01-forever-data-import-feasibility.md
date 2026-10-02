@@ -237,16 +237,110 @@ The public Codex source page reports unavailable level-50–60 data and Classic-
 
 ## Task 3 — import routes
 
-Not yet executed. No real addon or Sixty Upgrades export fixture retained or decoded.
+### Addon source inspection
+
+Correct repository: `https://github.com/wowsims/exporter`. The guessed `wowsims/WoWSimsExporter` returned 404, then primary-source search identified the real repository. Tool-managed temporary clone HEAD: `ad9e903e3997b99f66a2122a4a91b555d40c4ece` (last commit August 4, 2026). Read LICENSE, README, .toc, Shared.lua, WowSimsExporter.lua, ExportStructures/{Character,EquipmentSpec,ItemSpec,Misc}.lua and extras.lua in full.
+
+- MIT code licence, copyright General Wrex 2022; no source code copied into our repo.
+- .toc interfaces: `50504, 50503, 40402, 38001, 20505, 11508`; no explicit Forever-specific branch.
+- Shared.lua client flags cover Era/SoD/TBC/Wrath/Cata/Mists; this is not a live Forever compatibility test.
+- Output calls LibParse JSONEncode on a Character populated from game APIs.
+- Character fields: `version`, `unit`, `id`, `name`, `realm`, `race`, `class`, `level`, `talents`, `professions`, `spec`, `gear`, `glyphs`. `version` is addon metadata; `id` is a unit GUID, not application ownership.
+- Equipment uses a fixed 17-slot statistical array. Item-link components supply item and enchant numeric IDs; later-expansion fields are conditional.
+- Talents use hyphen-separated positional ranks. Old talent APIs are sorted by row/column in extras.lua. Do not assume those APIs or that ordering match Forever's current trees.
+- No addon was installed or executed, no real export obtained, and no game/client data was provisioned. Realm/region, new races and talent semantics remain runtime gaps.
+
+Sixty Upgrades Exporter remained HTTP 403, so its publisher/client/license claims from search were not upgraded to verified facts. Talents Forever's browser link labeled “Get the in-game addon” actually points to `/ideas`; its public page documents beta installation and talent-plan sharing, not a tested equipment export. Guessed `/addon` was 404. Addon runtime gate remains blocked; request a consented actual export plus addon version and `GetBuildInfo()` output.
+
+### Public Sixty Upgrades export
+
+In a new, unsigned-in Playwright browser, opened the exact public link supplied by the user:
+`https://sixtyupgrades.com/forever/set/vH9HQmj6tzxi7fajuHmu8p`.
+
+HTTP 200; rendered a level-60 Priest/Dwarf planned gear set. Clicked the public **Export** control normally. It opened **EXPORT SET** with human-facing JSON, Buffs/Talents export options and Copy to Clipboard / Download controls. Did not click Download, save the raw payload, log in, inspect private editor URLs, or reverse-engineer site software. Footer Discord contact link was `https://discord.gg/xUnQtQB`.
+
+Decoded the displayed JSON transiently with JSON.parse:
+
+- Top keys: `name`, `phase`, `links`, `character`, `items`, `consumables`, `buffs`, `points`, `stats`, `exportOptions`.
+- `character`: name, level 60, gameClass PRIEST, race DWARF, faction ALLIANCE; no realm/region observed.
+- 17 item records, 17 unique slot labels, including RANGED; shirt/tabard not represented in this sample's item array.
+- Representative identifier: HEAD item `260212`.
+- Representative enchant domains: neck enchant `id = 8219`, `spellId = 1249058`. Neither was verified against our own permitted catalog.
+- `exportOptions.talents = true` but **no actual `talents` property**; do not interpret an export checkbox as an allocated build.
+- No explicit schema/client/catalog version; `phase = 1` and `/forever/` source link are not build versions.
+- Provider stats/EP/buffs were not treated as independently verified calculations or added to our app.
+
+The research report contains the field-by-field mapping, expected missing-field treatment, and exact slot names. Ran the saved recipe below: **6/6 parser/structure observations passed**. Both saved Node recipes also passed `node --check -`. None demonstrate a production importer or catalog validator.
+
+```bash
+node - <<'JS'
+const assert = require('node:assert/strict');
+const {chromium} = require('C:/Users/merli/Documents/Projects/wow-upgrade-agent/ui-finder/node_modules/@playwright/test');
+(async () => {
+  const browser = await chromium.launch({headless: true});
+  let checks = 0;
+  const pass = message => { checks++; console.log('PASS', message); };
+  try {
+    const page = await browser.newPage();
+    await page.goto('https://sixtyupgrades.com/forever/set/vH9HQmj6tzxi7fajuHmu8p', {
+      waitUntil: 'domcontentloaded', timeout: 30000,
+    });
+    await page.getByText('Export', {exact: true}).click();
+    let data;
+    for (const text of await page.locator('pre').allTextContents()) {
+      try {
+        const candidate = JSON.parse(text);
+        if (candidate.character && candidate.items) { data = candidate; break; }
+      } catch { /* A non-JSON pre element is not the export. */ }
+    }
+    if (!data) {
+      const text = await page.locator('body').innerText();
+      const start = text.indexOf('{\n', text.indexOf('EXPORT SET'));
+      const end = text.indexOf('\nBuffs\n', start);
+      assert(start >= 0 && end > start, 'Export markup changed; inspect it again');
+      data = JSON.parse(text.slice(start, end));
+    }
+    assert.equal(data.items.length, 17);
+    assert.equal(new Set(data.items.map(item => item.slot)).size, 17);
+    pass('public JSON decodes with 17 unique named slots');
+    assert.throws(() => JSON.parse(JSON.stringify(data).slice(0, -1)), SyntaxError);
+    pass('truncated JSON rejected by native parser');
+    const unresolved = structuredClone(data);
+    unresolved.items[0].id = 2147483647;
+    assert.equal(JSON.parse(JSON.stringify(unresolved)).items[0].id, 2147483647);
+    pass('artificial unresolved reference still parses; catalog validation is separate');
+    const wrongSource = structuredClone(data);
+    wrongSource.links.set = wrongSource.links.set.replace('/forever/', '/tbc/');
+    assert.match(JSON.parse(JSON.stringify(wrongSource)).links.set, /\/tbc\//);
+    pass('wrong game-source hint still parses; semantic validation is separate');
+    assert.equal(data.exportOptions.talents, true);
+    assert.equal(Object.hasOwn(data, 'talents'), false);
+    pass('talents flag does not imply an actual allocation in this sample');
+    assert.equal(Object.hasOwn(data, 'version'), false);
+    pass('no explicit top-level version in observed export');
+    console.log('TOTAL', checks, 'parser/structure observations passed; no payload retained');
+  } finally {
+    await browser.close();
+  }
+})().catch(error => { console.error(error.message); process.exitCode = 1; });
+JS
+```
+
+### Scope / retention decision
+
+Text/file export is technically **partial**, not cleared for production: rights/interoperability scope, version handling, complete talent example and equipment reference validation remain unresolved. URL import is **blocked**: public browser readability does not establish a supported machine-export API or permission to scrape the service.
+
+No raw Sixty export fixture was retained because its cross-site retention scope was not cleared; no actual addon fixture was available. Reproduction uses the mutable public UI, so changes to that set or markup can change these observations. No negative input was submitted to the provider or used to mutate Current/plans. Artificial reference/source examples above show parser limitations only; our future importer must validate/reject them before applying changes.
 
 ## Retained fixtures
 
-After Task 2, only `forever-fixtures/catalog-sample.json` is retained: an attributed numeric/structural talent projection. Its file hash is recorded with the artifact checks below. No complete live JSON, equipment catalog, addon export, or Sixty Upgrades export is retained. The live-source hash above is distinct from the committed fixture hash.
+After Task 3, only `forever-fixtures/catalog-sample.json` is retained: an attributed numeric/structural talent projection. Its file hash is recorded with the Task 2 checks above and was rechecked unchanged in Task 3. The plan's fixture-byte check reported both `addon-export.txt` and `sixty-export.txt` as not retained. No complete live JSON, equipment catalog, addon export, or Sixty Upgrades export is retained. The live-source hash above is distinct from the committed fixture hash.
 
 ## Gate decisions
 
 - Gate A: blocked for the full manual equipment/talent editor. Numeric talent evidence is available and eight provider-UI cases pass, but item reuse/acquisition, full presentation rights and versioned talent identity still need decisions.
-- Gate B addon: blocked; client/version/export fixture absent.
-- Gate B Sixty Upgrades: blocked; export access/format/reuse scope unverified.
+- Gate B addon: blocked; code-derived candidate format known, but Forever client/version/runtime export fixture absent.
+- Gate B Sixty Upgrades text/file: partial technical evidence; UI JSON export works, but retention/interop scope, versioning, full talents and catalog mapping remain unresolved.
+- Gate B Sixty Upgrades link: blocked; no documented permitted machine-export contract.
 - Whole-character stats: blocked; no complete authoritative formula coverage inspected.
 - Gate C hosted ownership/sharing: outside this research phase, not tested.

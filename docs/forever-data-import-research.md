@@ -77,23 +77,75 @@ Known version pitfall: the upstream describes client-derived beta data, wowforev
 
 ## Addon import
 
-Task 3 has not yet completed. No real Forever addon export or client was provided. The CurseForge project fetch is denied. Addon policy and search results are not a successful runtime export test.
+### Existing exporter source: inspected, Forever runtime unverified
+
+The candidate repository is [wowsims/exporter](https://github.com/wowsims/exporter), not the guessed `wowsims/WoWSimsExporter` (404). Inspected commit **`ad9e903e3997b99f66a2122a4a91b555d40c4ece`**, whose [MIT licence](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/LICENSE) allows software reuse with notices. Selected code was read from a temporary tool-managed clone, not copied into this project.
+
+[Shared.lua](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/Shared.lua) recognizes Era/SoD/TBC/Wrath/Cata/Mists. The [.toc](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/WowSimsExporter.toc) lists interfaces `50504, 50503, 40402, 38001, 20505, 11508`, with no explicit Forever interface/branch. This does not prove it cannot run in Forever under an existing project flag; it means no dedicated support or runtime correctness was verified.
+
+| Target | Source path / encoding from inspected code | Representative source behavior / missing-field limit |
+| --- | --- | --- |
+| Name | `name` | `UnitFullName`; no real exported value obtained |
+| Race / class | `race`, `class` | Race from game GUID info; class lowercased; new faction-specific race handling not verified |
+| Level | `level` | `UnitLevel`; no real Forever output obtained |
+| Realm / region | `realm`; no region field in Character structure | Optional realm from `UnitFullName`; region is absent, not inferred |
+| Gear | `gear.items[index].id` | EquipmentSpec's fixed 17-slot order; preserve empty-slot positions rather than compacting arrays |
+| Enchant | `gear.items[index].enchant` | Numeric enchant component parsed from the item link; actual Forever identifier semantics remain unverified |
+| Talents | `talents` | Hyphen-separated positional rank digits; `extras.lua` orders old `GetTalentInfo` entries by tier/column; Forever API compatibility and versioned tree mapping unverified |
+| Version | `version` | Addon metadata version, **not a game/client build**; no explicit Forever catalog revision in the Character structure |
+
+Mapping evidence: [Character.lua](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/ExportStructures/Character.lua), [EquipmentSpec.lua](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/ExportStructures/EquipmentSpec.lua), [ItemSpec.lua](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/ExportStructures/ItemSpec.lua), [Misc.lua](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/ExportStructures/Misc.lua), [extras.lua](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/extras.lua), and [output encoding](https://github.com/wowsims/exporter/blob/ad9e903e3997b99f66a2122a4a91b555d40c4ece/WowSimsExporter.lua). This is a code-derived format, not a real export fixture.
+
+The Sixty Upgrades Exporter CurseForge project still returns 403; its actual licence/client support could not be independently inspected. [Talents Forever's actual addon page](https://talentsforever.com/ideas) documents beta installation and talent-plan link sharing, but no complete gear-export format was verified there. Guessed `/addon` returned 404; that was not evidence the addon does not exist.
+
+**Gate B addon remains blocked.** Obtain a consented real Forever export with addon version and `GetBuildInfo()` output (no account/private-link data), or separately approve testing/adapting a minimal exporter. No new addon was written or installed.
 
 ## Sixty Upgrades import
 
-Task 3 has not yet completed. Public homepage rendered successfully and explicitly says “Set up multiple characters and gear sets.” Terms rendered successfully. The supplied share-link data/export has not yet been inspected in a browser; an HTTP 200 shell is not a machine export.
+### User-facing JSON export: technically verified
+
+The [supplied public set](https://sixtyupgrades.com/forever/set/vH9HQmj6tzxi7fajuHmu8p) rendered HTTP 200 in an isolated unsigned-in browser. Its **Export** action opened JSON with Copy to Clipboard and Download controls. No site software was reverse-engineered, private editor accessed, or endpoint invented.
+
+The JSON decoded successfully in memory and contained **17 unique named statistical equipment slots**. The sample was a level-60 Priest/Dwarf planned set. A single observed export is not a general equipment ruleset or proof of all-class coverage. Shirt/tabard placeholders were visible in the UI but absent from this export's item records.
+
+| Target | Observed JSON source path / value | Missing-field / interpretation behavior for future import |
+| --- | --- | --- |
+| Plan name | `name` | Use only as a display name, never identify/overwrite an existing plan by name |
+| Character name | `character.name` | Present; treat as user-supplied identity, not ownership proof |
+| Race / class / level | `character.race = DWARF`, `character.gameClass = PRIEST`, `character.level = 60` | Explicit mapping needed; not TBC enum/protobuf values |
+| Faction | `character.faction = ALLIANCE` | Present; full race/faction compatibility still needs verified rules |
+| Realm / region | No fields in observed `character` | Leave absent; never infer from language or link |
+| Equipment | `items[].slot`, `items[].id`; example `HEAD`, `260212` | Named slots, not positional sim equipment; verify IDs against a permitted Forever catalog |
+| Enchant | `items[].enchant.id = 8219`, `.spellId = 1249058` for observed neck record | Two distinct identifier domains; do not substitute the spell ID for an enchant effect or assume TBC equality |
+| Talent allocation | **No `talents` field** in this payload | `exportOptions.talents = true` is only an option flag, not a build; preserve missing allocation explicitly |
+| Game/source | `links.set` has `/forever/set/…`; `phase = 1` | Route is a source hint, not authenticated proof; phase is not a schema/game build |
+| Version | No explicit schema or client/catalog version observed | Require a documented source/version compatibility decision; do not guess from level or item names |
+| Stats / EP / buffs | `stats`, `points`, `buffs`, `consumables` present | Outside first-version import calculation scope; provider totals are not our verified character stats |
+
+Observed slot labels: `HEAD`, `NECK`, `SHOULDERS`, `CHEST`, `WAIST`, `LEGS`, `FEET`, `WRISTS`, `HANDS`, `FINGER_1`, `FINGER_2`, `TRINKET_1`, `TRINKET_2`, `BACK`, `MAIN_HAND`, `OFF_HAND`, `RANGED`. Keep the provider enum mapping distinct from display labels and future canonical game slots.
+
+A truncated copy failed native JSON parsing as expected. Unknown-item and wrong-game mutations can remain syntactically valid JSON; rejecting them requires our future schema/catalog validator, which was not implemented or tested. The actually absent talents demonstrate a valid partial export rather than an empty/zero-point build.
+
+### Import verdicts remain separate
+
+- **Text/file import: partial.** Public UI export and JSON structure are verified; complete talents, schema/version compatibility, permitted hosted payload scope and catalog/reference validation are not. No export file was retained because retention/cross-site scope was not cleared.
+- **Link import: blocked.** A human browser can view the page; no documented, permitted machine-export URL/API contract was established. Do not build a server scraper based on that observation.
+- **End-to-end import: blocked.** No equipment IDs/enchants were validated against a permitted catalog, and the real set lacks a talent allocation. A user-owned export with allocated talents and provider reuse clarification are concrete next inputs.
+
+The [terms](https://sixtyupgrades.com/forever/terms) constrain copying/mirroring website materials. That is not a legal conclusion that all user-entered factual build data is forbidden to transfer; obtain a scoped permission/interoperability decision instead of pretending the broad terms grant catalog reuse. Verified community contact entry point: `https://discord.gg/xUnQtQB`; no message sent.
 
 ## Capability verdicts
 
-| Capability | Status after Task 2 | Evidence / missing condition |
+| Capability | Status after Task 3 | Evidence / missing condition |
 | --- | --- | --- |
 | Numeric talent structure research | ready | Attributed CC BY projection, 467-record structural audit, eight provider UI observations; narrow research scope only |
 | Full independent talent planner | partial | Text/art rights, canonical/versioned talent identity and independent game verification remain separate issues |
 | Hosted Forever item catalog | blocked | No confirmed applicable reuse grant and versioned usable acquisition path |
-| Addon import | blocked | No verified project/client version or real export fixture |
-| Sixty Upgrades import | blocked | Export representation and cross-site reuse scope not verified |
+| Addon import | blocked | MIT exporter source inspected; no real Forever runtime output or client version |
+| Sixty Upgrades text/file import | partial | Real public UI JSON decoded; talents absent, permissions/version/reference validation unresolved |
+| Sixty Upgrades link import | blocked | Browser viewing is not a documented permitted machine-export contract |
 | Whole-character stats | blocked | No verified complete Forever formula coverage |
 
 ## Next decisions
 
-Continue the separate import investigations. If they remain unsupported, report their exact missing inputs rather than claiming a ready editor. Stable hosted ownership/sharing is still part of the product roadmap, but this phase does not implement it.
+Tasks 1–3 evidence is complete; Task 4's final decision/recommendation awaits the execution checkpoint. The full equipment/talent editor is not yet cleared by Gate A, and neither importer is ready end to end. Ask for a user-owned Forever addon export with build metadata, a Sixty Upgrades export with allocated talents, and an item-data/interoperability rights decision. Stable hosted ownership/sharing remains part of the product roadmap, but this phase does not implement it.
