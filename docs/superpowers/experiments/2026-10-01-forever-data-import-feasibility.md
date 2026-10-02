@@ -328,19 +328,95 @@ JS
 
 ### Scope / retention decision
 
-Text/file export is technically **partial**, not cleared for production: rights/interoperability scope, version handling, complete talent example and equipment reference validation remain unresolved. URL import is **blocked**: public browser readability does not establish a supported machine-export API or permission to scrape the service.
+At the first execution checkpoint, text/file export was technically **partial**, not cleared for production: rights/interoperability scope, version handling, a complete talent example and equipment reference validation remained unresolved. The Task 4 follow-up below supplies a nonempty talent example; it does not resolve the other conditions. URL import is **blocked**: public browser readability does not establish a supported machine-export API or permission to scrape the service.
 
-No raw Sixty export fixture was retained because its cross-site retention scope was not cleared; no actual addon fixture was available. Reproduction uses the mutable public UI, so changes to that set or markup can change these observations. No negative input was submitted to the provider or used to mutate Current/plans. Artificial reference/source examples above show parser limitations only; our future importer must validate/reject them before applying changes.
+No raw Sixty export fixture was retained because its cross-site retention scope was not cleared; no full equipped-character addon output was available. The subsequent talent-only share link is documented separately below. Reproduction uses the mutable public UI, so changes to that set or markup can change these observations. No negative input was submitted to the provider or used to mutate Current/plans. Artificial reference/source examples above show parser limitations only; our future importer must validate/reject them before applying changes.
+
+## Task 4 — follow-up evidence and final decision
+
+### User-provided Sixty talent allocation
+
+After the checkpoint, the user pasted an export with `talents: []`, then a new export with 18 nonempty `{name, id, rank, spellId}` records and `links.talents`. Recorded only format observations and numeric examples, not a full raw payload or a new export fixture.
+
+Checked 18 unique supplied IDs and the rank sum: **48 points**, not the initially assumed 51. The incorrect 51-point expectation failed a scratch arithmetic assertion; summing the supplied ranks directly identified the mistaken assumption. This is not evidence of an exporter error: a valid partial build may leave three points unspent. Rank caps, prerequisite legality and ID semantics were not independently checked.
+
+Reproduce the supplied numeric arithmetic without retaining the mixed-content export:
+
+```bash
+python - <<'PY'
+talents = [(105848, 3), (105849, 5), (105851, 1), (105852, 1),
+           (105853, 5), (105854, 1), (105855, 2), (105856, 1),
+           (105857, 2), (105858, 3), (105859, 2), (105860, 3),
+           (105861, 3), (105862, 1), (105863, 5), (105864, 5),
+           (105866, 3), (110855, 2)]
+assert len(talents) == len({identifier for identifier, _ in talents}) == 18
+assert sum(rank for _, rank in talents) == 48
+print('Supplied Sixty allocation: 18 unique IDs, 48 points; identity/legality unverified')
+PY
+```
+
+### Friend-reported addon talent-sharing artifact
+
+The user supplied this link and explicitly said their beta-playing friend generated it from the Talents Forever addon:
+`https://talentsforever.com/shaman/60/050433002-054032031005102251--RUVXYS1cbefSghBEFDI-5`.
+
+Classify addon origin as **user-reported runtime evidence**. We did not install/run the addon, inspect their client, or verify addon/client version. The link describes a plan, not necessarily currently learned talents or the actual character's level. It contains no equipment export.
+
+Independent browser observation: HTTP 200, level selector 60, displayed **17/34/0**, 51 allocated ranks, zero remaining points once rendering counters settled, and a leveling-order section. Extra URL suffix fields were not decoded or labeled as race/build metadata without evidence.
+
+Initial immediate reads showed remaining points 4 or 5 and slightly lower tree counters while the header already showed 17/34/0. Waiting on the expected zero-remaining condition produced coherent 17/34/0 and 51 ranks. This was a premature UI observation, not a demonstrated invalid build. Use condition-based waiting rather than arbitrary sleeps for these numeric counters.
+
+```bash
+node - <<'JS'
+const assert = require('node:assert/strict');
+const {chromium} = require('C:/Users/merli/Documents/Projects/wow-upgrade-agent/ui-finder/node_modules/@playwright/test');
+(async () => {
+  const browser = await chromium.launch({headless: true});
+  try {
+    const page = await browser.newPage();
+    const response = await page.goto('https://talentsforever.com/shaman/60/050433002-054032031005102251--RUVXYS1cbefSghBEFDI-5', {
+      waitUntil: 'domcontentloaded', timeout: 30000,
+    });
+    assert.equal(response.status(), 200);
+    assert.equal(await page.locator('#level').inputValue(), '60');
+    await page.waitForFunction(() => document.body.innerText.includes('Points left: 0'), {}, {timeout: 5000});
+    const text = await page.locator('body').innerText();
+    assert(text.includes('17/34/0'));
+    const ranks = await page.locator('.talent[aria-label]').evaluateAll(elements =>
+      elements.map(element => Number(element.getAttribute('aria-label').match(/rank (\d+) of/)?.[1] || 0)));
+    assert.equal(ranks.reduce((total, rank) => total + rank, 0), 51);
+    assert(text.includes('Points left: 0') && text.includes('Leveling order'));
+    console.log('PASS shared Shaman link: HTTP 200, level 60, 17/34/0, 51 ranks, zero remaining, leveling-order section');
+  } finally {
+    await browser.close();
+  }
+})().catch(error => { console.error(error.message); process.exitCode = 1; });
+JS
+```
+
+### Final handoff and scope review
+
+Research report now has a final capability matrix with status, evidence/coverage limits and next actions for all planned rows. **Gate A remains blocked for the full real-data editor**, despite useful numeric talent evidence. Equipment, enchant/source mapping and full stats did not gain validation from a talent link. Full equipped-character addon import remains blocked; talent-only sharing is partial, with reported runtime origin and independently observed browser behavior. Sixty text/file import is partial with its nonempty record shape now observed; machine-link import remains blocked.
+
+Next bounded work is permitted catalog acquisition and identifier/version mapping, not a production editor with guessed data. Only after adequate data evidence should a separate manual-editor plan begin. Durable hosted ownership/publication remains required for permanent latest-edit links. No provider inquiry, merge, push or application implementation was performed. No more user input is required to finalize this research; further beta gear exports are optional future evidence.
+
+### Final verification
+
+Ran the plan's two Python evidence checks: `Evidence wrapper valid: 17 records`; retained sample 8,839 bytes with unchanged SHA-256 `0f9cc51c43ad7775368b2d6aa017ddc66afc632d20eaea714255fddc25e84341`; both raw export filenames reported not retained. Ran the supplied talent arithmetic recipe: 18 unique IDs / 48 points. All three saved Node recipes passed `node --check -`; ran the new saved Shaman-link recipe and its HTTP, level, distribution, rank-total, remaining-point and leveling-section assertions passed.
+
+Confirmed that the report's final matrix covers every required capability with evidence/limits and a next action. Checked for unfinished markers and secret-bearing query strings, read source/permission boundaries against the observations, and ran `git diff --check`. Only the research report, experiment log and permitted numeric sample changed since the execution baseline. No application sources, manifests, embedded UI bundles or dependency lockfiles changed.
+
+Review was inline under the user's approved fallback; independent delegate review was unavailable. Existing source-audit and 8/6 provider-probe results remain dated observations, not a promise that mutable live providers stay identical. Go/UI application suites were not run because this approved phase changes only research artifacts; no application correctness or production readiness claim is made.
 
 ## Retained fixtures
 
-After Task 3, only `forever-fixtures/catalog-sample.json` is retained: an attributed numeric/structural talent projection. Its file hash is recorded with the Task 2 checks above and was rechecked unchanged in Task 3. The plan's fixture-byte check reported both `addon-export.txt` and `sixty-export.txt` as not retained. No complete live JSON, equipment catalog, addon export, or Sixty Upgrades export is retained. The live-source hash above is distinct from the committed fixture hash.
+After Task 4, only `forever-fixtures/catalog-sample.json` is retained as a standalone data file: an attributed numeric/structural talent projection. Its file hash is recorded with the Task 2 checks above and was rechecked unchanged in Task 3. The plan's fixture-byte check reported both `addon-export.txt` and `sixty-export.txt` as not retained. No complete live JSON, equipment catalog, addon export, or Sixty Upgrades export is retained. The live-source hash above is distinct from the committed fixture hash.
 
 ## Gate decisions
 
 - Gate A: blocked for the full manual equipment/talent editor. Numeric talent evidence is available and eight provider-UI cases pass, but item reuse/acquisition, full presentation rights and versioned talent identity still need decisions.
-- Gate B addon: blocked; code-derived candidate format known, but Forever client/version/runtime export fixture absent.
-- Gate B Sixty Upgrades text/file: partial technical evidence; UI JSON export works, but retention/interop scope, versioning, full talents and catalog mapping remain unresolved.
+- Gate B full character addon: blocked; code-derived candidate format known, but equipped-character runtime output/client version absent. Talent-only sharing: partial, with a friend-reported addon artifact independently opened in the browser.
+- Gate B Sixty Upgrades text/file: partial technical evidence; UI JSON works and the user supplied nonempty talent records. Retention/interop scope, versioning and identifier/catalog mapping remain unresolved.
 - Gate B Sixty Upgrades link: blocked; no documented permitted machine-export contract.
 - Whole-character stats: blocked; no complete authoritative formula coverage inspected.
 - Gate C hosted ownership/sharing: outside this research phase, not tested.

@@ -6,7 +6,7 @@ Checked 2026-10-02 UTC. Research only; no application changes, authenticated Bli
 
 Can the approved hosted Forever armory obtain permitted, versioned item/talent data and import actual or planned builds without depending on a Blizzard character API?
 
-**Initial result:** community talent structure is accessible under an explicit attribution licence. A distributable Forever item catalog and both import routes are not yet verified. The sources have different versions and scopes; their availability must not be collapsed into a single ready verdict.
+**Final research verdict:** talent structure and user-facing talent/gear export formats have useful verified evidence. The user also supplied a nonempty Sixty talent export and a friend-reported addon-generated talent link that renders correctly. **Do not start the full real-data editor yet:** a permitted, sufficiently complete versioned item catalog, identifier/version mapping and full gear-addon runtime evidence remain unresolved. Research is complete; production readiness is not.
 
 Experiment procedures and outcomes: [`superpowers/experiments/2026-10-01-forever-data-import-feasibility.md`](superpowers/experiments/2026-10-01-forever-data-import-feasibility.md). The filename follows the approved plan date; observations were made October 2.
 
@@ -98,7 +98,15 @@ Mapping evidence: [Character.lua](https://github.com/wowsims/exporter/blob/ad9e9
 
 The Sixty Upgrades Exporter CurseForge project still returns 403; its actual licence/client support could not be independently inspected. [Talents Forever's actual addon page](https://talentsforever.com/ideas) documents beta installation and talent-plan link sharing, but no complete gear-export format was verified there. Guessed `/addon` returned 404; that was not evidence the addon does not exist.
 
-**Gate B addon remains blocked.** Obtain a consented real Forever export with addon version and `GetBuildInfo()` output (no account/private-link data), or separately approve testing/adapting a minimal exporter. No new addon was written or installed.
+### Friend-reported Talents Forever addon sharing
+
+The user supplied [this Shaman build](https://talentsforever.com/shaman/60/050433002-054032031005102251--RUVXYS1cbefSghBEFDI-5) and explicitly confirmed that their beta-playing friend generated it **from the addon**, not the website. Record this as **user-reported runtime evidence**, not our own in-game test.
+
+Independently opening that link in a fresh browser showed level 60, **17 Elemental / 34 Enhancement / 0 Restoration**, 51 displayed allocated ranks, zero remaining points after the counters settled, and a leveling-order section. The URL's extra suffix was not decoded or assigned a guessed meaning. Early reads of animated counters briefly showed nonzero remaining points; a condition-based wait reached the consistent final state.
+
+This demonstrates a site-compatible talent-plan artifact and strengthens the talent-only addon path. It does **not** prove that the friend's character is level 60, that the plan equals currently learned talents, that a specific addon version/API was tested by us, or that equipped gear/enchants/race/realm can be exported.
+
+**Gate B full character addon remains blocked; talent-only sharing is partial.** A real equipped-character export plus addon version and `GetBuildInfo()` output is an optional future input, not required to complete this research handoff. No new addon was written or installed.
 
 ## Sixty Upgrades import
 
@@ -117,35 +125,58 @@ The JSON decoded successfully in memory and contained **17 unique named statisti
 | Realm / region | No fields in observed `character` | Leave absent; never infer from language or link |
 | Equipment | `items[].slot`, `items[].id`; example `HEAD`, `260212` | Named slots, not positional sim equipment; verify IDs against a permitted Forever catalog |
 | Enchant | `items[].enchant.id = 8219`, `.spellId = 1249058` for observed neck record | Two distinct identifier domains; do not substitute the spell ID for an enchant effect or assume TBC equality |
-| Talent allocation | **No `talents` field** in this payload | `exportOptions.talents = true` is only an option flag, not a build; preserve missing allocation explicitly |
+| Talent allocation | Initial browser export omitted `talents`; later user export contains `talents[].id`, `.rank`, `.spellId`, `.name` | Distinguish absent field, explicitly empty array, and nonempty allocation. Identifier domains and legality need validation; never infer allocation from the export option alone |
 | Game/source | `links.set` has `/forever/set/…`; `phase = 1` | Route is a source hint, not authenticated proof; phase is not a schema/game build |
 | Version | No explicit schema or client/catalog version observed | Require a documented source/version compatibility decision; do not guess from level or item names |
 | Stats / EP / buffs | `stats`, `points`, `buffs`, `consumables` present | Outside first-version import calculation scope; provider totals are not our verified character stats |
 
 Observed slot labels: `HEAD`, `NECK`, `SHOULDERS`, `CHEST`, `WAIST`, `LEGS`, `FEET`, `WRISTS`, `HANDS`, `FINGER_1`, `FINGER_2`, `TRINKET_1`, `TRINKET_2`, `BACK`, `MAIN_HAND`, `OFF_HAND`, `RANGED`. Keep the provider enum mapping distinct from display labels and future canonical game slots.
 
-A truncated copy failed native JSON parsing as expected. Unknown-item and wrong-game mutations can remain syntactically valid JSON; rejecting them requires our future schema/catalog validator, which was not implemented or tested. The actually absent talents demonstrate a valid partial export rather than an empty/zero-point build.
+A truncated copy failed native JSON parsing as expected. Unknown-item and wrong-game mutations can remain syntactically valid JSON; rejecting them requires our future schema/catalog validator, which was not implemented or tested. Initial absent talents were a partial export, not evidence that the format cannot export talents.
+
+### User-provided nonempty talent export
+
+At the checkpoint the user first provided an explicitly empty `talents: []`, then a nonempty export after assigning points. Its **18 unique talent IDs total 48 allocated points**, leaving three against the observed level-60 budget. Example: `id = 105848`, `rank = 3`, `spellId = 14523`. It also includes `links.talents` pointing to a Forever Priest calculator page. This verifies the supplied nonempty record shape; it does not establish whether `id` is a provider ID, game trait ID or another domain, or prove rank/prerequisite legality.
+
+The user example supplies the previously missing format evidence. No need to decode the sharing URL merely to obtain allocations when these JSON records exist. Phase is still not a catalog version; a source link is still not authenticated origin. No full pasted payload, names, stat tables or raw exporter file were committed.
 
 ### Import verdicts remain separate
 
-- **Text/file import: partial.** Public UI export and JSON structure are verified; complete talents, schema/version compatibility, permitted hosted payload scope and catalog/reference validation are not. No export file was retained because retention/cross-site scope was not cleared.
+- **Text/file import: partial.** Public UI export plus supplied gear/enchant/talent JSON shapes are verified. Schema/version compatibility, permitted hosted payload scope and identifier/catalog validation remain unresolved. No raw export file was retained because retention/cross-site scope was not cleared.
 - **Link import: blocked.** A human browser can view the page; no documented, permitted machine-export URL/API contract was established. Do not build a server scraper based on that observation.
-- **End-to-end import: blocked.** No equipment IDs/enchants were validated against a permitted catalog, and the real set lacks a talent allocation. A user-owned export with allocated talents and provider reuse clarification are concrete next inputs.
+- **End-to-end import: blocked.** A nonempty talent example is now available; missing examples are no longer the only issue. Resolve permitted catalog acquisition and ID/version validation before implementing imports.
 
 The [terms](https://sixtyupgrades.com/forever/terms) constrain copying/mirroring website materials. That is not a legal conclusion that all user-entered factual build data is forbidden to transfer; obtain a scoped permission/interoperability decision instead of pretending the broad terms grant catalog reuse. Verified community contact entry point: `https://discord.gg/xUnQtQB`; no message sent.
 
 ## Capability verdicts
 
-| Capability | Status after Task 3 | Evidence / missing condition |
-| --- | --- | --- |
-| Numeric talent structure research | ready | Attributed CC BY projection, 467-record structural audit, eight provider UI observations; narrow research scope only |
-| Full independent talent planner | partial | Text/art rights, canonical/versioned talent identity and independent game verification remain separate issues |
-| Hosted Forever item catalog | blocked | No confirmed applicable reuse grant and versioned usable acquisition path |
-| Addon import | blocked | MIT exporter source inspected; no real Forever runtime output or client version |
-| Sixty Upgrades text/file import | partial | Real public UI JSON decoded; talents absent, permissions/version/reference validation unresolved |
-| Sixty Upgrades link import | blocked | Browser viewing is not a documented permitted machine-export contract |
-| Whole-character stats | blocked | No verified complete Forever formula coverage |
+Final statuses below concern production capabilities unless explicitly labeled research. All blocked/partial rows have a concrete next action; no gate is inferred from another row.
+
+| Capability | Status | Evidence / coverage limits | Next action |
+| --- | --- | --- | --- |
+| Manual item selection | blocked | Public catalogs exist, but permitted hosted acquisition and sufficient level-60 coverage were not established | Obtain scoped catalog permission/access and a versioned representative dataset |
+| Enchants | blocked | Export exposes distinct enchant and spell IDs; no permitted authoritative mapping verified | Verify identifier domains, restrictions and effects against that dataset |
+| Independent talent planning | partial | CC BY structural evidence, nine class trees, eight provider UI observations, nonempty JSON and an addon-reported share link | Decide versioned talent identity and text/icon presentation rights; validate classes/prerequisites without TBC fallbacks |
+| Lower-level restrictions | partial | Talent budgets observed at levels 10/30/60; equipment/race restrictions not verified | Test actual item/slot/class rules and talent budgets for supported levels |
+| Source filters | blocked | Source metadata includes provider-labeled Classic-derived loot that may differ from Forever | Acquire attributable Forever sources and preserve unknown/Classic provenance labels |
+| Whole-character stats | blocked | No complete independently checked base/racial/talent/level formula coverage | Keep totals unavailable until coverage/parity is demonstrated |
+| Addon import: full character | blocked | MIT candidate source inspected; Talents Forever sharing is friend-reported and browser-observed, not gear export | Obtain an equipped-character output with client/addon versions or approve a separate minimal-exporter experiment |
+| Sixty text/file import | partial | Public gear JSON and user-supplied nonempty talent record shape verified | Resolve compatibility/rights scope and validate all reference domains before applying a build |
+| Sixty link import | blocked | Public browser viewing works, but a permitted machine-export contract was not established | Obtain provider-supported API/export access; do not scrape an editor |
+| Numeric talent research | ready | Attributed 17-record projection; source audit and runnable probes | Preserve licence/changes notices; do not promote this to full game-data clearance |
+| Talent-only addon share link | partial | Friend reports addon origin; Shaman link opens to a consistent 17/34/0 plan | Check addon/client versions and versioned allocation mapping when this route is implemented |
+| Hosted ownership/stable sharing | outside phase | No server, account or publication implementation tested | Separate Gate C plan remains required for permanent latest-edit links |
 
 ## Next decisions
 
-Tasks 1–3 evidence is complete; Task 4's final decision/recommendation awaits the execution checkpoint. The full equipment/talent editor is not yet cleared by Gate A, and neither importer is ready end to end. Ask for a user-owned Forever addon export with build metadata, a Sixty Upgrades export with allocated talents, and an item-data/interoperability rights decision. Stable hosted ownership/sharing remains part of the product roadmap, but this phase does not implement it.
+**Go:** the bounded feasibility investigation is complete; the product remains technically plausible. Nothing else is required from the user merely to finalize this report.
+
+**No-go for the full editor now:** Gate A lacks a permitted, sufficiently complete, versioned item/enchant dataset. This is a missing-evidence/rights decision, not a claim that the product is impossible or that all game facts are categorically prohibited from use. Both full import routes remain short of end-to-end readiness.
+
+**Recommended next scoped work:** catalog access/permission and identifier mapping. Confirm an authorized provider/contact and request a grant covering a free hosted planner, caching/updates, names/tooltips/icons separately, and user-selected gear/talent interoperability. No inquiry has been sent. Verify a representative armor item, weapon/off-hand conflict, ring, enchant, and level-60 coverage against the chosen version. Map Sixty `id` versus `spellId` and community snapshot positions before deciding an import/build schema.
+
+Only after that evidence is sufficient should the next manual-editor plan include Current/Planned, independent named builds, supported class/level coverage and the item picker. Leave unverified character totals unavailable and omit unverified import routes. A synthetic mockup is not a substitute for passing the real-data gate.
+
+The hosted ownership/publication plan remains a required subsequent milestone: guest/account ownership, recovery/revocation, durable storage and selected published builds under permanent URLs. Browser-local storage alone does not satisfy the Discord/bookmark requirement. Future beta exports are useful optional inputs, not a demand that the friend install more addons or provide account/private details.
+
+No application implementation, merge, push or provider contact is authorized by this research completion.
