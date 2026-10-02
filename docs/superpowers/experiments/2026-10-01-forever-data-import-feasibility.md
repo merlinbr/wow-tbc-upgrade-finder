@@ -105,7 +105,135 @@ Source/rights findings are separated from gameplay accuracy. Positive community/
 
 ## Task 2 — catalog and rule coverage
 
-Not yet executed. Gate A remains blocked for a hosted complete item/talent editor; accessible community talent structure needs its own inspection before a narrower verdict.
+### Structural audit and retained projection
+
+Fetched `https://talentsforever.com/data.json` again. Source hash matched the Task 1 observation. Transiently inspected all nine classes / 27 trees / 467 class talent records. Observed positive integer rank caps, one-based row/column coordinates, 71 prerequisite names resolving within their own tree, zero duplicate grid positions and zero `complete`/description-count gaps. No game talent/spell identifier field was in the class-record key union. Provider verification flags and rank text were inspected, not independently validated against the client.
+
+Retained `forever-fixtures/catalog-sample.json`: 17 numeric/structural records for the first Warrior tree, with attribution to Chris Baldwin / talentsforever.com, CC BY 4.0 link and a changes statement. Removed spell names, descriptions, artwork/icon references, Classic text, costs and unrelated data. Resolved same-tree prerequisite names to source indexes. IDs are snapshot locators (`2026-10-01:Warrior:0:<sourceIndex>`), explicitly not stable game IDs.
+
+This is a small permitted community-work projection, not an application item catalog or clearance to republish mixed Blizzard text/art. For a future save format, tie allocations to an immutable data version and explicitly resolve migrations; do not load old positions against a new live tree.
+
+Reproduce the source-consistency audit without retaining the mixed-content JSON:
+
+```bash
+python - <<'PY'
+import hashlib, json, urllib.request
+raw = urllib.request.urlopen('https://talentsforever.com/data.json', timeout=30).read(2500000)
+assert hashlib.sha256(raw).hexdigest() == 'fea556416a6f9ac4c8573b7aa98ca60d7aa576f947e906f5906edae50018636c', 'Source changed; inspect a new version before comparing results'
+data = json.loads(raw)
+total = edges = 0
+for player_class, block in data['talents'].items():
+    assert len(block['trees']) == 3
+    for tree in block['trees']:
+        names = [t['name'] for t in tree['talents']]
+        positions = set()
+        for talent in tree['talents']:
+            assert isinstance(talent['max'], int) and talent['max'] > 0
+            assert talent['row'] >= 1 and 1 <= talent['col'] <= 4
+            position = (talent['row'], talent['col'])
+            assert position not in positions
+            positions.add(position)
+            assert talent['complete'] and len(talent['desc']) == talent['max']
+            if talent.get('req'):
+                assert names.count(talent['req']) == 1
+                edges += 1
+            total += 1
+assert len(data['talents']) == 9 and total == 467 and edges == 71
+print('Source structure: 9 classes, 27 trees, 467 talents, 71 resolved prerequisites')
+PY
+```
+
+Ran the plan's evidence-wrapper check: `Evidence wrapper valid: 17 records`. Additional checks passed for unique snapshot locators, in-range prerequisites, attribution/licence and absence of excluded text/icon/art fields. Retained file: **8,839 bytes**, SHA-256 `0f9cc51c43ad7775368b2d6aa017ddc66afc632d20eaea714255fddc25e84341`.
+
+### Provider UI cases
+
+Primary rule descriptions: `https://talentsforever.com/warrior`. Selected level sets the point budget; rows require five points per tier and arrow prerequisites must be maxed. Observed cases:
+
+| Input / setup | Expected | Observed |
+| --- | --- | --- |
+| Empty level 60 build | 51 points available | 51 |
+| First-tree source index 3 at zero spent | Reject locked row-2 point | Rank stays 0 |
+| First-tree source index 0, attempt rank 4 with cap 3 | Reject fourth point | Rank stays 3 |
+| First row: index 0 rank 3, index 1 rank 2; add index 3 | Allow row-2 point after five spent | Rank becomes 1 |
+| Row 3 open with ten points, prerequisite index 4 still 0; add index 6 | Reject unmet prerequisite | Rank stays 0 |
+| Max prerequisite index 4 to rank 5; add index 6 | Allow point | Rank becomes 1 |
+| Empty level 30 build | 21 points available | 21 |
+| Empty level 10 build; attempt two points at index 0 | Allow one, reject second | Rank 1; zero points left |
+
+**Result: 8/8 assertions passed.** These are observations of the provider UI only, not proof of game-server behavior or our future importer/validator.
+
+The first combined browser probe failed after six checks because the provider restored the prior build within the same browser context. Evidence: revisiting after one point restored rank 1, `localStorage` key `tf_last_Warrior`, and a “Picked up your last Warrior build” notice; a fresh context showed rank 0. The test's empty-build assumption was wrong, not a demonstrated level-budget bug. Re-ran with one fresh context per scenario and all eight checks passed. No user browser state was accessed.
+
+Reproduce using the already installed Playwright package from this Windows checkout (adjust only its absolute module path on another machine):
+
+```bash
+node - <<'JS'
+const assert = require('node:assert/strict');
+const {chromium} = require('C:/Users/merli/Documents/Projects/wow-upgrade-agent/ui-finder/node_modules/@playwright/test');
+(async () => {
+  const browser = await chromium.launch({headless: true});
+  let context, page, checks = 0;
+  const start = async level => {
+    if (context) await context.close();
+    context = await browser.newContext();
+    page = await context.newPage();
+    await page.goto('https://talentsforever.com/warrior', {
+      waitUntil: 'domcontentloaded', timeout: 30000,
+    });
+    await page.locator('#level').selectOption(String(level));
+  };
+  const talent = name => page.getByRole('button', {
+    name: new RegExp('^' + name + ', rank '),
+  });
+  const rank = async name => Number((await talent(name).getAttribute('aria-label')).match(/rank (\d+) of/)[1]);
+  const add = async (name, count) => {
+    for (let i = 0; i < count; i++) await talent(name).click();
+  };
+  const pass = label => { checks++; console.log('PASS', label); };
+  try {
+    await start(60);
+    assert.match(await page.locator('body').innerText(), /Points left: 51/);
+    pass('level 60 budget 51');
+    await add('Improved Charge', 1);
+    assert.equal(await rank('Improved Charge'), 0);
+    pass('row 2 locked below five tree points');
+    await add('Improved Heroic Strike', 4);
+    assert.equal(await rank('Improved Heroic Strike'), 3);
+    pass('rank cap 3 refuses fourth point');
+    await add('Deflection', 2);
+    await add('Improved Charge', 1);
+    assert.equal(await rank('Improved Charge'), 1);
+    pass('row 2 unlocks at five tree points');
+    await add('Deflection', 3);
+    await add('Improved Charge', 1);
+    await add('Anger Management', 1);
+    assert.equal(await rank('Anger Management'), 0);
+    pass('unmet maxed prerequisite blocks allocation with row open');
+    await add('Improved Tactical Mastery', 5);
+    await add('Anger Management', 1);
+    assert.equal(await rank('Anger Management'), 1);
+    pass('maxed prerequisite permits allocation');
+    await start(30);
+    assert.match(await page.locator('body').innerText(), /Points left: 21/);
+    pass('level 30 budget 21');
+    await start(10);
+    await add('Improved Heroic Strike', 2);
+    assert.equal(await rank('Improved Heroic Strike'), 1);
+    assert.match(await page.locator('body').innerText(), /Points left: 0/);
+    pass('level 10 budget refuses second point');
+    console.log('TOTAL', checks, 'provider UI observations passed');
+  } finally {
+    await browser.close();
+  }
+})().catch(error => { console.error(error.message); process.exitCode = 1; });
+JS
+```
+
+### Equipment and statistics stop conditions
+
+No equipment source passed Task 1's rights/acquisition gate, so no armor/weapon/ring/enchant records were copied and no equipment legality cases were claimed as tested. Expected future cases remain: too-high required level, wrong slot, and two-handed weapon/off-hand conflict. They need permitted Forever records and actual restrictions before becoming verified acceptance examples.
+
+The public Codex source page reports unavailable level-50–60 data and Classic-derived loot. Coverage is provider-reported, not a full collection audit. No actual full-character stat engine/formulas were tested. The sample's single class-tree coverage does not imply a production all-class editor is ready.
 
 ## Task 3 — import routes
 
@@ -113,11 +241,11 @@ Not yet executed. No real addon or Sixty Upgrades export fixture retained or dec
 
 ## Retained fixtures
 
-None after Task 1. The live-source hash above is not a committed fixture hash.
+After Task 2, only `forever-fixtures/catalog-sample.json` is retained: an attributed numeric/structural talent projection. Its file hash is recorded with the artifact checks below. No complete live JSON, equipment catalog, addon export, or Sixty Upgrades export is retained. The live-source hash above is distinct from the committed fixture hash.
 
 ## Gate decisions
 
-- Gate A: blocked for the full manual equipment/talent editor; talent-structure source is promising but not yet validation-tested.
+- Gate A: blocked for the full manual equipment/talent editor. Numeric talent evidence is available and eight provider-UI cases pass, but item reuse/acquisition, full presentation rights and versioned talent identity still need decisions.
 - Gate B addon: blocked; client/version/export fixture absent.
 - Gate B Sixty Upgrades: blocked; export access/format/reuse scope unverified.
 - Whole-character stats: blocked; no complete authoritative formula coverage inspected.

@@ -41,9 +41,39 @@ All rows below were checked October 2, 2026. `partial` means useful evidence, no
 
 ## Catalog and rules
 
-Task 2 has not yet completed. Accessible data and licence evidence do not establish full catalog accuracy, class/race coverage, equipment legality, talent-validation behavior, or character-stat formulas. No TBC rules were substituted.
+### Talent structure: usable evidence, not a complete game-data clearance
 
-Known version pitfall: the Talents Forever upstream currently describes client-derived beta data, whereas wowforever.space explicitly retains a September 15 demo snapshot. The repository build marker `70178` differs from the `70170` sites. Never combine these silently.
+The current [upstream JSON](https://talentsforever.com/data.json) has **467 class talents across nine classes and 27 trees**, not the mirror's old 470-record snapshot. Class tree counts observed directly:
+
+| Class | Talents per tree |
+| --- | --- |
+| Warrior | 17 / 18 / 18 |
+| Paladin | 17 / 16 / 17 |
+| Hunter | 16 / 16 / 18 |
+| Rogue | 17 / 17 / 19 |
+| Priest | 18 / 17 / 18 |
+| Shaman | 16 / 18 / 16 |
+| Mage | 18 / 17 / 19 |
+| Warlock | 17 / 19 / 16 |
+| Druid | 16 / 20 / 16 |
+
+Observed paths: `talents.<Class>.trees[].talents[]`; `row`/`col` are one-based, `max` is the cap, `req` refers to a same-tree talent name, and `desc` contains rank text. Auditing all 467 records found positive integer caps, no duplicate grid positions, 71 resolvable prerequisite references, and no `complete`/description-count gaps. Those are source-consistency checks, not independent game verification. The export's explanatory README still mentions estimated/unconfirmed ranks; do not use that wording as proof every current field is independently confirmed.
+
+No canonical talent/spell identifier was present in the class-talent record keys. Our [17-record numeric projection](superpowers/experiments/forever-fixtures/catalog-sample.json) uses clearly labeled **snapshot locators**, not persistent game IDs. A production planner needs an explicit versioned identity/migration policy; never reinterpret an old allocation using a reordered live array. Race data contains five entries per faction and `classes` fields, but race identity, faction variants and full compatibility were not independently client-tested.
+
+The [Warrior calculator](https://talentsforever.com/warrior) documents rows opening every five tree points and prerequisites requiring maximum rank. Its UI was exercised in isolated browser contexts: **8/8 observations passed**, covering level-60/30 budgets, rank ceilings, row unlocking, prerequisite rejection/acceptance, and refusing a second point at level 10. These verify provider UI behavior, not our nonexistent validator or a game-server rule. Exact cases and a runnable recipe are in the experiment log.
+
+The retained projection includes only numeric/structural fields, author attribution, licence link and the changes made; it omits spell names, tooltip text, icons and art. This grants no broader clearance for a production name/tooltip/icon presentation.
+
+### Equipment, source labels and statistics: blocked
+
+No candidate passed both permitted hosted reuse and usable versioned equipment acquisition. Consequently armor, weapon/off-hand conflicts, ring/trinket legality, enchants, equipment slot inventory, and lower-level item restrictions could not be fixture-tested. Their acceptance cases remain requirements, not passing observations. The existing app's 17 statistical slots and TBC enchant IDs are not assumed valid for Forever.
+
+[Forever Codex's source page](https://forever-codex.com/sources/) says 8,189 of 31,821 item IDs lack data, mostly level-50–60 equipment; its Classic-derived loot/vendor data is expressly not guaranteed Forever-equivalent. These provider-reported limits directly matter to our level-60-first scope. Do not turn Classic loot rates into Forever source filters.
+
+No complete base/racial/talent/level formula set was independently verified. Item descriptions, provider stat displays and a simulator fork are not sufficient proof of whole-character stat parity. Full character totals and derived percentages remain blocked; talent budgets have narrower UI evidence only.
+
+Known version pitfall: the upstream describes client-derived beta data, wowforever.space retains a September 15 demo snapshot, and the repository build marker `70178` differs from the `70170` sites. Never combine these silently.
 
 ## Addon import
 
@@ -55,9 +85,10 @@ Task 3 has not yet completed. Public homepage rendered successfully and explicit
 
 ## Capability verdicts
 
-| Capability | Status after Task 1 | Evidence / missing condition |
+| Capability | Status after Task 2 | Evidence / missing condition |
 | --- | --- | --- |
-| Permitted talent structure research | partial | Upstream CC BY contribution and accessible JSON; inspect actual structure/validation next |
+| Numeric talent structure research | ready | Attributed CC BY projection, 467-record structural audit, eight provider UI observations; narrow research scope only |
+| Full independent talent planner | partial | Text/art rights, canonical/versioned talent identity and independent game verification remain separate issues |
 | Hosted Forever item catalog | blocked | No confirmed applicable reuse grant and versioned usable acquisition path |
 | Addon import | blocked | No verified project/client version or real export fixture |
 | Sixty Upgrades import | blocked | Export representation and cross-site reuse scope not verified |
@@ -65,4 +96,4 @@ Task 3 has not yet completed. Public homepage rendered successfully and explicit
 
 ## Next decisions
 
-Continue the bounded catalog/talent inspection and separate import investigations. If they remain unsupported, report their exact missing inputs rather than claiming a ready editor. Stable hosted ownership/sharing is still part of the product roadmap, but this phase does not implement it.
+Continue the separate import investigations. If they remain unsupported, report their exact missing inputs rather than claiming a ready editor. Stable hosted ownership/sharing is still part of the product roadmap, but this phase does not implement it.
