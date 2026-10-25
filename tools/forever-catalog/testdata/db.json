@@ -1,0 +1,76 @@
+{
+  "items": [
+    {
+      "id": 720,
+      "name": "Brawler Gloves",
+      "icon": "inv_gauntlets_05",
+      "type": 7,
+      "armorType": 2,
+      "phase": 1,
+      "quality": 3,
+      "scalingOptions": {
+        "0": {
+          "randPropPoints": 12,
+          "stats": { "0": 8, "2": 7, "27": 62 },
+          "ilvl": 28
+        },
+        "1": {
+          "randPropPoints": 14,
+          "stats": { "0": 10, "2": 9, "27": 80 },
+          "ilvl": 34
+        }
+      }
+    },
+    {
+      "id": 721,
+      "name": "Test Plate Helm",
+      "icon": "inv_helmet_01",
+      "type": 1,
+      "armorType": 4,
+      "phase": 1,
+      "quality": 4,
+      "stats": { "0": 12, "2": 15, "27": 400 },
+      "ilvl": 60,
+      "requiredProfession": 2,
+      "classAllowlist": [2],
+      "unique": true,
+      "limitCategory": 700,
+      "setId": 162,
+      "setName": "Embrace of the Viper",
+      "sources": [
+        { "drop": { "difficulty": 1, "npcId": 644, "zoneId": 1581 } }
+      ]
+    },
+    {
+      "id": 722,
+      "name": "Hidden Shirt",
+      "icon": "inv_shirt_01",
+      "type": 0,
+      "quality": 1,
+      "scalingOptions": {
+        "0": { "ilvl": 1 }
+      }
+    }
+  ],
+  "enchants": [
+    {
+      "effectId": 8219,
+      "itemId": 249503,
+      "spellId": 1249058,
+      "name": "Greater Stats",
+      "icon": "inv_enchant_greaterstats",
+      "type": 2,
+      "extraTypes": [7, 9, 10],
+      "stats": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      "quality": 3,
+      "lvl": 60
+    }
+  ],
+  "randomSuffixes": [
+    {
+      "id": 12718,
+      "name": "of the Bear",
+      "stats": [9, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    }
+  ]
+}
