@@ -66,6 +66,9 @@ func TestParseCapabilities(t *testing.T) {
 	if len(caps.Specs["paladin"]) != 3 {
 		t.Fatalf("specs = %+v", caps.Specs["paladin"])
 	}
+	if !slices.Contains(caps.Professions, "blacksmithing") {
+		t.Fatalf("professions = %+v", caps.Professions)
+	}
 
 	// Unknown members must fail the generator rather than silently disappear.
 	broken := strings.Replace(capsTS, "ArmorType.ArmorTypePlate", "ArmorType.ArmorTypeSpandex", 1)

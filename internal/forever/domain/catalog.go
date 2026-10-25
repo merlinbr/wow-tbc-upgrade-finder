@@ -233,13 +233,14 @@ type WeaponEligibility struct {
 
 // Capabilities is the pinned class/spec capability data used by validation.
 type Capabilities struct {
-	Classes   []ClassInfo                   `json:"classes"`
-	Specs     map[Class][]SpecInfo          `json:"specs"`
-	Armor     map[Class][]string            `json:"armor"`
-	Weapons   map[Class][]WeaponEligibility `json:"weapons"`
-	Ranged    map[Class][]string            `json:"ranged"`
-	Races     map[Class][]string            `json:"races"`
-	DualWield map[Spec]bool                 `json:"dualWield"`
+	Classes     []ClassInfo                   `json:"classes"`
+	Specs       map[Class][]SpecInfo          `json:"specs"`
+	Armor       map[Class][]string            `json:"armor"`
+	Weapons     map[Class][]WeaponEligibility `json:"weapons"`
+	Ranged      map[Class][]string            `json:"ranged"`
+	Races       map[Class][]string            `json:"races"`
+	DualWield   map[Spec]bool                 `json:"dualWield"`
+	Professions []string                      `json:"professions"`
 }
 
 // Manifest pins one generated catalog build. It carries no timestamp so

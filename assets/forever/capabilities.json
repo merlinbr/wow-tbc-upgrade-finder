@@ -737,5 +737,17 @@
     "warrior_arms": true,
     "warrior_fury": true,
     "warrior_protection": true
-  }
+  },
+  "professions": [
+    "alchemy",
+    "blacksmithing",
+    "enchanting",
+    "engineering",
+    "herbalism",
+    "inscription",
+    "leatherworking",
+    "mining",
+    "skinning",
+    "tailoring"
+  ]
 }

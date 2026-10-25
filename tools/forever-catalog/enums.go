@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"regexp"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -117,6 +118,20 @@ func (e Enums) Value(enumName, key string) (int, bool) {
 	}
 	value, ok := keys[key]
 	return value, ok
+}
+
+// Keys returns every catalog key of an enum, sorted for deterministic output.
+func (e Enums) Keys(enumName string) []string {
+	values, ok := e.byValue[enumName]
+	if !ok {
+		return nil
+	}
+	keys := make([]string, 0, len(values))
+	for _, key := range values {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+	return keys
 }
 
 func (e Enums) fallback(prefix string, value int) string {

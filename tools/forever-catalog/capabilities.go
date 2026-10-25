@@ -146,6 +146,13 @@ func ParseCapabilities(capsTS string, enums Enums, specs map[domain.Class][]doma
 		}
 	}
 
+	for _, key := range enums.Keys("Profession") {
+		if key == "unknown" {
+			continue
+		}
+		caps.Professions = append(caps.Professions, key)
+	}
+
 	classKeys := make([]string, 0, len(specs))
 	for class := range specs {
 		classKeys = append(classKeys, class)
