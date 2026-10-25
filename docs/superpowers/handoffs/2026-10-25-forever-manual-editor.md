@@ -140,6 +140,16 @@ proves it wrong.
    class armor table, and the pinned data's only spec-level rule is dual-wield (which covers whole
    classes). The Task 12 capability-warning e2e therefore changes race to make an equipped
    faction-restricted item incompatible. Equipment is preserved and the warning is shown.
+4. **The Task 13 picker test contradicted explicit save.** Its snippet reloaded after Apply, which
+   would require an immediate write. The spec now asserts the local slot update; Task 15's
+   full-flow test covers save plus reload.
+5. **Pinned items have only `scalingOptions` key `"0"` (Task 13).** No non-default variants exist in
+   the payload, so the picker's variant select is dormant. The test asserts the flattened default
+   variant's ilvl and stats rather than another variant's values.
+6. **Enchants endpoint gained `includeIncompatible=1` (Task 13).** The picker must show a weapon-only
+   effect on an armor slot as disabled with `incompatible_enchant_slot`, but the default
+   `/api/enchants?slot=` response filters those rows out. The opt-in flag returns them with
+   `compatible`/`reason`; default behavior is unchanged.
 
 ## Definition of done for Phase 2
 

@@ -118,17 +118,35 @@ func (a *api) handleEnchants(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid_query", err.Error())
 		return
 	}
+	includeIncompatible := query.Get("includeIncompatible") == "1" ||
+		query.Get("includeIncompatible") == "true"
 	enchants := catalog.SearchEnchants(a.catalog, catalog.EnchantFilter{
-		Class:  query.Get("class"),
-		Slot:   slot,
-		Query:  query.Get("q"),
-		Limit:  limit,
-		Offset: offset,
+		Class:               query.Get("class"),
+		Slot:                slot,
+		Query:               query.Get("q"),
+		Limit:               limit,
+		Offset:              offset,
+		IncludeIncompatible: includeIncompatible,
 	})
+
+	type enchantRow struct {
+		domain.Enchant
+		Compatible bool   `json:"compatible"`
+		Reason     string `json:"reason,omitempty"`
+	}
+	rows := make([]enchantRow, 0, len(enchants))
+	for index := range enchants {
+		row := enchantRow{Enchant: enchants[index], Compatible: true}
+		if includeIncompatible && slot != "" && !catalog.EnchantAdmitsSlot(&enchants[index], slot) {
+			row.Compatible = false
+			row.Reason = "incompatible_enchant_slot"
+		}
+		rows = append(rows, row)
+	}
 	writeJSON(w, http.StatusOK, struct {
-		Enchants []domain.Enchant `json:"enchants"`
-		Count    int              `json:"count"`
-	}{Enchants: enchants, Count: len(enchants)})
+		Enchants []enchantRow `json:"enchants"`
+		Count    int          `json:"count"`
+	}{Enchants: rows, Count: len(rows)})
 }
 
 func (a *api) handleTalents(w http.ResponseWriter, r *http.Request) {

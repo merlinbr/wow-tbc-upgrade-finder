@@ -1001,8 +1001,6 @@ test('filters by slot and applies an item', async ({ page, request }) => {
   await page.getByTestId('picker-row').first().click();
   await page.getByRole('button', { name: 'Apply to head' }).click();
   await expect(page.getByTestId('gear-slot-head')).toContainText('Bad Hat');
-  await page.reload();
-  await expect(page.getByTestId('gear-slot-head')).toContainText('Bad Hat');
 });
 ```
 
@@ -1026,7 +1024,7 @@ The Enchants tab calls `/api/enchants?slot=<slot>&class=<class>` and, on Apply, 
 
 - [ ] **Step 6: Add the variant, incompatibility and retention e2e test**
 
-Seed a build whose head item's stats exist only inside `scalingOptions`; assert the slot card and a reload show those stats, not zeros or another variant's values. Then pick a plate item for a mage plan, assert Apply is disabled and `incompatible_armor` is shown, and assert the existing head item is unchanged. Add an item with an unknown source and confirm it is shown but labelled.
+Seed a build whose head item's stats exist only inside `scalingOptions`; assert the picker detail and the slot card's item level reflect the flattened default variant, not zeros or another variant's values. Then pick a plate item for a mage plan, assert Apply is disabled and `incompatible_armor` is shown, and assert the existing head item is unchanged. Add an item with an unknown source and confirm it is shown but labelled.
 
 - [ ] **Step 7: Run the picker specs**
 

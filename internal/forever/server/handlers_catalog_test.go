@@ -107,6 +107,34 @@ func TestEnchantsSearch(t *testing.T) {
 	}
 }
 
+func TestEnchantsIncludeIncompatible(t *testing.T) {
+	srv := newTestServer(t)
+	rec := get(
+		t,
+		srv,
+		"/api/enchants?slot=head&class=paladin&includeIncompatible=1&q=Lesser%20Striking",
+	)
+	if rec.Code != http.StatusOK {
+		t.Fatalf("status %d: %s", rec.Code, rec.Body.String())
+	}
+	var body struct {
+		Enchants []struct {
+			EffectID   int    `json:"effectId"`
+			Compatible bool   `json:"compatible"`
+			Reason     string `json:"reason"`
+		} `json:"enchants"`
+	}
+	if err := json.Unmarshal(rec.Body.Bytes(), &body); err != nil {
+		t.Fatal(err)
+	}
+	if len(body.Enchants) != 1 {
+		t.Fatalf("enchants = %+v", body.Enchants)
+	}
+	if body.Enchants[0].Compatible || body.Enchants[0].Reason != "incompatible_enchant_slot" {
+		t.Fatalf("row = %+v", body.Enchants[0])
+	}
+}
+
 func TestTalentsRequiresKnownClass(t *testing.T) {
 	srv := newTestServer(t)
 	if rec := get(t, srv, "/api/talents?class=paladin"); rec.Code != http.StatusOK {

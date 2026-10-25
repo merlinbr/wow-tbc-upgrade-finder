@@ -5,8 +5,8 @@
   import EditCharacterDialog from './EditCharacterDialog.svelte';
   import GearGrid from './GearGrid.svelte';
   import IdentityHeader from './IdentityHeader.svelte';
+  import ItemPicker from './ItemPicker.svelte';
   import StatsPanel from './StatsPanel.svelte';
-  import { slotLabel } from './labels.js';
   import { href } from './router.svelte.js';
 
   let { id, tab = 'gear', buildId = '' } = $props();
@@ -22,6 +22,8 @@
   let error = $state('');
   let actionError = $state('');
   let selectedSlot = $state('');
+  let liveViolations = $state([]);
+  let pickerSlot = $state('');
 
   let editDialogOpen = $state(false);
   let planDialogOpen = $state(false);
@@ -76,6 +78,8 @@
     build = target;
     equipment = JSON.parse(JSON.stringify(target.equipment ?? {}));
     selectedSlot = '';
+    pickerSlot = '';
+    liveViolations = [];
     await loadItems(equipment);
     if (updateUrl && character) {
       const currentTab = untrack(() => tab);
@@ -213,6 +217,25 @@
     warnings = newWarnings ?? [];
     editDialogOpen = false;
   }
+
+  function applyItem(slot, instance) {
+    equipment = { ...equipment, [slot]: instance };
+    pickerSlot = '';
+    loadItems(equipment);
+    validateLocal();
+  }
+
+  async function validateLocal() {
+    try {
+      const result = await api.post(`/api/characters/${character.id}/validate`, {
+        equipment,
+        talents: build?.talents ?? {},
+      });
+      liveViolations = result.violations ?? [];
+    } catch {
+      liveViolations = [];
+    }
+  }
 </script>
 
 {#if error}
@@ -288,17 +311,23 @@
       {/each}
     </div>
 
+    {#if liveViolations.length > 0}
+      <ul class="validation-list" role="status">
+        {#each liveViolations as violation, index (index)}
+          <li><code>{violation.code}</code> {violation.message}</li>
+        {/each}
+      </ul>
+    {/if}
+
     {#if tab === 'gear'}
       <GearGrid
         {equipment}
         {items}
         onopenslot={(slot) => {
           selectedSlot = slot;
+          pickerSlot = slot;
         }}
       />
-      {#if selectedSlot}
-        <p class="muted">Item selection for {slotLabel(selectedSlot)} is coming next.</p>
-      {/if}
     {:else if tab === 'stats'}
       <StatsPanel />
     {:else}
@@ -308,6 +337,17 @@
       </section>
     {/if}
   </section>
+
+  {#if pickerSlot}
+    <ItemPicker
+      open={true}
+      slot={pickerSlot}
+      {character}
+      current={equipment[pickerSlot] ?? null}
+      onclose={() => (pickerSlot = '')}
+      onapply={(instance) => applyItem(pickerSlot, instance)}
+    />
+  {/if}
 
   <EditCharacterDialog
     open={editDialogOpen}

@@ -15,6 +15,19 @@ export async function seedCharacter(request, overrides = {}) {
   return response.json();
 }
 
+export async function equipItem(request, characterId, slot, itemId) {
+  const buildsResponse = await request.get(`/api/characters/${characterId}/builds`);
+  const builds = (await buildsResponse.json()).builds;
+  const current = builds.find((build) => build.kind === 'current');
+  const response = await request.patch(`/api/builds/${current.id}`, {
+    data: { version: current.version, equipment: { [slot]: { itemId } } },
+  });
+  if (!response.ok()) {
+    throw new Error(`equip item failed: ${response.status()} ${await response.text()}`);
+  }
+  return response.json();
+}
+
 export function buildIdFromUrl(url) {
   const hash = new URL(url).hash;
   return hash.split('?build=')[1] ?? '';

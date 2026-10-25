@@ -20,11 +20,12 @@ type ItemFilter struct {
 
 // EnchantFilter selects catalog enchants for the picker.
 type EnchantFilter struct {
-	Class  domain.Class
-	Slot   domain.Slot
-	Query  string
-	Limit  int
-	Offset int
+	Class               domain.Class
+	Slot                domain.Slot
+	Query               string
+	Limit               int
+	Offset              int
+	IncludeIncompatible bool
 }
 
 // ValidSlot reports whether slot is one of the seventeen canonical slots.
@@ -78,7 +79,8 @@ func SearchEnchants(cat *Catalog, filter EnchantFilter) []domain.Enchant {
 
 	matched := make([]*domain.Enchant, 0, len(cat.EnchantList))
 	for _, enchant := range cat.EnchantList {
-		if filter.Slot != "" && !enchantAdmitsTypes(enchant, types) {
+		if filter.Slot != "" && !filter.IncludeIncompatible &&
+			!enchantAdmitsTypes(enchant, types) {
 			continue
 		}
 		if filter.Class != "" && len(enchant.ClassAllowlist) > 0 &&
@@ -169,6 +171,12 @@ func (c *Catalog) Compatibility(ch domain.Character, item *domain.Item, slot dom
 		return false, "incompatible_profession"
 	}
 	return true, ""
+}
+
+// EnchantAdmitsSlot reports whether the enchant's type or extra types admit
+// the canonical slot.
+func EnchantAdmitsSlot(enchant *domain.Enchant, slot domain.Slot) bool {
+	return enchantAdmitsTypes(enchant, SlotItemTypes(slot))
 }
 
 // SlotItemTypes maps a canonical slot to the item types an enchant applies to.
