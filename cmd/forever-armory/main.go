@@ -6,6 +6,7 @@ import (
 	"errors"
 	"flag"
 	"fmt"
+	"io/fs"
 	"log"
 	"net"
 	"net/http"
@@ -58,7 +59,7 @@ func main() {
 	}
 
 	httpServer := &http.Server{
-		Handler:           server.New(cat, svc),
+		Handler:           server.New(cat, svc, mustWebUI()),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 
@@ -74,6 +75,15 @@ func main() {
 	if err := httpServer.Serve(listener); err != nil && !errors.Is(err, http.ErrServerClosed) {
 		log.Fatalf("forever-armory: %v", err)
 	}
+}
+
+// mustWebUI returns the embedded build rooted at the bundle directory.
+func mustWebUI() fs.FS {
+	ui, err := fs.Sub(webUI, "webui")
+	if err != nil {
+		log.Fatalf("forever-armory: embedded UI: %v", err)
+	}
+	return ui
 }
 
 // loopbackAddr refuses any address that is not loopback.

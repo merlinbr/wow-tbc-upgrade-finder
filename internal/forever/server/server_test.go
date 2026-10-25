@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"io/fs"
 	"net/http"
 	"net/http/httptest"
 	"slices"
@@ -16,6 +17,11 @@ import (
 
 func newTestServer(t *testing.T) http.Handler {
 	t.Helper()
+	return newTestServerWithUI(t, nil)
+}
+
+func newTestServerWithUI(t *testing.T, ui fs.FS) http.Handler {
+	t.Helper()
 	cat, err := catalog.Load()
 	if err != nil {
 		t.Fatalf("load catalog: %v", err)
@@ -25,7 +31,7 @@ func newTestServer(t *testing.T) http.Handler {
 		t.Fatalf("new store: %v", err)
 	}
 	t.Cleanup(func() { _ = st.Close() })
-	return New(cat, service.New(st, cat))
+	return New(cat, service.New(st, cat), ui)
 }
 
 func get(t *testing.T, handler http.Handler, path string) *httptest.ResponseRecorder {
