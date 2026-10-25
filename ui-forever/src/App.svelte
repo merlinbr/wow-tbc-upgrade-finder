@@ -1,4 +1,6 @@
 <script>
+  import CharacterLibrary from './lib/CharacterLibrary.svelte';
+  import Editor from './lib/Editor.svelte';
   import { parse } from './lib/router.svelte.js';
 
   let route = $state(parse(window.location.hash));
@@ -25,8 +27,8 @@
 
 <main>
   {#if route.name === 'library'}
-    <h1>Library</h1>
+    <CharacterLibrary />
   {:else}
-    <h1>Editor</h1>
+    <Editor id={route.id} tab={route.tab} buildId={route.buildId} />
   {/if}
 </main>
