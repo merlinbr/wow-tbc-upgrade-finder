@@ -16,6 +16,8 @@ import (
 	"github.com/pkg/browser"
 	"github.com/wowsims/tbc/internal/forever/catalog"
 	"github.com/wowsims/tbc/internal/forever/server"
+	"github.com/wowsims/tbc/internal/forever/service"
+	"github.com/wowsims/tbc/internal/forever/store"
 )
 
 func main() {
@@ -28,12 +30,17 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	_ = dbPath // The store is wired in the SQLite task.
 
 	cat, err := catalog.Load()
 	if err != nil {
 		log.Fatalf("forever-armory: %v", err)
 	}
+	database, err := store.NewSQLite(*dbPath)
+	if err != nil {
+		log.Fatalf("forever-armory: open database %s: %v", *dbPath, err)
+	}
+	defer database.Close()
+	svc := service.New(database, cat)
 
 	listener, err := net.Listen("tcp", listenAddr)
 	if err != nil {
@@ -51,7 +58,7 @@ func main() {
 	}
 
 	httpServer := &http.Server{
-		Handler:           server.New(cat, nil),
+		Handler:           server.New(cat, svc),
 		ReadHeaderTimeout: 10 * time.Second,
 	}
 

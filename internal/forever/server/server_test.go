@@ -10,6 +10,8 @@ import (
 
 	"github.com/wowsims/tbc/internal/forever/catalog"
 	"github.com/wowsims/tbc/internal/forever/domain"
+	"github.com/wowsims/tbc/internal/forever/service"
+	"github.com/wowsims/tbc/internal/forever/store"
 )
 
 func newTestServer(t *testing.T) http.Handler {
@@ -18,7 +20,12 @@ func newTestServer(t *testing.T) http.Handler {
 	if err != nil {
 		t.Fatalf("load catalog: %v", err)
 	}
-	return New(cat, nil)
+	st, err := store.NewSQLite(":memory:")
+	if err != nil {
+		t.Fatalf("new store: %v", err)
+	}
+	t.Cleanup(func() { _ = st.Close() })
+	return New(cat, service.New(st, cat))
 }
 
 func get(t *testing.T, handler http.Handler, path string) *httptest.ResponseRecorder {
