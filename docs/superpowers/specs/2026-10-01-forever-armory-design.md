@@ -2,7 +2,7 @@
 
 Date: 2026-10-01
 Revised: 2026-10-25
-Status: Design approved in conversation; revised specification awaiting user review.
+Status: Design approved in conversation; revised specification approved 2026-10-25.
 
 ## Revision note (2026-10-25)
 
@@ -25,7 +25,7 @@ assumptions. This revision keeps the approved product goal and exclusions and re
 - **Native WoWSims interchange** is approved as a gated entry route, inbound only, implemented
   after the manual editor.
 - **Delivery shape.** Work is sequenced by the [roadmap](../../plans/2026-10-20-forever-armory-roadmap.md).
-  Five wireframes are accepted; the item picker and talent editor await visual review.
+  All seven wireframes are accepted as of 2026-10-25.
 
 This document remains a design artifact, not authorization to implement.
 

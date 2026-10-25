@@ -4,9 +4,8 @@ Date: 2026-10-20
 Status: Proposed delivery sequence and visual-design brief. Not an approved implementation plan or authorization to change the application.
 
 Progress (2026-10-25): the [revised specification](../superpowers/specs/2026-10-01-forever-armory-design.md)
-and the [upstream data and validation contract](../forever-upstream-data-contract.md) are written.
-Five of the seven wireframes are accepted; the item picker and talent editor still await visual
-review. Phase 1 exit is not yet met.
+and the [upstream data and validation contract](../forever-upstream-data-contract.md) are approved,
+and all seven wireframes are accepted. Phase 1 exit is met; Phase 2 planning is next.
 
 ## Goal and starting point
 
@@ -199,28 +198,30 @@ The Recovery desktop/mobile captures in the table are refreshed. Additional tab 
 
 ### Final wireframe pair — item/enchant picker and talent editor
 
-The user approved the screen briefs: “yes do it.” These drafts follow the accepted dark armory/card language, tabbed navigation and collapsed Design notes. Both show Elara's private Planned / Pre-raid context and await visual review; this approval does not authorize production editing or verified game rules.
+The user approved the screen briefs: “yes do it.” These drafts follow the accepted dark armory/card language, tabbed navigation and collapsed Design notes. Both show Elara's private Planned / Pre-raid context. They were accepted on 2026-10-25; that sign-off covers the visual direction only, not production editing or verified game rules.
 
 | Screen | Standalone HTML | Desktop capture | Mobile capture | Browser preview |
 | --- | --- | --- | --- | --- |
 | Item/enchant picker — Items | [HTML](../wireframes/forever-armory-item-picker.html) | [Desktop](../wireframes/forever-armory-item-picker-desktop.png) | [Mobile](../wireframes/forever-armory-item-picker-mobile.png) | [Preview](https://p.superdesign.dev/draft/50ce446a-d1eb-43e0-8097-51e76aaa9875) |
-| Talent editor — Tree A | [HTML](../wireframes/forever-armory-talent-editor.html) | [Desktop](../wireframes/forever-armory-talent-editor-desktop.png) | [Mobile](../wireframes/forever-armory-talent-editor-mobile.png) | [Preview](https://p.superdesign.dev/draft/718fb8c7-e29b-4999-b208-8beaf5a41ae0) |
+| Talent editor — Holy | [HTML](../wireframes/forever-armory-talent-editor.html) | [Desktop](../wireframes/forever-armory-talent-editor-desktop.png) | [Mobile](../wireframes/forever-armory-talent-editor-mobile.png) | [Preview](https://p.superdesign.dev/draft/718fb8c7-e29b-4999-b208-8beaf5a41ae0) |
 
 Additional tab captures:
 
 - Enchants: [desktop](../wireframes/forever-armory-item-picker-enchants-desktop.png), [mobile](../wireframes/forever-armory-item-picker-enchants-mobile.png).
-- Tree B: [desktop](../wireframes/forever-armory-talent-editor-b-desktop.png), [mobile](../wireframes/forever-armory-talent-editor-b-mobile.png).
-- Tree C: [desktop](../wireframes/forever-armory-talent-editor-c-desktop.png), [mobile](../wireframes/forever-armory-talent-editor-c-mobile.png).
+- Protection tab on narrow screens: [mobile](../wireframes/forever-armory-talent-editor-protection-mobile.png).
+- Retribution tab on narrow screens: [mobile](../wireframes/forever-armory-talent-editor-retribution-mobile.png).
 
-The picker includes working Items/Enchants tabs, search, source/demo-compatibility filters, result selection and a no-results/reset state. Selected details distinguish item identity from enchant effects and required character level from item level. Synthetic fit/incompatible/unknown examples are explicitly unverified; incompatible and unknown new choices cannot enable Apply. An existing unknown Head choice is retained and explained. Per-tab selections survive navigation, hidden-tab rendering does not override the active action state, and filtered-out selections are not actionable. Apply and return are illustrative affordances, not equipment mutation or a save.
+The picker includes working Items/Enchants tabs, search, source/demo-compatibility filters, result selection and a no-results/reset state. Selected details distinguish item identity from enchant effects and required character level from item level; the level row is an explicitly labelled placeholder because the pinned catalog carries no required character level. Synthetic fit/incompatible/unknown examples are explicitly unverified; incompatible and unknown new choices cannot enable Apply. An existing unknown Head choice is retained and explained. Per-tab selections survive navigation, hidden-tab rendering does not override the active action state, and filtered-out selections are not actionable. Apply and return are illustrative affordances, not equipment mutation or a save.
 
-The talent editor shows one neutral sample tree at a time, with sticky demo-point accounting, selected-node details, rank controls and synthetic prerequisite/cap/budget feedback. Its 9-point demo budget is not a real level-60/class budget. Tree selections and ranks persist when switching; unmet prerequisites retain and flag existing preview ranks rather than removing them. A separate unknown allocation stays flagged and outside the synthetic tally. Reset requires confirmation, cancel retains ranks, and confirmed reset clears only supported Pre-raid demo ranks while preserving the unknown fixture and current tree. Current/sibling builds and storage are outside this prototype. No TBC tree, game statistic or real Forever validation is used.
+The talent editor shows three class trees side by side on desktop and one at a time through tabs on narrow screens, with sticky demo-point accounting, selected-node details, popover rank controls and synthetic prerequisite/cap/budget feedback. Its 18-point demo budget is not a real level-60/class budget. Tree selections and ranks persist when switching; unmet prerequisites retain and flag existing preview ranks rather than removing them. A separate unknown allocation stays flagged and outside the synthetic tally. Reset requires confirmation, cancel retains ranks, and confirmed reset clears only supported Pre-raid demo ranks while preserving the unknown fixture and current tree. Current/sibling builds and storage are outside this prototype. No TBC tree, game statistic or real Forever validation is used.
 
-Verification: rendered all five tabs locally and in imported previews at 1440px and 390px widths, with exactly one panel visible and no horizontal page overflow. Ten full-page captures are linked above. Local browser exercises covered picker fit/incompatible/unknown states, combined filters, empty results/reset, per-tab selection and keyboard navigation; talent node selection, prerequisite lock/unlock, retained incompatible allocation, rank cap, cross-tree demo budget and confirmed/canceled reset. The mobile point summary remained visible at the rank controls. Keyboard focus showed a 3px outline; no local browser script errors were reported.
+Verification: rendered all five tabs locally and in imported previews at 1440px and 390px widths, with exactly one panel visible and no horizontal page overflow. Eight full-page captures are linked above, all regenerated from the current HTML on 2026-10-25 (the earlier generic Tree A/B/C captures were removed when the editor moved to the three class trees). Local browser exercises covered picker fit/incompatible/unknown states, combined filters, empty results/reset, per-tab selection and keyboard navigation; talent node selection, prerequisite lock/unlock, retained incompatible allocation, rank cap, cross-tree demo budget and confirmed/canceled reset. The mobile point summary remained visible at the rank controls. Keyboard focus showed a 3px outline; no local browser script errors were reported.
 
 Imported-preview checks also exercised picker empty/reset/unknown states and keyboard tabs, plus talent rank editing, canceled reset and keyboard tree switching. Both directly authored drafts were imported without model-generation credits and retrieved at version 1; remote HTML exactly matched the local files. Only the two illustrative HTML files were uploaded, without credentials, game artwork or real character exports. No production application code or accepted wireframe changed.
 
-This supplies draft artifacts for the last two screen types in the initial wireframe set. Their visual review, the revised written specification and the upstream data/validation contract remain separate gates; the Phase 1 exit is not implied by having these mockups.
+The last two screen types were accepted on 2026-10-25, alongside the revised specification and the
+upstream data/validation contract. Phase 1 exit is met; Phase 2 planning follows the planning
+boundaries below.
 
 ## Planning and approval boundaries
 

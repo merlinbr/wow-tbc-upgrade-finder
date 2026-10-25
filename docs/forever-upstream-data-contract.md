@@ -1,6 +1,7 @@
 # Forever upstream data and validation contract
 
 Date: 2026-10-25
+Approved: 2026-10-25
 Status: Phase 1 design artifact. It binds the manual-editor and hosted-armory implementation
 plans; it does not authorize implementation, and it is not legal advice.
 
