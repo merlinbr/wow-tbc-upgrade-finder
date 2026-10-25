@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forever Armory — spatial talent editor wireframe</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{color-scheme:dark;--bg:#090b10;--panel:#131923;--raised:#182130;--border:#344258;--border-bright:#536b8a;--text:#e8edf5;--muted:#9ba9bd;--accent:#65b7ff;--accent-strong:#9ad4ff;--gold:#f1c56b;--error:#ff8d8d;--success:#87dbad}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,sans-serif}button{font:inherit;cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}[hidden]{display:none!important}.icon{width:32px;height:32px;display:block;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.wireframe-notice{text-align:center;font-size:12px;color:var(--muted);padding:8px 16px;background:var(--raised);border-bottom:1px solid var(--border)}.site-nav,.content{max-width:1240px;margin:0 auto}.site-nav{min-height:64px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--border)}.brand{font-size:18px;font-weight:700;letter-spacing:-.03em}.nav-links{display:flex;gap:24px;font-size:13px;color:var(--muted)}.nav-links a{min-height:44px;display:flex;align-items:center}.content{padding:20px 0 28px}.breadcrumb{font-size:12px;color:var(--muted);margin:0 0 16px}.identity{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}.identity-main{display:flex;align-items:center;gap:14px}.portrait{width:48px;height:48px;display:grid;place-items:center;border:1px dashed var(--border-bright);border-radius:7px;font-size:10px;color:var(--muted);background:var(--panel)}.identity h1{font-size:26px;font-weight:700;line-height:1.2;margin:0 0 4px}.identity p{font-size:13px;color:var(--muted);margin:0}.button{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 14px;border:1px solid var(--border-bright);border-radius:7px;background:var(--raised);color:var(--text);font-size:13px;font-weight:600}.button.primary{background:var(--accent);border-color:var(--accent);color:var(--bg)}.button:disabled{opacity:.4;cursor:not-allowed}.badge{display:inline-block;padding:3px 8px;border:1px solid var(--border-bright);border-radius:5px;font-size:11px;color:var(--muted)}
+.build-context{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:16px 20px;border:1px solid var(--border);border-radius:10px;background:var(--panel)}.build-name{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.build-name h2{font-size:19px;font-weight:700;margin:0}.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}.scope-note{font-size:12px;color:var(--muted);margin:4px 0 0}.save-area{display:flex;align-items:center;gap:12px}.save-area span{font-size:12px;color:var(--muted)}.view-tabs{display:flex;gap:8px;padding:6px;margin-top:16px;background:var(--panel);border:1px solid var(--border);border-radius:7px}.view-tab{min-height:44px;padding:9px 16px;border:0;border-radius:5px;background:transparent;color:var(--muted);font-size:13px;font-weight:600}.view-tab.active{background:var(--accent);color:var(--bg)}.layout-note{font-size:12px;color:var(--gold);margin:12px 0 0}
+.workspace-bar{position:sticky;top:8px;z-index:2;background:var(--bg);padding:12px 0}.point-summary{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;font-size:13px}.point-summary strong{font-weight:600}.point-split{font-variant-numeric:tabular-nums;color:var(--gold);font-weight:700}.budget{color:var(--muted);font-size:12px}.mobile-tabs{display:none}.tree-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:1140px;margin:0 auto}.tree-card{border:1px solid var(--border);border-radius:7px;overflow:hidden;background:var(--panel);min-width:0;--tree-color:var(--gold)}.tree-card.protection{--tree-color:var(--accent-strong)}.tree-card.retribution{--tree-color:var(--error)}.tree-header{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--panel);border-bottom:1px solid var(--border)}.tree-header .icon{width:28px;height:28px;color:var(--tree-color)}.tree-header h3{font-size:14px;font-weight:700;margin:0;flex:1}.tree-points{font-size:12px;color:var(--gold);white-space:nowrap}.tree-body{position:relative;background:var(--bg);isolation:isolate}.tree-scene{position:absolute;inset:0;width:100%;height:100%;color:var(--tree-color);opacity:.13;z-index:-1;pointer-events:none}.tree-board{position:relative;width:280px;height:500px;margin:0 auto}.connections{position:absolute;inset:0;width:280px;height:500px;pointer-events:none;overflow:visible}.connection{fill:none;stroke:var(--border-bright);stroke-width:2;stroke-linejoin:round}.connection.met{stroke:var(--gold)}.connection.locked{stroke-dasharray:4 4}.connection-arrow{fill:var(--border-bright)}.connection-arrow.met{fill:var(--gold)}
+.talent-node{position:absolute;left:calc(12px + var(--col)*68px);top:calc(16px + var(--row)*68px);width:52px;height:52px;padding:0;border:2px solid var(--border-bright);border-radius:4px;background:var(--raised);color:var(--muted);box-shadow:0 2px 6px var(--bg);display:grid;place-items:center}.talent-node .icon{width:34px;height:34px;opacity:.7;margin-bottom:5px}.talent-node[data-state="allocated"]{border-color:var(--gold);color:var(--tree-color)}.talent-node[data-state="maxed"]{border-color:var(--success);color:var(--tree-color)}.talent-node[data-state="allocated"] .icon,.talent-node[data-state="maxed"] .icon{opacity:1}.talent-node[data-state="locked"]{border-style:dashed;color:var(--muted)}.talent-node[data-state="locked"] .icon{opacity:.34}.talent-node[data-state="retained"],.talent-node[data-state="incompatible"]{border-color:var(--error);color:var(--error)}.talent-node[aria-expanded="true"]{outline:2px solid var(--accent-strong);outline-offset:3px}.rank-badge{position:absolute;bottom:0;right:0;min-width:25px;padding:0 3px;background:var(--bg);color:var(--text);font-size:10px;line-height:15px;text-align:center;font-weight:700;border-radius:3px 0 0 0}.tree-foot{padding:8px 12px;border-top:1px solid var(--border);color:var(--muted);font-size:10px;letter-spacing:.04em;text-transform:uppercase}.editor-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:14px auto 0;max-width:1140px}.editor-foot p{font-size:12px;color:var(--gold);margin:0}.legend{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin:16px 0}.legend span{display:inline-flex;align-items:center;gap:6px}.legend i{width:10px;height:10px;border:1px solid var(--border-bright);display:block}.legend .allocated{border-color:var(--gold)}.legend .maxed{border-color:var(--success)}.legend .locked{border-style:dashed}.legend .unknown{border-color:var(--error)}.hint{text-align:center;font-size:12px;color:var(--muted);margin:8px 0}.design-notes{border-top:1px solid var(--border);margin-top:18px;font-size:12px;color:var(--muted)}.design-notes summary{min-height:44px;padding:12px 0;cursor:pointer;font-weight:600}.design-notes p{max-width:900px;margin:0 0 10px}.page-foot{display:flex;justify-content:space-between;gap:16px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);margin-top:16px;padding-top:14px}
+.talent-popover{position:fixed;inset:auto;margin:0;width:min(308px,calc(100vw - 32px));max-height:calc(100dvh - 32px);overflow:auto;padding:16px;border:1px solid var(--border-bright);border-radius:10px;background:var(--panel);color:var(--text);box-shadow:0 12px 32px var(--bg)}.popover-heading{display:flex;align-items:start;gap:12px}.popover-heading>div{flex:1}.popover-heading h3{font-size:16px;font-weight:700;line-height:1.3;margin:0}.popover-heading .eyebrow{font-size:10px}.close-button{display:grid;place-items:center;min-width:44px;min-height:44px;padding:0;border:0;background:transparent;color:var(--muted);font-size:24px;margin:-10px -10px 0 0}.node-description{font-size:12px;color:var(--muted);margin:10px 0}.rank-line{display:flex;justify-content:space-between;font-size:12px;padding:10px 0;border-top:1px solid var(--border)}.rank-line strong{font-size:13px}.rank-actions{display:flex;gap:8px}.rank-actions button{flex:1}.rank-feedback{font-size:12px;color:var(--gold);margin:10px 0 0}.demo-caption{font-size:10px;color:var(--muted);margin:10px 0 0}.reset-dialog{width:min(400px,calc(100vw - 32px));padding:24px;border:1px solid var(--border-bright);border-radius:10px;background:var(--panel);color:var(--text)}.reset-dialog::backdrop{background:var(--bg);opacity:.8}.reset-dialog h2{font-size:20px;font-weight:700;margin:0 0 10px}.reset-dialog p{font-size:13px;color:var(--muted);margin:0 0 16px}.dialog-actions{display:flex;gap:8px;justify-content:flex-end}
+@media(max-width:1300px){.site-nav,.content{margin-left:24px;margin-right:24px}}@media(max-width:1000px){.mobile-tabs{display:flex;gap:4px;margin-top:12px;border-bottom:1px solid var(--border)}.tree-tab{flex:1;min-height:48px;padding:10px 4px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font-size:12px;font-weight:600}.tree-tab[aria-selected="true"]{border-bottom-color:var(--accent);color:var(--accent-strong)}.tree-grid{display:block;max-width:420px}.tree-card{width:100%}.tree-tab:focus-visible{outline-offset:-3px}.editor-foot{max-width:420px;align-items:flex-start;flex-direction:column}.point-summary{gap:6px 10px}.workspace-bar{padding:10px 0}.legend{gap:10px}}@media(max-width:640px){.site-nav,.content{margin-left:16px;margin-right:16px}.brand{font-size:16px}.nav-links{font-size:12px;gap:14px}.identity{align-items:flex-start;flex-direction:column;margin-bottom:16px}.identity h1{font-size:24px}.build-context{align-items:flex-start;flex-direction:column;gap:12px;padding:14px}.save-area{width:100%;justify-content:space-between}.view-tabs{margin-top:12px}.layout-note{font-size:11px}.point-summary{font-size:12px}.budget{font-size:11px}.page-foot{flex-direction:column;gap:4px}.legend{font-size:10px}}
+</style>
+</head>
+<body>
+<div id="forever-armory-talent-editor" class="min-h-screen">
+<svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden"><defs>
+<symbol id="icon-sun" viewBox="0 0 32 32"><circle cx="16" cy="16" r="6"/><path d="M16 2v5m0 18v5M2 16h5m18 0h5M6 6l4 4m12 12 4 4M6 26l4-4M22 10l4-4"/></symbol>
+<symbol id="icon-shield" viewBox="0 0 32 32"><path d="M16 3 27 7v9c0 7-6 11-11 14C11 27 5 23 5 16V7zM16 8v15M10 15h12"/></symbol>
+<symbol id="icon-sword" viewBox="0 0 32 32"><path d="m8 24 15-17 6-4-2 7L12 26M6 19l9 9M4 28l4-4M3 29l2 1"/></symbol>
+<symbol id="icon-book" viewBox="0 0 32 32"><path d="M16 8c-4-4-9-4-13-3v21c5-2 9-1 13 2 4-3 8-4 13-2V5c-4-1-9-1-13 3v20M7 10l5 1m-5 5 5 1m8-6 5-1m-5 7 5-1"/></symbol>
+<symbol id="icon-flame" viewBox="0 0 32 32"><path d="M17 2c2 8-5 8-2 14 3-1 4-4 5-6 7 6 9 11 5 16-4 6-15 5-19-1-4-8 5-12 7-19 0 7 2 9 4 9"/></symbol>
+<symbol id="icon-hammer" viewBox="0 0 32 32"><path d="m5 8 7-6 13 12-6 7zM15 18 5 29l-3-3 10-11M21 6l5 4"/></symbol>
+<symbol id="icon-star" viewBox="0 0 32 32"><path d="m16 2 4 9 10 5-10 4-4 10-4-10-10-4 10-5zM16 10v12M10 16h12"/></symbol>
+<symbol id="icon-wing" viewBox="0 0 32 32"><path d="M4 27C8 13 19 7 29 3c-2 12-8 22-20 24M8 22l16-14M12 17l1 9m4-14 2 9M6 25l-3 5"/></symbol>
+<symbol id="icon-crown" viewBox="0 0 32 32"><path d="m3 8 8 6 5-11 5 11 8-6-4 17H7zM8 29h16"/></symbol>
+<symbol id="icon-hand" viewBox="0 0 32 32"><path d="M12 14V5c0-3 4-3 4 0v8-10c0-3 4-3 4 0v11-8c0-3 4-3 4 0v10-5c0-3 4-3 4 0v10c0 6-3 9-9 9h-3c-4 0-6-2-9-6l-4-7c-1-3 2-5 4-2l5 5z"/></symbol>
+<symbol id="icon-eye" viewBox="0 0 32 32"><path d="M2 16C9 5 23 5 30 16c-7 11-21 11-28 0z"/><circle cx="16" cy="16" r="5"/><path d="M16 13v6"/></symbol>
+<symbol id="icon-spark" viewBox="0 0 32 32"><path d="m18 2-12 17h9l-1 11 12-17h-9z"/></symbol>
+</defs></svg>
+<div class="wireframe-notice">DESIGN PROTOTYPE · Illustrative talent positions, icons and demo ranks · No real save</div>
+<header class="site-nav"><div class="brand">Forever Armory</div><nav class="nav-links" aria-label="Application"><a id="talent-nav-library" href="#character-library">My characters</a><a id="talent-nav-editor" href="#editor-overview">Owner editor</a></nav></header>
+<main class="content" id="editor-overview">
+<p class="breadcrumb">My characters / Elara / Planned · Pre-raid / Talents</p>
+<section class="identity" aria-label="Character identity"><div class="identity-main"><div class="portrait" aria-hidden="true">Portrait</div><div><h1>Elara</h1><p>Level 60 Human · Paladin · Realm not set</p></div></div><a class="button" id="return-to-editor" href="#editor-overview">← Return to editor</a></section>
+<section class="build-context" aria-label="Selected build"><div><div class="eyebrow">Planned build · not Current</div><div class="build-name"><h2>Pre-raid</h2><span class="badge">Private</span><span class="badge">Editable preview</span></div><p class="scope-note">Changes belong only to this plan; Current and sibling plans are unchanged.</p></div><div class="save-area"><span>Unsaved demo changes</span><button class="button primary" id="save-preview" type="button" aria-describedby="prototype-note">Save changes</button></div></section>
+<div class="view-tabs" aria-label="Build views"><button class="view-tab" type="button" aria-pressed="false">Gear</button><button class="view-tab" type="button" aria-pressed="false">Stats</button><button class="view-tab active" type="button" aria-pressed="true">Talents</button></div>
+<p class="layout-note">Illustrative layout only — not verified Forever trees, prerequisites or class-point budgets.</p>
+<div class="workspace-bar"><div class="point-summary" aria-live="polite"><strong>Pre-raid · demo allocation</strong><span class="point-split" id="point-split">3 / 3 / 6</span><span class="budget" id="demo-tally">12 / 18 points · 6 available</span></div><div class="mobile-tabs" role="tablist" aria-label="Talent trees"><button class="tree-tab" id="tree-tab-holy" type="button" role="tab" aria-selected="true" aria-controls="tree-holy" tabindex="0">Holy</button><button class="tree-tab" id="tree-tab-protection" type="button" role="tab" aria-selected="false" aria-controls="tree-protection" tabindex="-1">Protection</button><button class="tree-tab" id="tree-tab-retribution" type="button" role="tab" aria-selected="false" aria-controls="tree-retribution" tabindex="-1">Retribution</button></div></div>
+<div class="tree-grid" id="tree-grid"></div>
+<div class="editor-foot"><p id="retained-note">Unverified allocation retained in Retribution; excluded from demo points.</p><button class="button" id="reset-request" type="button">Reset demo ranks…</button></div>
+<div class="legend" aria-label="Talent states"><span><i class="allocated"></i>Allocated</span><span><i class="maxed"></i>At demo cap</span><span><i></i>Available</span><span><i class="locked"></i>Locked</span><span><i class="unknown"></i>Unverified</span></div>
+<p class="hint">Select a talent for details and rank controls. Use arrow keys to move between nodes.</p>
+<details class="design-notes"><summary>Design notes</summary><p>Three spatial trees are shown together on desktop; narrow screens show one full-size tree through tabs. The reference supplies a layout direction, not an imported or read-only build. Icons and subdued backdrops are original neutral illustrations, not game artwork or a verified Forever catalog.</p><p>Only node selection, demo rank controls, mobile tabs, note disclosure and confirmed demo reset are interactive. The 18-point budget, sample names, positions, rank caps and prerequisites are synthetic; the class tree names are presentation labels. Existing unmet or unverified allocations remain visible and are not silently deleted.</p><p id="prototype-note">Save, return and Gear/Stats controls are illustrative. Nothing is persisted, published or imported. Saving a private plan must not publish it; a failed save must preserve edits and leave the public page unchanged.</p></details>
+<footer class="page-foot"><span>Design review · Spatial talent editor · Editable plan context</span><span>No simulator, real talent validation or production saves</span></footer>
+</main>
+<div id="talent-popover" class="talent-popover" popover="auto" role="dialog" aria-labelledby="detail-name" aria-describedby="detail-copy"><div class="popover-heading"><div><div class="eyebrow" id="detail-tree">Holy · sample talent</div><h3 id="detail-name">Talent details</h3></div><button id="close-details" class="close-button" type="button" aria-label="Close talent details">×</button></div><p class="node-description" id="detail-copy"></p><div class="rank-line"><span>Demo rank</span><strong id="detail-rank"></strong></div><div class="rank-actions"><button id="rank-minus" class="button" type="button">− Rank</button><button id="rank-plus" class="button" type="button">+ Rank</button></div><p class="rank-feedback" id="rank-feedback" aria-live="polite"></p><p class="demo-caption">Synthetic preview · not a game-rule check</p></div>
+<dialog class="reset-dialog" id="reset-confirm" aria-labelledby="reset-title"><h2 id="reset-title">Reset Pre-raid demo ranks?</h2><p>This clears the editable demo ranks across all three trees. The unverified allocation stays flagged. Current, other plans and stored data are not changed.</p><div class="dialog-actions"><button id="reset-cancel" class="button" type="button" autofocus>Cancel</button><button id="reset-accept" class="button primary" type="button">Confirm reset</button></div></dialog>
+<script>
+(() => {
+  const root = document.getElementById('forever-armory-talent-editor');
+  const trees = [{id:'holy',name:'Holy',icon:'sun'},{id:'protection',name:'Protection',icon:'shield'},{id:'retribution',name:'Retribution',icon:'sword'}];
+  const nodes = [];
+  const positions = [[1,0],[2,0],[0,1],[1,1],[3,1],[0,2],[2,2],[1,3],[3,3],[0,4],[2,4],[1,5],[2,5],[1,6]];
+  const names = ['Radiance','Resolve','Insight','Ward','Vigil','Focus','Grace','Oath','Conviction','Beacon','Courage','Devotion','Judgment','Ascendance'];
+  const icons = ['sun','shield','book','hand','eye','star','wing','crown','sword','flame','hammer','spark','sword','crown'];
+  const caps = [3,3,2,2,1,2,2,1,2,1,2,1,2,1];
+  const initial = {holy:[2,0,0,1],protection:[2,0,0,1],retribution:[2,2,1,1]};
+  for (const tree of trees) positions.forEach(([col,row],index) => {
+    const node = {id:tree.id+'-'+index,tree:tree.id,name:'Sample '+names[index],icon:icons[(index+(tree.id==='protection'?1:tree.id==='retribution'?2:0))%icons.length],col,row,cap:caps[index],rank:initial[tree.id][index]||0};
+    if (index===3) {node.requires=tree.id+'-0';node.requiredRank=1;}
+    if (index===7) {node.requires=tree.id+'-3';node.requiredRank=2;}
+    if (index===12) {node.requires=tree.id+'-6';node.requiredRank=2;}
+    if (tree.id==='retribution'&&index===13) {node.retained=true;node.name='Unverified retained allocation';node.rank=0;}
+    nodes.push(node);
+  });
+  const byId = new Map(nodes.map(node => [node.id,node]));
+  const budget = 18;
+  const narrow = matchMedia('(max-width: 1000px)');
+  const grid = root.querySelector('#tree-grid');
+  const tabs = [...root.querySelectorAll('[role="tab"]')];
+  const popover = root.querySelector('#talent-popover');
+  const minus = root.querySelector('#rank-minus');
+  const plus = root.querySelector('#rank-plus');
+  let activeTree = 'holy';
+  let selected = null;
+  let lastNode = null;
+  const icon = name => `<svg class="icon" viewBox="0 0 32 32" aria-hidden="true"><use href="#icon-${name}"></use></svg>`;
+  function backdrop(tree) {
+    const shapes = tree==='holy' ? '<path d="M25 500V180Q140-20 255 180v320M55 500V185Q140 35 225 185v315M85 500V205Q140 90 195 205v295" fill="none" stroke="currentColor" stroke-width="14"/><path d="M0 420h280v24H0zm0 48h280v20H0z" fill="currentColor"/>' : tree==='protection' ? '<path d="M10 500V210h35v-35h30v35h35v290m-40 0V140l70-75 70 75v360m-40 0V210h35v-35h30v35h35v290M108 215v285m64-285v285" fill="none" stroke="currentColor" stroke-width="17"/><path d="M136 0h8v130h-8z" fill="currentColor"/>' : '<path d="m22 490 180-350 28-60-2 68L70 500m65-227 95 48M34 84l58 43M230 20l-35 74M8 230l63 7M257 185l-42 23M113 6l9 83" fill="none" stroke="currentColor" stroke-width="18"/>';
+    return `<svg class="tree-scene" viewBox="0 0 280 500" preserveAspectRatio="xMidYMid slice" aria-hidden="true">${shapes}</svg>`;
+  }
+  for (const tree of trees) {
+    const card = document.createElement('section');card.id='tree-'+tree.id;card.className='tree-card '+tree.id;
+    card.innerHTML=`<header class="tree-header">${icon(tree.icon)}<h3 id="tree-title-${tree.id}">${tree.name}</h3><span class="tree-points" id="points-${tree.id}"></span></header><div class="tree-body">${backdrop(tree.id)}<div class="tree-board" role="group" aria-label="${tree.name} illustrative talent grid"><svg class="connections" viewBox="0 0 280 500" aria-hidden="true"></svg></div></div><div class="tree-foot">Illustrative positions · demo ranks</div>`;
+    const board=card.querySelector('.tree-board');
+    for (const node of nodes.filter(item=>item.tree===tree.id)) {
+      const button=document.createElement('button');button.type='button';button.id='node-'+node.id;button.className='talent-node';button.dataset.node=node.id;button.style.setProperty('--col',node.col);button.style.setProperty('--row',node.row);button.tabIndex=node.id===tree.id+'-0'?0:-1;button.setAttribute('aria-haspopup','dialog');button.setAttribute('aria-controls','talent-popover');button.setAttribute('aria-expanded','false');button.innerHTML=icon(node.icon)+'<span class="rank-badge"></span>';
+      button.addEventListener('click',()=>openNode(node,button));
+      button.addEventListener('keydown',event=>moveNode(event,node));
+      board.append(button);
+    }
+    grid.append(card);
+  }
+  const used = () => nodes.reduce((sum,node)=>sum+(node.retained?0:node.rank),0);
+  const locked = node => Boolean(node.requires&&byId.get(node.requires).rank<node.requiredRank);
+  function state(node) {if(node.retained)return 'retained';if(locked(node))return node.rank?'incompatible':'locked';if(node.rank===node.cap)return 'maxed';return node.rank?'allocated':'available';}
+  function paint() {
+    const totals=trees.map(tree=>nodes.filter(node=>node.tree===tree.id&&!node.retained).reduce((sum,node)=>sum+node.rank,0));
+    root.querySelector('#point-split').textContent=totals.join(' / ');
+    root.querySelector('#demo-tally').textContent=`${used()} / ${budget} points · ${budget-used()} available`;
+    trees.forEach((tree,index)=>root.querySelector('#points-'+tree.id).textContent=totals[index]+' points');
+    for(const node of nodes){const button=root.querySelector('#node-'+node.id);button.dataset.state=state(node);button.querySelector('.rank-badge').textContent=node.retained?'?':node.rank+'/'+node.cap;button.setAttribute('aria-label',`${trees.find(tree=>tree.id===node.tree).name}: ${node.name}, ${node.retained?'unknown retained rank':node.rank+' of '+node.cap+' demo ranks'}, ${state(node)}`);}
+    for(const tree of trees){const svg=root.querySelector('#tree-'+tree.id+' .connections');svg.replaceChildren();for(const node of nodes.filter(item=>item.tree===tree.id&&item.requires)){const parent=byId.get(node.requires);const x1=38+parent.col*68,y1=42+parent.row*68+26,x2=38+node.col*68,y2=42+node.row*68-29,mid=(y1+y2)/2;const path=document.createElementNS('http://www.w3.org/2000/svg','path');path.setAttribute('d',`M${x1} ${y1}V${mid}H${x2}V${y2}`);path.setAttribute('class','connection '+(locked(node)?'locked':'met'));const arrow=document.createElementNS('http://www.w3.org/2000/svg','path');arrow.setAttribute('d',`M${x2-4} ${y2-5}L${x2} ${y2}L${x2+4} ${y2-5}Z`);arrow.setAttribute('class','connection-arrow '+(locked(node)?'':'met'));svg.append(path,arrow);}}
+    if(selected)renderDetails();
+  }
+  function renderDetails(){
+    root.querySelector('#detail-tree').textContent=trees.find(tree=>tree.id===selected.tree).name+' · sample talent';
+    root.querySelector('#detail-name').textContent=selected.name;
+    root.querySelector('#detail-copy').textContent=selected.retained?'An existing allocation cannot be interpreted by this demo. It is retained, not silently reassigned.':'Illustrative talent icon and rank cap. This is not a real class ability or verified Forever talent.';
+    root.querySelector('#detail-rank').textContent=selected.retained?'Unknown · retained':selected.rank+' / '+selected.cap;
+    minus.disabled=selected.retained||selected.rank===0;
+    plus.disabled=selected.retained||locked(selected)||selected.rank>=selected.cap||used()>=budget;
+    minus.setAttribute('aria-label','Decrease '+selected.name+' demo rank');plus.setAttribute('aria-label','Increase '+selected.name+' demo rank');
+    let feedback='Demo rank controls affect only this Pre-raid preview.';
+    if(selected.retained)feedback='Unverified allocation is excluded from the demo tally. Rank editing is unavailable.';
+    else if(locked(selected))feedback=`Requires ${byId.get(selected.requires).name} rank ${selected.requiredRank} in this demo.${selected.rank?' Existing rank retained; prerequisite unmet.':''}`;
+    else if(used()>=budget)feedback='Demo point budget reached. Remove a rank before adding another.';
+    else if(selected.rank>=selected.cap)feedback='Demo rank cap reached.';
+    else if(selected.requires)feedback=`Demo prerequisite met: ${byId.get(selected.requires).name} rank ${selected.requiredRank}.`;
+    root.querySelector('#rank-feedback').textContent=feedback;
+  }
+  function positionDetails(){if(!lastNode||!popover.matches(':popover-open'))return;const rect=lastNode.getBoundingClientRect(),box=popover.getBoundingClientRect();let left=rect.right+12;if(left+box.width>innerWidth-16)left=rect.left-box.width-12;left=Math.max(16,Math.min(left,innerWidth-box.width-16));popover.style.left=left+'px';popover.style.top=Math.max(16,Math.min(rect.top,innerHeight-box.height-16))+'px';}
+  function openNode(node,button){
+    if(lastNode)lastNode.setAttribute('aria-expanded','false');selected=node;lastNode=button;
+    for(const item of root.querySelectorAll('#tree-'+node.tree+' .talent-node'))item.tabIndex=item===button?0:-1;
+    renderDetails();if(!popover.matches(':popover-open'))popover.showPopover();button.setAttribute('aria-expanded','true');positionDetails();root.querySelector('#close-details').focus({preventScroll:true});
+  }
+  function closeDetails(restoreFocus=false){if(popover.matches(':popover-open'))popover.hidePopover();if(lastNode)lastNode.setAttribute('aria-expanded','false');if(restoreFocus&&lastNode&&lastNode.getClientRects().length)lastNode.focus({preventScroll:true});}
+  popover.addEventListener('toggle',()=>{if(!popover.matches(':popover-open')&&lastNode)lastNode.setAttribute('aria-expanded','false');});
+  root.querySelector('#close-details').addEventListener('click',()=>closeDetails(true));
+  popover.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();closeDetails(true);}});
+  minus.addEventListener('click',()=>{if(selected&&!minus.disabled){selected.rank--;paint();positionDetails();}});
+  plus.addEventListener('click',()=>{if(selected&&!plus.disabled){selected.rank++;paint();positionDetails();}});
+  function moveNode(event,node){
+    const keys=['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];if(!keys.includes(event.key))return;event.preventDefault();
+    let candidates=nodes.filter(item=>item.tree===node.tree),target;
+    if(event.key==='Home')target=candidates[0];else if(event.key==='End')target=candidates[candidates.length-1];
+    else {const horizontal=event.key==='ArrowLeft'||event.key==='ArrowRight',positive=event.key==='ArrowRight'||event.key==='ArrowDown';candidates=candidates.filter(item=>horizontal?item.row===node.row&&(positive?item.col>node.col:item.col<node.col):positive?item.row>node.row:item.row<node.row);candidates.sort((a,b)=>horizontal?Math.abs(a.col-node.col)-Math.abs(b.col-node.col):Math.abs(a.row-node.row)-Math.abs(b.row-node.row)||Math.abs(a.col-node.col)-Math.abs(b.col-node.col));target=candidates[0];}
+    if(target){const button=root.querySelector('#node-'+target.id);for(const item of root.querySelectorAll('#tree-'+node.tree+' .talent-node'))item.tabIndex=item===button?0:-1;button.focus();}
+  }
+  function syncLayout(){
+    for(const tree of trees){const card=root.querySelector('#tree-'+tree.id);card.hidden=narrow.matches&&tree.id!==activeTree;card.setAttribute('role',narrow.matches?'tabpanel':'region');card.setAttribute('aria-labelledby',(narrow.matches?'tree-tab-':'tree-title-')+tree.id);card.tabIndex=narrow.matches?0:-1;}
+    for(const tab of tabs){const active=tab.id==='tree-tab-'+activeTree;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;}
+  }
+  function activate(tab,focus=false){closeDetails();activeTree=tab.id.replace('tree-tab-','');syncLayout();if(focus)tab.focus();}
+  tabs.forEach(tab=>{tab.addEventListener('click',()=>activate(tab));tab.addEventListener('keydown',event=>{let index=tabs.indexOf(tab);if(event.key==='ArrowRight')index=(index+1)%tabs.length;else if(event.key==='ArrowLeft')index=(index+tabs.length-1)%tabs.length;else if(event.key==='Home')index=0;else if(event.key==='End')index=tabs.length-1;else return;event.preventDefault();activate(tabs[index],true);});});
+  narrow.addEventListener('change',()=>{closeDetails();syncLayout();});
+  window.addEventListener('resize',positionDetails);
+  window.addEventListener('scroll',positionDetails,{passive:true});
+  const reset=root.querySelector('#reset-confirm');
+  root.querySelector('#reset-request').addEventListener('click',()=>{closeDetails();reset.showModal();});
+  root.querySelector('#reset-cancel').addEventListener('click',()=>reset.close());
+  root.querySelector('#reset-accept').addEventListener('click',()=>{for(const node of nodes)if(!node.retained)node.rank=0;paint();reset.close();});
+  paint();syncLayout();
+})();
+</script>
+</div>
+</body>
+</html>
