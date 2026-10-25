@@ -8,6 +8,11 @@ export default defineConfig({
   testDir: './e2e',
   fullyParallel: false,
   reporter: 'line',
+  // The ranking specs screen ~1,200 candidates on a 4-vCPU runner (~11 s of
+  // simulation) before the report renders. The Playwright default of 30 s left
+  // no room for import, UI settling and the two specs sharing the same cores,
+  // and it silently capped the per-assertion timeouts inside those tests.
+  timeout: 120_000,
   use: {
     permissions: ['clipboard-write'],
     trace: 'retain-on-failure',
