@@ -119,9 +119,9 @@ Observed payload hashes:
 
 ```text
 assets/database/db.json
-  sha256 9fa8335e7e97f824373ad8225b6c2d82e1a2915b0e71a6f05e2312add442e9e3
+  sha256 e78be48cbc65e3a82ad3baa15ccb5f8fad524ccc35d18887b9be1ce241194de7
 assets/database/leftover_db.json
-  sha256 eeb3ff7788226b9739e470c27d8a9a4035dbae5b5ad5f5d781483eeef0ce4685
+  sha256 6de2991a0f23e3a565aba0f06af5f740fc41925f552c074ba196b6801e30b761
 ```
 
 A durable armory save must bind to an immutable catalog/talent snapshot and define migration or unsupported-reference handling. Never reinterpret an old positional talent string against reordered live trees. Our old research's 467-talent provider snapshot is not this 465-talent dataset.

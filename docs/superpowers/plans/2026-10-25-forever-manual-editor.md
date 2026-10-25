@@ -14,7 +14,7 @@
 ## Global Constraints
 
 - Module path is `github.com/wowsims/tbc`. Forever packages never import `sim/`, `cmd/wowsimcli/`, or `assets/database`.
-- Catalog pin: commit `0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4`; `db.json` sha256 `9fa8335e7e97f824373ad8225b6c2d82e1a2915b0e71a6f05e2312add442e9e3`; `leftover_db.json` sha256 `eeb3ff7788226b9739e470c27d8a9a4035dbae5b5ad5f5d781483eeef0ce4685`.
+- Catalog pin: commit `0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4`; `db.json` sha256 `e78be48cbc65e3a82ad3baa15ccb5f8fad524ccc35d18887b9be1ce241194de7`; `leftover_db.json` sha256 `6de2991a0f23e3a565aba0f06af5f740fc41925f552c074ba196b6801e30b761`. (Corrected during implementation: the earlier values were CRLF-normalized hashes of the same payloads.)
 - `catalog_revision` is exactly `wowsims/forever@0cfb1a0:<sha256(db.json)>:<sha256(leftover_db.json)>`. It is computed from the raw downloaded bytes, never typed by hand.
 - The server binds loopback only by default (`127.0.0.1:0`) and prints its URL. Flags: `--addr`, `--no-browser`, `--db`.
 - Phase 2 has no authentication, no publication, and no remote storage. `published` is always `false` and no public route exists.

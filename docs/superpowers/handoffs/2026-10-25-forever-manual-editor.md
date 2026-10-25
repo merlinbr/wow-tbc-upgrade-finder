@@ -123,6 +123,17 @@ Do not modify the TBC application or its assets at all.
   `npm run build` before any Go test that serves the index, and commit the bundle where the plan
   says to.
 
+## Implementation divergences
+
+Recorded as implementation proceeds. The plan is corrected in the same commit series when a test
+proves it wrong.
+
+1. **Pinned payload hashes were CRLF-normalized (Task 1).** The contract recorded
+   `9fa8335e…` / `eeb3ff77…`. Those are the SHA-256 values of the files after converting LF to
+   CRLF. The bytes actually served by `raw.githubusercontent.com` hash to `e78be48c…` /
+   `6de2991a…`. The generator hashes fetched bytes directly, so the contract, plan and review were
+   corrected to the raw-byte values. `catalog_revision` therefore ends in the corrected hashes.
+
 ## Definition of done for Phase 2
 
 - All 15 plan tasks complete, each with its tests and commit.
