@@ -321,12 +321,16 @@ test.describe('item tooltip', () => {
     await expect(tip.locator('.tooltip-inline-icon')).toBeVisible();
     await expect(tip.locator('.tooltip-icon-slot')).toBeHidden();
     // Wait for the layer remeasure: mobile footprint drops the 38px icon column.
-    await expect.poll(async () => (await page.locator('.tooltip-layer').boundingBox())?.width ?? 0)
-      .toBeLessThanOrEqual(390 - 16);
-    const box = await page.locator('.tooltip-layer').boundingBox();
-    expect(box.x).toBeGreaterThanOrEqual(8);
-    expect(box.x + box.width).toBeLessThanOrEqual(390 - 8);
-    expect(box.y + box.height).toBeLessThanOrEqual(844 - 8);
+    // Poll the whole box: a bare boundingBox() landing mid-resize returned null
+    // and crashed the assertion with "Cannot read properties of null (reading 'x')".
+    await expect.poll(async () => {
+      const measured = await page.locator('.tooltip-layer').boundingBox();
+      if (!measured) return false;
+      return measured.width <= 390 - 16
+        && measured.x >= 8
+        && measured.x + measured.width <= 390 - 8
+        && measured.y + measured.height <= 844 - 8;
+    }).toBe(true);
 
     // The tooltip replaces the old disclosure and keeps item details available
     // through the focusable name button at a mobile-sized viewport.
@@ -346,12 +350,21 @@ test.describe('item tooltip', () => {
     await maxPhase.fill('1');
     await screening.fill('1');
     await confirmation.fill('1');
-    const kindBoxes = page.locator('.source-kind-group input[type="checkbox"]');
+    // Source kinds only: the include-unknown toggle shares this fieldset (and
+    // therefore this selector) and would add ~2,000 source-less candidates.
+    const kindBoxes = page.locator('.source-kind-group input[type="checkbox"]:not(#include-unknown)');
     for (let index = 0; index < await kindBoxes.count(); index += 1) {
       await kindBoxes.nth(index).check();
     }
+    await page.getByLabel('Include unknown-source items').uncheck();
+    const progress = page.getByRole('status');
     await page.getByRole('button', { name: 'Start ranking', exact: true }).click();
-    await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible({ timeout: 60_000 });
+    await expect(progress).toContainText(/queued|running/i, { timeout: 15_000 });
+    // The status region only leaves queued/running once the job settles, so a
+    // failed job surfaces the server's message instead of exhausting the timeout.
+    await expect(progress).not.toContainText(/queued|running/i, { timeout: 90_000 });
+    await expect(page.getByRole('alert')).toHaveText('');
+    await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible();
 
     const reportTrigger = page.locator('.report-item-trigger').first();
     await reportTrigger.hover();

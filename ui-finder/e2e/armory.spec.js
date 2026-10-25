@@ -67,16 +67,24 @@ test('imports the armory, ranks upgrades, copies the report, and cancels a job',
   await expect(maxPhase).toHaveValue('1');
   await expect(screening).toHaveValue('1');
   await expect(confirmation).toHaveValue('1');
-  const kindBoxes = page.locator('.source-kind-group input[type="checkbox"]');
+  // Source kinds only: the include-unknown toggle shares this fieldset (and
+  // therefore this selector) and would add ~2,000 source-less candidates,
+  // tripling the screening run for no extra coverage of the kind filters.
+  const kindBoxes = page.locator('.source-kind-group input[type="checkbox"]:not(#include-unknown)');
   const kindCount = await kindBoxes.count();
   for (let index = 0; index < kindCount; index += 1) {
     await kindBoxes.nth(index).check();
   }
+  await page.getByLabel('Include unknown-source items').uncheck();
 
   const progress = page.getByRole('status');
   await page.getByRole('button', { name: 'Start ranking', exact: true }).click();
   await expect(progress).toContainText(/queued|running/i, { timeout: 15_000 });
-  await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible({ timeout: 15_000 });
+  // The status region only leaves queued/running once the job settles, so a
+  // failed job surfaces the server's message instead of exhausting the timeout.
+  await expect(progress).not.toContainText(/queued|running/i, { timeout: 90_000 });
+  await expect(page.getByRole('alert')).toHaveText('');
+  await expect(page.getByRole('heading', { name: 'Upgrade report', exact: true })).toBeVisible();
   await expect(page.getByRole('table', { name: 'Confirmed single-item upgrades' })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText('Source filters')).toBeVisible();
   await expect(page.locator('.report-summary dd').filter({ hasText: 'Crafting' })).toBeVisible();
