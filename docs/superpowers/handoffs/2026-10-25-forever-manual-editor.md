@@ -133,6 +133,9 @@ proves it wrong.
    CRLF. The bytes actually served by `raw.githubusercontent.com` hash to `e78be48c…` /
    `6de2991a…`. The generator hashes fetched bytes directly, so the contract, plan and review were
    corrected to the raw-byte values. `catalog_revision` therefore ends in the corrected hashes.
+2. **Undead paladins are legal (Task 5).** The pinned `CLASS_RACES` lists human, dwarf and undead
+   for paladin, so the plan's `undeadPaladin` mismatch fixture was wrong. Validation reads the
+   pinned table; the plan's Task 5 and Task 11 fixtures now use an orc paladin instead.
 
 ## Definition of done for Phase 2
 

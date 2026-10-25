@@ -472,7 +472,7 @@ func TestEquipmentRules(t *testing.T) {
 		{"shield in main hand", warrior(), gearIn("main_hand", shieldID), "incompatible_slot"},
 		{"second unique copy", warrior(), twoCopies(uniqueID), "unique_conflict"},
 		{"two limit-category items", warrior(), twoLimited(limitedIDs), "limit_category_conflict"},
-		{"race/class mismatch", undeadPaladin(), gear(0), "race_class_mismatch"},
+		{"race/class mismatch", orcPaladin(), domain.Equipment{}, "race_class_mismatch"},
 		{"off-hand one-hander without dw", paladin(), twoOneHands(), "dual_wield_unavailable"},
 		{"two-hander clears off hand", warrior(), twoHandPlusOffHand(), "two_hand_conflict"},
 	}
@@ -908,7 +908,7 @@ Expected: PASS.
 
 - [ ] **Step 5: Add the validation e2e test**
 
-Submitting an empty name and an undead paladin shows `invalid_character_name` and `race_class_mismatch` messages, keeps the dialog open, and creates nothing.
+Submitting an empty name and an orc paladin shows `invalid_character_name` and `race_class_mismatch` messages, keeps the dialog open, and creates nothing. (Undead paladins are legal in the pinned data.)
 
 - [ ] **Step 6: Run the library specs**
 
