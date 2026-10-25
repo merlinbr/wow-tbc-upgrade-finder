@@ -187,6 +187,141 @@ a:focus-visible,
   margin-top: 1rem;
 }
 
+:root {
+  --class-warrior: #c79c6e;
+  --class-paladin: #f58cba;
+  --class-hunter: #abd473;
+  --class-rogue: #fff569;
+  --class-priest: #ffffff;
+  --class-shaman: #0070de;
+  --class-mage: #69ccf0;
+  --class-warlock: #9482c9;
+  --class-druid: #ff7d0a;
+}
+.class-warrior { color: var(--class-warrior); }
+.class-paladin { color: var(--class-paladin); }
+.class-hunter { color: var(--class-hunter); }
+.class-rogue { color: var(--class-rogue); }
+.class-priest { color: var(--class-priest); }
+.class-shaman { color: var(--class-shaman); }
+.class-mage { color: var(--class-mage); }
+.class-warlock { color: var(--class-warlock); }
+.class-druid { color: var(--class-druid); }
+
+.quality-poor { color: var(--quality-poor); }
+.quality-common { color: var(--quality-common); }
+.quality-uncommon { color: var(--quality-uncommon); }
+.quality-rare { color: var(--quality-rare); }
+.quality-epic { color: var(--quality-epic); }
+.quality-legendary { color: var(--quality-legendary); }
+
+.identity-header {
+  align-items: flex-start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.character-name { margin-bottom: 0.25rem; }
+.identity-subtitle { color: var(--accent-strong); margin-bottom: 0.25rem; }
+.identity-professions { font-size: 0.9rem; }
+
+.warning-list { color: var(--gold); }
+
+.build-bar {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+.build-selector { flex: 1 1 16rem; min-width: 14rem; }
+.build-selector label { margin-top: 0; }
+
+.tabs {
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 0.25rem;
+  margin: 1rem 0;
+}
+.tabs [role='tab'] {
+  border: 1px solid transparent;
+  border-bottom: none;
+  border-radius: 6px 6px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+  padding: 0.5rem 0.9rem;
+  text-decoration: none;
+}
+.tabs [role='tab'][aria-selected='true'] {
+  background: var(--panel);
+  border-color: var(--border);
+  color: var(--text);
+}
+
+.gear-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+.gear-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.gear-slot-item { list-style: none; }
+.slot-card {
+  align-items: center;
+  background: linear-gradient(145deg, rgba(24, 33, 48, 0.98), rgba(13, 18, 27, 0.98));
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  display: grid;
+  font: inherit;
+  gap: 0.15rem 0.6rem;
+  grid-template-columns: 6rem minmax(0, 1fr) auto;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  width: 100%;
+}
+.slot-card:hover { border-color: var(--border-bright); }
+.slot-label {
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.slot-item-name {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.slot-empty { color: var(--muted); font-style: italic; grid-column: 2 / span 2; }
+.slot-meta { color: var(--muted); font-size: 0.8rem; }
+.ilvl-badge {
+  background: #0b1018;
+  border: 1px solid var(--border-bright);
+  border-radius: 4px;
+  color: var(--gold);
+  font-size: 0.78rem;
+  padding: 0.05rem 0.35rem;
+}
+.slot-enchant {
+  color: var(--accent-strong);
+  font-size: 0.8rem;
+  grid-column: 2 / span 2;
+}
+
+@media (max-width: 820px) {
+  .gear-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 600px) {
   main { padding: 1rem 0.75rem 2rem; }
 }

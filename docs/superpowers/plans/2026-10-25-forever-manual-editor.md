@@ -963,7 +963,7 @@ Expected: PASS.
 
 - [ ] **Step 5: Add the plan-lifecycle e2e test**
 
-Create a plan copied from current, open it, assert Current remains empty in its own view; duplicate it, rename one, delete the other with confirmation, and assert the URL build id of the surviving plan is unchanged. Edit the character's spec to one whose class cannot use the equipped armor and assert the warning is shown and the equipment is still present.
+Create a plan copied from current, open it, assert Current remains empty in its own view; duplicate it, rename one, delete the other with confirmation, and assert the URL build id of the surviving plan is unchanged. Edit the character's race to one that makes an equipped faction-restricted item incompatible (the pinned data has no spec-level armor change within a class) and assert the warning is shown and the equipment is still present.
 
 - [ ] **Step 6: Run the editor specs**
 

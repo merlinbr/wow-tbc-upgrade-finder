@@ -136,6 +136,10 @@ proves it wrong.
 2. **Undead paladins are legal (Task 5).** The pinned `CLASS_RACES` lists human, dwarf and undead
    for paladin, so the plan's `undeadPaladin` mismatch fixture was wrong. Validation reads the
    pinned table; the plan's Task 5 and Task 11 fixtures now use an orc paladin instead.
+3. **Spec changes cannot change armor legality (Task 12).** Every spec of a class shares the
+   class armor table, and the pinned data's only spec-level rule is dual-wield (which covers whole
+   classes). The Task 12 capability-warning e2e therefore changes race to make an equipped
+   faction-restricted item incompatible. Equipment is preserved and the warning is shown.
 
 ## Definition of done for Phase 2
 
