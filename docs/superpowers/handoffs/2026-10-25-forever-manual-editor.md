@@ -150,6 +150,9 @@ proves it wrong.
    effect on an armor slot as disabled with `incompatible_enchant_slot`, but the default
    `/api/enchants?slot=` response filters those rows out. The opt-in flag returns them with
    `compatible`/`reason`; default behavior is unchanged.
+7. **Violations carry an optional `talentId` (Task 14).** Talent node states and `+` disabling need
+   to know which talent a finding belongs to; the plan's `Violation` shape had no talent
+   identifier. `talentId` is populated for talent findings; equipment findings are unchanged.
 
 ## Definition of done for Phase 2
 

@@ -16,6 +16,7 @@ type Violation struct {
 	Severity string      `json:"severity"`
 	Message  string      `json:"message"`
 	Slot     domain.Slot `json:"slot,omitempty"`
+	TalentID string      `json:"talentId,omitempty"`
 }
 
 // Equipment validates a character's equipment against the pinned catalog.

@@ -42,6 +42,15 @@ func level10Paladin() domain.Character {
 	return domain.Character{Class: "paladin", Spec: "paladin_retribution", Race: "human", Level: 10}
 }
 
+func hasTalentCode(violations []Violation, code, talentID string) bool {
+	for _, violation := range violations {
+		if violation.Code == code && violation.TalentID == talentID {
+			return true
+		}
+	}
+	return false
+}
+
 func TestTalentBudgetAndTier(t *testing.T) {
 	trees := paladinTrees(t)
 	alloc := domain.Talents{
@@ -74,6 +83,9 @@ func TestTierGateAndPrerequisiteAndBroken(t *testing.T) {
 	)
 	if !hasCode(violations, "talent_prereq_unmet") {
 		t.Fatalf("prereq: %v", codes(violations))
+	}
+	if !hasTalentCode(violations, "talent_prereq_unmet", "def:child") {
+		t.Fatalf("prereq talent id missing: %+v", violations)
 	}
 	if !slices.Contains(issues.Broken, "def:child") {
 		t.Fatalf("broken = %v", issues.Broken)

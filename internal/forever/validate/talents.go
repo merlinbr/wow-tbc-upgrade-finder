@@ -52,6 +52,7 @@ func Talents(ch domain.Character, alloc domain.Talents, trees *domain.TalentClas
 				Code:     "unknown_talent",
 				Severity: "error",
 				Message:  fmt.Sprintf("Talent %q is not in the pinned trees.", id),
+				TalentID: id,
 			})
 			issues.Broken = append(issues.Broken, id)
 			continue
@@ -67,6 +68,7 @@ func Talents(ch domain.Character, alloc domain.Talents, trees *domain.TalentClas
 					"%s has %d points; the maximum is %d.",
 					located.talent.Name, points, located.talent.MaxPoints,
 				),
+				TalentID: id,
 			})
 		}
 	}
@@ -97,6 +99,7 @@ func Talents(ch domain.Character, alloc domain.Talents, trees *domain.TalentClas
 					"%s needs %d points in higher rows of its tree.",
 					located.talent.Name, 5*located.talent.Row,
 				),
+				TalentID: id,
 			})
 		}
 		if result.prereqFail {
@@ -111,6 +114,7 @@ func Talents(ch domain.Character, alloc domain.Talents, trees *domain.TalentClas
 				Code:     "talent_prereq_unmet",
 				Severity: "error",
 				Message:  message,
+				TalentID: id,
 			})
 		}
 		if result.broken {
@@ -142,6 +146,7 @@ func TrySetPointsAtLevel(trees *domain.TalentClass, alloc domain.Talents, id str
 				Code:     "unknown_talent",
 				Severity: "error",
 				Message:  fmt.Sprintf("Talent %q is not in the pinned trees.", id),
+				TalentID: id,
 			}}
 		}
 		delete(updated, id)
@@ -154,6 +159,7 @@ func TrySetPointsAtLevel(trees *domain.TalentClass, alloc domain.Talents, id str
 			Message: fmt.Sprintf(
 				"%s has a maximum of %d points.", located.talent.Name, located.talent.MaxPoints,
 			),
+			TalentID: id,
 		}}
 	}
 
@@ -178,6 +184,7 @@ func TrySetPointsAtLevel(trees *domain.TalentClass, alloc domain.Talents, id str
 				"%s needs %d points in higher rows of its tree.",
 				located.talent.Name, 5*located.talent.Row,
 			),
+			TalentID: id,
 		}}
 	}
 	if result.prereqFail {
@@ -185,6 +192,7 @@ func TrySetPointsAtLevel(trees *domain.TalentClass, alloc domain.Talents, id str
 			Code:     "talent_prereq_unmet",
 			Severity: "error",
 			Message:  fmt.Sprintf("%s has an unmet prerequisite.", located.talent.Name),
+			TalentID: id,
 		}}
 	}
 	if result.broken {
@@ -192,6 +200,7 @@ func TrySetPointsAtLevel(trees *domain.TalentClass, alloc domain.Talents, id str
 			Code:     "talent_prereq_unmet",
 			Severity: "error",
 			Message:  fmt.Sprintf("%s would be broken.", located.talent.Name),
+			TalentID: id,
 		}}
 	}
 

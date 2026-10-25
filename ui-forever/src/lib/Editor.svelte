@@ -7,6 +7,7 @@
   import IdentityHeader from './IdentityHeader.svelte';
   import ItemPicker from './ItemPicker.svelte';
   import StatsPanel from './StatsPanel.svelte';
+  import TalentEditor from './TalentEditor.svelte';
   import { href } from './router.svelte.js';
 
   let { id, tab = 'gear', buildId = '' } = $props();
@@ -15,6 +16,7 @@
   let builds = $state([]);
   let build = $state(null);
   let equipment = $state({});
+  let talents = $state({});
   let items = $state({});
   let meta = $state(null);
   let warnings = $state([]);
@@ -32,6 +34,7 @@
   let renameDialogOpen = $state(false);
   let renameName = $state('');
   let deleteDialogOpen = $state(false);
+  let validationTimer;
 
   $effect(() => {
     const requestedId = id;
@@ -77,6 +80,7 @@
     }
     build = target;
     equipment = JSON.parse(JSON.stringify(target.equipment ?? {}));
+    talents = JSON.parse(JSON.stringify(target.talents ?? {}));
     selectedSlot = '';
     pickerSlot = '';
     liveViolations = [];
@@ -229,12 +233,24 @@
     try {
       const result = await api.post(`/api/characters/${character.id}/validate`, {
         equipment,
-        talents: build?.talents ?? {},
+        talents,
       });
       liveViolations = result.violations ?? [];
     } catch {
       liveViolations = [];
     }
+  }
+
+  function scheduleValidation() {
+    clearTimeout(validationTimer);
+    validationTimer = setTimeout(() => {
+      validateLocal();
+    }, 150);
+  }
+
+  function handleTalentsChange(next) {
+    talents = next;
+    scheduleValidation();
   }
 </script>
 
@@ -331,10 +347,13 @@
     {:else if tab === 'stats'}
       <StatsPanel />
     {:else}
-      <section class="panel">
-        <h2>Talent editor</h2>
-        <p class="muted">The talent editor is coming next.</p>
-      </section>
+      <TalentEditor
+        {character}
+        {build}
+        {talents}
+        violations={liveViolations}
+        onchange={handleTalentsChange}
+      />
     {/if}
   </section>
 
