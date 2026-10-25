@@ -6,8 +6,10 @@
   import GearGrid from './GearGrid.svelte';
   import IdentityHeader from './IdentityHeader.svelte';
   import ItemPicker from './ItemPicker.svelte';
+  import SaveBar from './SaveBar.svelte';
   import StatsPanel from './StatsPanel.svelte';
   import TalentEditor from './TalentEditor.svelte';
+  import ViolationList from './ViolationList.svelte';
   import { href } from './router.svelte.js';
 
   let { id, tab = 'gear', buildId = '' } = $props();
@@ -26,6 +28,9 @@
   let selectedSlot = $state('');
   let liveViolations = $state([]);
   let pickerSlot = $state('');
+  let dirty = $state(false);
+  let saving = $state(false);
+  let saveError = $state('');
 
   let editDialogOpen = $state(false);
   let planDialogOpen = $state(false);
@@ -40,6 +45,18 @@
     const requestedId = id;
     const requestedBuildId = untrack(() => buildId);
     load(requestedId, requestedBuildId);
+  });
+
+  $effect(() => {
+    if (!dirty) {
+      return;
+    }
+    const guard = (event) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', guard);
+    return () => window.removeEventListener('beforeunload', guard);
   });
 
   async function load(requestedId, requestedBuildId) {
@@ -84,6 +101,8 @@
     selectedSlot = '';
     pickerSlot = '';
     liveViolations = [];
+    dirty = false;
+    saveError = '';
     await loadItems(equipment);
     if (updateUrl && character) {
       const currentTab = untrack(() => tab);
@@ -225,6 +244,8 @@
   function applyItem(slot, instance) {
     equipment = { ...equipment, [slot]: instance };
     pickerSlot = '';
+    dirty = true;
+    saveError = '';
     loadItems(equipment);
     validateLocal();
   }
@@ -250,7 +271,39 @@
 
   function handleTalentsChange(next) {
     talents = next;
+    dirty = true;
+    saveError = '';
     scheduleValidation();
+  }
+
+  async function saveBuild() {
+    if (!dirty || saving) {
+      return;
+    }
+    saving = true;
+    saveError = '';
+    try {
+      const saved = await api.patch(`/api/builds/${build.id}`, {
+        version: build.version,
+        equipment,
+        talents,
+      });
+      build = saved;
+      builds = builds.map((candidate) => (candidate.id === saved.id ? saved : candidate));
+      liveViolations = [];
+      dirty = false;
+    } catch (error) {
+      if (error.code === 'version_conflict') {
+        saveError = 'This build changed elsewhere. Reload to see the latest version.';
+      } else if (error.violations?.length) {
+        liveViolations = error.violations;
+        saveError = error.message ?? 'The build did not pass validation.';
+      } else {
+        saveError = error.message ?? 'Could not save the build.';
+      }
+    } finally {
+      saving = false;
+    }
   }
 </script>
 
@@ -270,11 +323,7 @@
     />
 
     {#if warnings.length > 0}
-      <ul class="validation-list warning-list" role="status">
-        {#each warnings as warning, index (index)}
-          <li><code>{warning.code}</code> {warning.message}</li>
-        {/each}
-      </ul>
+      <ViolationList violations={warnings} />
     {/if}
 
     <div class="build-bar panel">
@@ -314,6 +363,16 @@
       <p class="error-text" role="alert">{actionError}</p>
     {/if}
 
+    <SaveBar
+      dirty={dirty}
+      saving={saving}
+      version={build?.version ?? 1}
+      onsave={saveBuild}
+    />
+    {#if saveError}
+      <p class="error-text" role="alert">{saveError}</p>
+    {/if}
+
     <div class="tabs" role="tablist" aria-label="Editor views">
       {#each ['gear', 'stats', 'talents'] as value (value)}
         <a
@@ -328,11 +387,7 @@
     </div>
 
     {#if liveViolations.length > 0}
-      <ul class="validation-list" role="status">
-        {#each liveViolations as violation, index (index)}
-          <li><code>{violation.code}</code> {violation.message}</li>
-        {/each}
-      </ul>
+      <ViolationList violations={liveViolations} />
     {/if}
 
     {#if tab === 'gear'}

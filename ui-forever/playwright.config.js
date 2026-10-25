@@ -13,7 +13,19 @@ export default defineConfig({
     baseURL: `http://127.0.0.1:${port}`,
     trace: 'on-first-retry',
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+  projects: [
+    { name: 'chromium', use: { ...devices['Desktop Chrome'] } },
+    {
+      name: 'touch',
+      testMatch: /full-flow\.spec\.js/,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 390, height: 844 },
+        hasTouch: true,
+        isMobile: true,
+      },
+    },
+  ],
   webServer: {
     command: `go run ./cmd/forever-armory --no-browser --addr 127.0.0.1:${port} --db :memory:`,
     cwd: repoRoot,

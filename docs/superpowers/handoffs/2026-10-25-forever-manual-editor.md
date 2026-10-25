@@ -153,6 +153,11 @@ proves it wrong.
 7. **Violations carry an optional `talentId` (Task 14).** Talent node states and `+` disabling need
    to know which talent a finding belongs to; the plan's `Violation` shape had no talent
    identifier. `talentId` is populated for talent findings; equipment findings are unchanged.
+8. **`./tools/...` includes an unrelated failing package (Task 15).** `tools/tooltip` fails because
+   `./assets/db_inputs/dbc/enchants.json` is absent from this checkout; the failure predates and is
+   independent of Forever. The Forever-scoped command is
+   `go test ./internal/forever/... ./tools/forever-catalog -count=1`; every other package under
+   `./tools/...` passes. The TBC assets were not modified.
 
 ## Definition of done for Phase 2
 

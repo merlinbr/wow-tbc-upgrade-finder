@@ -76,6 +76,6 @@ test('identity edit warns without deleting equipment', async ({ page, request })
   await page.getByLabel('Race').selectOption('undead');
   await page.getByRole('button', { name: 'Save character', exact: true }).click();
 
-  await expect(page.getByText('incompatible_faction')).toBeVisible();
+  await expect(page.getByText('incompatible_faction', { exact: true })).toBeVisible();
   await expect(page.getByTestId('gear-slot-waist')).toContainText("Highlander's Plate Girdle");
 });

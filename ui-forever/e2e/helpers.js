@@ -15,6 +15,12 @@ export async function seedCharacter(request, overrides = {}) {
   return response.json();
 }
 
+export async function getCurrentBuild(request, characterId) {
+  const response = await request.get(`/api/characters/${characterId}/builds`);
+  const builds = (await response.json()).builds;
+  return builds.find((build) => build.kind === 'current');
+}
+
 export async function equipItem(request, characterId, slot, itemId) {
   const buildsResponse = await request.get(`/api/characters/${characterId}/builds`);
   const builds = (await buildsResponse.json()).builds;

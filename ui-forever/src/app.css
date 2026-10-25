@@ -429,6 +429,28 @@ a:focus-visible,
 .picker-count { margin: 0.4rem 0 0; }
 .picker-empty { padding: 0.75rem; }
 
+.save-bar {
+  align-items: center;
+  bottom: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: space-between;
+  margin: 0.75rem 0;
+  position: sticky;
+  z-index: 10;
+}
+.save-state {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.save-state .unsaved { color: var(--gold); font-weight: 700; }
+.save-state .saved { color: var(--success); font-weight: 700; }
+.violation-list li.warning { color: var(--gold); }
+.violation-slot { color: var(--muted); }
+
 .talent-header {
   align-items: flex-start;
   display: flex;
