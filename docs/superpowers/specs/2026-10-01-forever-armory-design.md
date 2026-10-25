@@ -19,7 +19,8 @@ assumptions. This revision keeps the approved product goal and exclusions and re
   equipment legality below level 60 cannot be verified. Level 60 is the supported
   equipment-planning level for the first version.
 - **Specialization added.** Upstream dual-wield and weapon capabilities are spec-level, so a
-  character stores both class and specialization.
+  character stores both class and specialization. Creation also records up to two optional
+  professions so profession-gated items can be validated.
 - **Talent encoding.** Positional talent strings are an interchange format, not a validator.
   Allocations are stored by talent identity and bound to a catalog revision.
 - **Statistics.** The upstream engine is a useful reference, not parity evidence. Whole-character
@@ -46,7 +47,7 @@ directory.
 
 - Hosted website; no local Go server required for users.
 - Multiple characters, usable as a guest or through an optional account.
-- Character creation with name, race, class, specialization, and level.
+- Character creation with name, race, class, specialization, level, and optional professions.
 - Browser-remembered guest editing access and a separate private edit/recovery link.
 - One Current build and multiple named plans per character.
 - Independent equipment, enchants, and talents for every build.
@@ -64,9 +65,9 @@ directory.
 
 ### Character
 
-A character has a stable internal identifier, name, race, class, specialization, level, and
-optional region/realm metadata. Identity is shared across its builds. Names and realms do
-not establish ownership and are not unique identifiers for manual characters.
+A character has a stable internal identifier, name, race, class, specialization, level, up to two
+optional professions, and optional region/realm metadata. Identity is shared across its builds.
+Names and realms do not establish ownership and are not unique identifiers for manual characters.
 Changing display identity must not change the permanent sharing URL.
 
 The specialization is selected at creation and determines spec-level capability rules that class

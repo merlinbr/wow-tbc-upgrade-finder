@@ -144,6 +144,7 @@ fallback remains possible.
 | `name` | Display only; user-supplied; not unique; sanitized on render. |
 | `class` | One of the nine upstream classes, stored by our own class key. |
 | `spec` | Our spec key, resolved against the pinned capability data; determines dual-wield and other spec-level rules. |
+| `professions` | Up to two profession keys; consulted by the required-profession rule. |
 | `race` | Our race key, with faction derived from it. |
 | `level` | Integer 1–60. See section 6.4 for what this can and cannot validate. |
 | `region`, `realm` | Optional display metadata; never identity. |

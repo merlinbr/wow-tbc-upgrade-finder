@@ -5,7 +5,9 @@ Status: Proposed delivery sequence and visual-design brief. Not an approved impl
 
 Progress (2026-10-25): the [revised specification](../superpowers/specs/2026-10-01-forever-armory-design.md)
 and the [upstream data and validation contract](../forever-upstream-data-contract.md) are approved,
-and all seven wireframes are accepted. Phase 1 exit is met; Phase 2 planning is next.
+and all seven wireframes are accepted. The
+[Phase 2 manual-editor plan](../superpowers/plans/2026-10-25-forever-manual-editor.md) is written;
+Phase 1 exit is met and execution method is not yet chosen.
 
 ## Goal and starting point
 
