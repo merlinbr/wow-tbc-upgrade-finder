@@ -18,6 +18,8 @@ assumptions. This revision keeps the approved product goal and exclusions and re
 - **Level promise narrowed.** The pinned catalog carries no required character level, so
   equipment legality below level 60 cannot be verified. Level 60 is the supported
   equipment-planning level for the first version.
+- **Specialization added.** Upstream dual-wield and weapon capabilities are spec-level, so a
+  character stores both class and specialization.
 - **Talent encoding.** Positional talent strings are an interchange format, not a validator.
   Allocations are stored by talent identity and bound to a catalog revision.
 - **Statistics.** The upstream engine is a useful reference, not parity evidence. Whole-character
@@ -44,6 +46,7 @@ directory.
 
 - Hosted website; no local Go server required for users.
 - Multiple characters, usable as a guest or through an optional account.
+- Character creation with name, race, class, specialization, and level.
 - Browser-remembered guest editing access and a separate private edit/recovery link.
 - One Current build and multiple named plans per character.
 - Independent equipment, enchants, and talents for every build.
@@ -61,10 +64,14 @@ directory.
 
 ### Character
 
-A character has a stable internal identifier, name, race, class, level, and optional
-region/realm metadata. Identity is shared across its builds. Names and realms do
+A character has a stable internal identifier, name, race, class, specialization, level, and
+optional region/realm metadata. Identity is shared across its builds. Names and realms do
 not establish ownership and are not unique identifiers for manual characters.
 Changing display identity must not change the permanent sharing URL.
+
+The specialization is selected at creation and determines spec-level capability rules that class
+alone cannot answer — most importantly dual-wield. Changing it preserves the build's equipment and
+talents and flags anything the new specialization cannot use.
 
 ### Current build
 
@@ -98,9 +105,9 @@ identifier never grants editing access.
 
 ### Character library
 
-Owners can create and reopen multiple characters and see their named plans. Guest
-access is remembered in the creating browser. Account users can access owned
-characters from another device by signing in.
+Owners can create and reopen multiple characters and see their named plans. Creation records
+name, race, class, specialization, and level. Guest access is remembered in the creating browser.
+Account users can access owned characters from another device by signing in.
 
 ### Armory editor
 
@@ -284,6 +291,7 @@ Leave runnable checks for the implemented behaviors using the project's chosen t
 
 - Copying, editing, importing, and deleting a plan never mutate sibling builds.
 - Independent talents respect verified rules and the character level.
+- Equipment legality reflects the character's class and specialization capabilities.
 - Invalid imports and failed saves preserve the previous valid data.
 - Incompatible/unknown catalog references are reported, not silently substituted.
 - Guests cannot access another owner's private data or mutate through a public link.

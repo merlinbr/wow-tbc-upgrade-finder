@@ -107,6 +107,8 @@ or third-party data. No provider grant was obtained. We proceed on a documented-
   phase, carrier item level, class allowlist, required profession, proc kind.
 - Talent structure: definition ID, rank spell ID, display name, max points, grid location,
   prerequisite location, per-class tree names and ordering.
+- Capability data: class armor/weapon/ranged eligibility, class/race availability, and
+  spec-level dual-wield eligibility.
 
 ### 3.3 What is not reused
 
@@ -141,6 +143,7 @@ fallback remains possible.
 | `character_id` | Opaque, server-generated, stable for the character's life. Never derived from name/realm. |
 | `name` | Display only; user-supplied; not unique; sanitized on render. |
 | `class` | One of the nine upstream classes, stored by our own class key. |
+| `spec` | Our spec key, resolved against the pinned capability data; determines dual-wield and other spec-level rules. |
 | `race` | Our race key, with faction derived from it. |
 | `level` | Integer 1–60. See section 6.4 for what this can and cannot validate. |
 | `region`, `realm` | Optional display metadata; never identity. |
@@ -256,10 +259,11 @@ unverified (section 9). A save never proceeds on a failed rule.
 | Rule | Source | Behavior |
 | --- | --- | --- |
 | Class allowlist | `UIItem.class_allowlist` (empty means no restriction) | Reject item for that character class. |
+| Class/race availability | Pinned `CLASS_RACES` | Reject a race/class pair the pinned data does not list. |
 | Armor proficiency | `armor_type` vs class | Reject. Cloth is universal; leather/mail/plate by class. |
 | Weapon proficiency | `weapon_type` vs class | Reject. |
 | Ranged proficiency | `ranged_weapon_type` vs class | Reject. |
-| Slot eligibility | `type`, `hand_type` | Reject an item that cannot occupy the target slot; one-hand weapons may occupy both melee slots only for dual-wield classes. |
+| Slot eligibility | `type`, `hand_type` | Reject an item that cannot occupy the target slot; one-hand weapons may occupy both melee slots only when the character's spec can dual-wield per the pinned capability data. |
 | Unique | `unique` | Reject equipping the same instance twice. |
 | Limit category | `limit_category` | Reject a second item sharing a category count already reached. |
 | Faction | `faction_restriction` | Reject on mismatch. |
@@ -274,8 +278,9 @@ Two deliberate departures from upstream behavior:
 2. `limit_category` and `unique` are validated across the whole build, not just at the moment of
    assignment, because imports can arrive with conflicts already present.
 
-The class capability inputs behind these rules — armor types, weapon types, ranged types and
-dual-wield — must be read from the pinned upstream capability data and verified for Forever. The
+The capability inputs behind these rules are class- and spec-level: armor, weapon and ranged
+eligibility plus class/race availability come from the class tables; dual-wield comes from the
+spec table. Read them from the pinned upstream capability data and verify them for Forever. The
 TBC tables in `cmd/wowsimcli/cmd/upgrades/candidates.go` are not a valid source for them.
 
 ### 6.2 Enchant
@@ -432,7 +437,8 @@ Required tests:
 | 6 | Required character level | Lower-level support | Source separately or keep the level-60 restriction |
 | 7 | Whether the pinned commit's native `api_version` matches the observed live value `2` | Native interchange | Read the constant at the pinned commit; test exact-match rejection |
 | 8 | Leftover catalog inclusion in the picker | Coverage | Decide whether the picker searches both partitions or resolves leftovers only on import |
+| 9 | Enhancement shaman dual-wield | Equipment validation | The pinned `SPEC_CAN_DUAL_WIELD` omits shaman although dual-wield is talent-granted in game; confirm whether the pin models it or needs a talent check |
 
-None of these blocks writing the Phase 2 manual-editor plan. Items 1, 2, 3 and 7 block the
-catalog adapter's first implementation slice; items 4, 5 and 6 gate their respective routes, not
-the core editor.
+None of these blocks writing the Phase 2 manual-editor plan. Items 1, 2, 3, 7 and 9 block the
+catalog adapter and validation's first implementation slice; items 4, 5 and 6 gate their
+respective routes, not the core editor.
