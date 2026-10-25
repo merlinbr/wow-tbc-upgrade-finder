@@ -1,7 +1,8 @@
 # Forever manual editor — implementation handoff
 
 Date: 2026-10-25
-Status: Phase 1 complete and approved. Phase 2 plan written and committed. Implementation not started.
+Status: Phase 2 complete on `feat/forever-manual-editor`. All 15 plan tasks are implemented,
+tested and committed; see Implementation divergences.
 Branch at handoff: `docs/forever-armory-design` (latest design commit `8bb83bd24`, plus this
 handoff commit).
 Execution method chosen: **native inline** — one agent implements the plan task by task in a new session.
@@ -158,6 +159,22 @@ proves it wrong.
    independent of Forever. The Forever-scoped command is
    `go test ./internal/forever/... ./tools/forever-catalog -count=1`; every other package under
    `./tools/...` passes. The TBC assets were not modified.
+
+## Completion
+
+All 15 tasks are committed on `feat/forever-manual-editor`, one commit per task with the plan's
+messages, plus a docs commit correcting the pinned hashes. Verification results:
+
+- `go test ./internal/forever/... ./tools/forever-catalog -count=1` — passes.
+- `cd ui-forever && npm run test:unit` — 4 tests pass.
+- `cd ui-forever && npm run build` — passes; bundle committed under `cmd/forever-armory/webui`.
+- `cd ui-forever && npx playwright test` — 16 passed, 4 skipped by project targeting (desktop
+  specs skip in the touch project; the responsive spec skips on desktop).
+- Manual smoke — created a paladin, equipped Icebane Helmet, allocated one Divine Strength point,
+  saved (version 2) and confirmed both persisted after restarting the binary on the same SQLite
+  file; the embedded index served with 200.
+- No TBC application asset or test was modified or staged; the pre-existing dirty files remain
+  unstaged.
 
 ## Definition of done for Phase 2
 
