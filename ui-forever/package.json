@@ -1,0 +1,19 @@
+{
+  "name": "forever-armory-ui",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "test:unit": "node --test src/lib/router.test.js src/lib/api.test.js",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "svelte": "^5.38.7"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "@sveltejs/vite-plugin-svelte": "^6.1.4",
+    "vite": "^7.1.3"
+  }
+}

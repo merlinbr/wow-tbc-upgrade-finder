@@ -33,8 +33,13 @@ so replacing the dataset does not change the domain or the UI.
 | Repository | `https://github.com/wowsims/forever` |
 | Commit | `0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4` |
 | Licence | MIT (software and associated documentation) |
-| Main catalog | `assets/database/db.json`, `sha256 9fa8335e7e97f824373ad8225b6c2d82e1a2915b0e71a6f05e2312add442e9e3` |
-| Leftover catalog | `assets/database/leftover_db.json`, `sha256 eeb3ff7788226b9739e470c27d8a9a4035dbae5b5ad5f5d781483eeef0ce4685` |
+| Main catalog | `assets/database/db.json`, `sha256 e78be48cbc65e3a82ad3baa15ccb5f8fad524ccc35d18887b9be1ce241194de7` |
+| Leftover catalog | `assets/database/leftover_db.json`, `sha256 6de2991a0f23e3a565aba0f06af5f740fc41925f552c074ba196b6801e30b761` |
+
+These hashes are SHA-256 of the exact bytes served by `raw.githubusercontent.com` at the pinned
+commit (LF line endings). The values first recorded here were `9fa8335e…` and `eeb3ff77…`, which
+are the same files after CRLF normalization; they were platform-dependent and have been corrected
+during Task 1 implementation. The generator hashes the fetched bytes directly.
 | Talent structure | `ui/sim/talents/trees/*.json`, `ui/sim/talents/config.ts` |
 | Schema | `proto/ui.proto`, `proto/db.proto`, `proto/common.proto` |
 

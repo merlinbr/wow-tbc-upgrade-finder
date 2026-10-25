@@ -1,0 +1,499 @@
+{
+  "class": "warrior",
+  "trees": [
+    {
+      "name": "Arms",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/161.jpg",
+      "talents": [
+        {
+          "id": "def:135489",
+          "name": "Improved Heroic Strike",
+          "icon": "ability_rogue_ambush",
+          "spellId": 12282,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135488",
+          "name": "Deflection",
+          "icon": "ability_parry",
+          "spellId": 16462,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135487",
+          "name": "Improved Rend",
+          "icon": "ability_gouge",
+          "spellId": 12286,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135486",
+          "name": "Improved Charge",
+          "icon": "ability_warrior_charge",
+          "spellId": 12285,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135485",
+          "name": "Improved Tactical Mastery",
+          "icon": "spell_nature_enchantarmor",
+          "spellId": 12295,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135483",
+          "name": "Improved Overpower",
+          "icon": "inv_sword_05",
+          "spellId": 12290,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:135482",
+          "name": "Anger Management",
+          "icon": "spell_holy_blessingofstamina",
+          "spellId": 12296,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 1,
+          "prereqId": "def:135485"
+        },
+        {
+          "id": "def:135481",
+          "name": "Deep Wounds",
+          "icon": "ability_backstab",
+          "spellId": 12834,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 2,
+          "prereqId": "def:135487"
+        },
+        {
+          "id": "def:135480",
+          "name": "Spearing Strike",
+          "icon": "inv_spear_01",
+          "spellId": 1310222,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135479",
+          "name": "Two-Handed Weapon Specialization",
+          "icon": "inv_axe_09",
+          "spellId": 12163,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135478",
+          "name": "Impale",
+          "icon": "ability_searingarrow",
+          "spellId": 16493,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 2,
+          "prereqId": "def:135481"
+        },
+        {
+          "id": "def:141974",
+          "name": "Bloodthrill",
+          "icon": "inv_sword_01",
+          "spellId": 1289682,
+          "maxPoints": 5,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:135476",
+          "name": "Sweeping Strikes",
+          "icon": "ability_rogue_slicedice",
+          "spellId": 12292,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135475",
+          "name": "Weaponmaster",
+          "icon": "garrison_weaponupgrade",
+          "spellId": 1290261,
+          "maxPoints": 5,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:142604",
+          "name": "Improved Slam",
+          "icon": "ability_warrior_decisivestrike",
+          "spellId": 12862,
+          "maxPoints": 2,
+          "row": 5,
+          "col": 0
+        },
+        {
+          "id": "def:135473",
+          "name": "Improved Hamstring",
+          "icon": "ability_shockwave",
+          "spellId": 12289,
+          "maxPoints": 3,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135472",
+          "name": "Mortal Strike",
+          "icon": "ability_warrior_savageblow",
+          "spellId": 12294,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135476"
+        }
+      ]
+    },
+    {
+      "name": "Fury",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/164.jpg",
+      "talents": [
+        {
+          "id": "def:135469",
+          "name": "Booming Voice",
+          "icon": "spell_nature_purge",
+          "spellId": 12321,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135470",
+          "name": "Cruelty",
+          "icon": "ability_rogue_eviscerate",
+          "spellId": 12320,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:142603",
+          "name": "Lingering Rage",
+          "icon": "ability_warrior_secondwind",
+          "spellId": 1323964,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135468",
+          "name": "Unbridled Wrath",
+          "icon": "spell_nature_stoneclawtotem",
+          "spellId": 12322,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135484",
+          "name": "Furious Precision",
+          "icon": "ability_warrior_incite",
+          "spellId": 1323963,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135466",
+          "name": "Piercing Howl",
+          "icon": "spell_shadow_deathscream",
+          "spellId": 12323,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:135465",
+          "name": "Blood Craze",
+          "icon": "spell_shadow_summonimp",
+          "spellId": 16487,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:135464",
+          "name": "Dual Wield Specialization",
+          "icon": "ability_dualwield",
+          "spellId": 23584,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135508",
+          "name": "Raging Blows",
+          "icon": "ability_whirlwind",
+          "spellId": 1310315,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135462",
+          "name": "Enrage",
+          "icon": "spell_shadow_unholyfrenzy",
+          "spellId": 12317,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "def:135463",
+          "name": "Improved Execute",
+          "icon": "inv_sword_48",
+          "spellId": 20502,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 3
+        },
+        {
+          "id": "def:135509",
+          "name": "Improved Berserker Rage",
+          "icon": "spell_nature_ancestralguardian",
+          "spellId": 20500,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:135458",
+          "name": "Death Wish",
+          "icon": "spell_shadow_deathpact",
+          "spellId": 12328,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135457",
+          "name": "Improved Intercept",
+          "icon": "ability_rogue_sprint",
+          "spellId": 20504,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 3
+        },
+        {
+          "id": "def:135459",
+          "name": "Flurry",
+          "icon": "ability_ghoulfrenzy",
+          "spellId": 12319,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 1,
+          "prereqId": "def:135458"
+        },
+        {
+          "id": "def:145863",
+          "name": "Gore Drinker",
+          "icon": "racial_troll_berserk",
+          "spellId": 1323967,
+          "maxPoints": 2,
+          "row": 5,
+          "col": 2,
+          "prereqId": "def:135462"
+        },
+        {
+          "id": "def:135461",
+          "name": "Bloodthirst",
+          "icon": "spell_nature_bloodlust",
+          "spellId": 23881,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1
+        }
+      ]
+    },
+    {
+      "name": "Protection",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/163.jpg",
+      "talents": [
+        {
+          "id": "def:135505",
+          "name": "Improved Bloodrage",
+          "icon": "ability_racial_bloodrage",
+          "spellId": 12301,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135507",
+          "name": "Shield Specialization",
+          "icon": "inv_shield_06",
+          "spellId": 12298,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:145864",
+          "name": "Iron Will",
+          "icon": "spell_magic_magearmor",
+          "spellId": 12962,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135506",
+          "name": "Anticipation",
+          "icon": "spell_nature_mirrorimage",
+          "spellId": 12297,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135500",
+          "name": "Improved Revenge",
+          "icon": "ability_warrior_revenge",
+          "spellId": 12797,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135503",
+          "name": "Improved Thunder Clap",
+          "icon": "ability_thunderclap",
+          "spellId": 12287,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:135501",
+          "name": "Last Stand",
+          "icon": "spell_holy_ashestoashes",
+          "spellId": 12975,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135502",
+          "name": "Master of Defense",
+          "icon": "ability_warrior_shieldguard",
+          "spellId": 1310316,
+          "maxPoints": 2,
+          "row": 2,
+          "col": 1,
+          "prereqId": "def:135507"
+        },
+        {
+          "id": "def:135498",
+          "name": "Improved Disarm",
+          "icon": "ability_warrior_disarm",
+          "spellId": 12313,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:142602",
+          "name": "Defiance",
+          "icon": "ability_warrior_innerrage",
+          "spellId": 12792,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 3
+        },
+        {
+          "id": "def:135499",
+          "name": "Improved Sunder Armor",
+          "icon": "ability_warrior_sunder",
+          "spellId": 12308,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135497",
+          "name": "Vanguard",
+          "icon": "ability_warrior_shieldcharge",
+          "spellId": 1310317,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135494",
+          "name": "Improved Shield Bash",
+          "icon": "ability_warrior_shieldbash",
+          "spellId": 12311,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "def:135495",
+          "name": "Improved Shield Wall",
+          "icon": "ability_warrior_shieldwall",
+          "spellId": 12312,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:135496",
+          "name": "Concussion Blow",
+          "icon": "ability_thunderbolt",
+          "spellId": 12809,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135492",
+          "name": "Focused Rage",
+          "icon": "ability_warrior_focusedrage",
+          "spellId": 29787,
+          "maxPoints": 3,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:135493",
+          "name": "Bastion",
+          "icon": "inv_shield_04",
+          "spellId": 16538,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135490",
+          "name": "Shield Slam",
+          "icon": "inv_shield_05",
+          "spellId": 23922,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135496"
+        }
+      ]
+    }
+  ]
+}

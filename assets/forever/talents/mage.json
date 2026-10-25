@@ -1,0 +1,516 @@
+{
+  "class": "mage",
+  "trees": [
+    {
+      "name": "Arcane",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/81.jpg",
+      "talents": [
+        {
+          "id": "def:135345",
+          "name": "Wand Specialization",
+          "icon": "inv_wand_01",
+          "spellId": 6057,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135344",
+          "name": "Arcane Focus",
+          "icon": "spell_holy_devotion",
+          "spellId": 11222,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135343",
+          "name": "Improved Channeling",
+          "icon": "spell_nature_starfall",
+          "spellId": 11237,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135332",
+          "name": "Missile Barrage",
+          "icon": "ability_mage_missilebarrage",
+          "spellId": 400588,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 3
+        },
+        {
+          "id": "def:135342",
+          "name": "Arcane Subtlety",
+          "icon": "spell_holy_dispelmagic",
+          "spellId": 11210,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135341",
+          "name": "Magic Absorption",
+          "icon": "spell_nature_astralrecalgroup",
+          "spellId": 29441,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135340",
+          "name": "Arcane Concentration",
+          "icon": "spell_shadow_manaburn",
+          "spellId": 11213,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135339",
+          "name": "Arcane Resilience",
+          "icon": "spell_arcane_arcaneresilience",
+          "spellId": 28574,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:135338",
+          "name": "Arcane Geometry",
+          "icon": "inv_ability_mage_radiantspark",
+          "spellId": 11247,
+          "maxPoints": 2,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135337",
+          "name": "Arcane Impact",
+          "icon": "spell_nature_wispsplode",
+          "spellId": 11242,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:135336",
+          "name": "Arcane Blast",
+          "icon": "spell_arcane_blast",
+          "spellId": 400574,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 3
+        },
+        {
+          "id": "def:135335",
+          "name": "Arcane Shielding",
+          "icon": "spell_shadow_detectlesserinvisibility",
+          "spellId": 11252,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135334",
+          "name": "Improved Counterspell",
+          "icon": "spell_frost_iceshock",
+          "spellId": 11255,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135333",
+          "name": "Arcane Meditation",
+          "icon": "spell_shadow_siphonmana",
+          "spellId": 18462,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 2,
+          "prereqId": "def:135340"
+        },
+        {
+          "id": "def:145958",
+          "name": "Arcane Wrath",
+          "icon": "ability_mage_netherwindpresence",
+          "spellId": 1326079,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 3,
+          "prereqId": "def:135336"
+        },
+        {
+          "id": "def:135331",
+          "name": "Presence of Mind",
+          "icon": "spell_nature_enchantarmor",
+          "spellId": 12043,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135330",
+          "name": "Arcane Mind",
+          "icon": "spell_shadow_charm",
+          "spellId": 11232,
+          "maxPoints": 5,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:135329",
+          "name": "Arcane Instability",
+          "icon": "spell_shadow_teleport",
+          "spellId": 15058,
+          "maxPoints": 3,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135328",
+          "name": "Arcane Power",
+          "icon": "spell_nature_lightning",
+          "spellId": 12042,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135331"
+        }
+      ]
+    },
+    {
+      "name": "Fire",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/41.jpg",
+      "talents": [
+        {
+          "id": "def:135327",
+          "name": "Improved Fire Blast",
+          "icon": "spell_fire_lavaspawn",
+          "spellId": 11078,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135326",
+          "name": "Incineration",
+          "icon": "spell_fire_flameshock",
+          "spellId": 18459,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135325",
+          "name": "Improved Fireball",
+          "icon": "spell_fire_flamebolt",
+          "spellId": 11069,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135324",
+          "name": "Ignite",
+          "icon": "spell_fire_incinerate",
+          "spellId": 11119,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135323",
+          "name": "Flame Throwing",
+          "icon": "spell_fire_flare",
+          "spellId": 11100,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135322",
+          "name": "Impact",
+          "icon": "spell_fire_meteorstorm",
+          "spellId": 11103,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135319",
+          "name": "Burning Soul",
+          "icon": "spell_fire_fire",
+          "spellId": 11083,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135321",
+          "name": "Improved Flamestrike",
+          "icon": "spell_fire_selfdestruct",
+          "spellId": 11108,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:135320",
+          "name": "Pyroblast",
+          "icon": "spell_fire_fireball02",
+          "spellId": 11366,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:135318",
+          "name": "Improved Scorch",
+          "icon": "spell_fire_soulburn",
+          "spellId": 11095,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135317",
+          "name": "Improved Fire Ward",
+          "icon": "spell_fire_firearmor",
+          "spellId": 11094,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135316",
+          "name": "Heating Up",
+          "icon": "spell_fire_firebolt",
+          "spellId": 400624,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 2,
+          "prereqId": "def:135320"
+        },
+        {
+          "id": "def:135315",
+          "name": "Master of Elements",
+          "icon": "spell_fire_masterofelements",
+          "spellId": 29074,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 3
+        },
+        {
+          "id": "def:135314",
+          "name": "Critical Mass",
+          "icon": "spell_nature_wispheal",
+          "spellId": 11115,
+          "maxPoints": 5,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135313",
+          "name": "Blast Wave",
+          "icon": "spell_holy_excorcism_02",
+          "spellId": 11113,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:135312",
+          "name": "Fire Power",
+          "icon": "spell_fire_immolation",
+          "spellId": 11124,
+          "maxPoints": 3,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135311",
+          "name": "Combustion",
+          "icon": "spell_fire_sealoffire",
+          "spellId": 11129,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135314"
+        }
+      ]
+    },
+    {
+      "name": "Frost",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/61.jpg",
+      "talents": [
+        {
+          "id": "def:135310",
+          "name": "Frost Warding",
+          "icon": "spell_frost_frostward",
+          "spellId": 11189,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135309",
+          "name": "Improved Frostbolt",
+          "icon": "spell_frost_frostbolt02",
+          "spellId": 11070,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135308",
+          "name": "Elemental Precision",
+          "icon": "spell_ice_magicdamage",
+          "spellId": 29438,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135307",
+          "name": "Ice Shards",
+          "icon": "spell_frost_iceshard",
+          "spellId": 11207,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135304",
+          "name": "Frostbite",
+          "icon": "spell_frost_frostarmor",
+          "spellId": 11071,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135305",
+          "name": "Improved Frost Nova",
+          "icon": "spell_frost_freezingbreath",
+          "spellId": 11165,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135306",
+          "name": "Permafrost",
+          "icon": "spell_frost_wisp",
+          "spellId": 11175,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:135302",
+          "name": "Frost Channeling",
+          "icon": "spell_frost_stun",
+          "spellId": 11160,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135301",
+          "name": "Improved Blizzard",
+          "icon": "spell_frost_icestorm",
+          "spellId": 11185,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:135297",
+          "name": "Ice Lance",
+          "icon": "spell_frost_frostblast",
+          "spellId": 1312002,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:135300",
+          "name": "Arctic Reach",
+          "icon": "spell_shadow_darkritual",
+          "spellId": 16757,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135299",
+          "name": "Ice Block",
+          "icon": "spell_frost_frost",
+          "spellId": 11958,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135298",
+          "name": "Shatter",
+          "icon": "spell_frost_frostshock",
+          "spellId": 11170,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 3
+        },
+        {
+          "id": "def:135295",
+          "name": "Improved Cone of Cold",
+          "icon": "spell_frost_glacier",
+          "spellId": 11190,
+          "maxPoints": 3,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:135296",
+          "name": "Cold Snap",
+          "icon": "spell_frost_wizardmark",
+          "spellId": 12472,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135294",
+          "name": "Fingers of Frost",
+          "icon": "ability_mage_wintersgrasp",
+          "spellId": 400647,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 2,
+          "prereqId": "def:135297"
+        },
+        {
+          "id": "def:135293",
+          "name": "Winter's Chill",
+          "icon": "spell_frost_chillingblast",
+          "spellId": 11180,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135292",
+          "name": "Ice Barrier",
+          "icon": "spell_ice_lament",
+          "spellId": 11426,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135296"
+        }
+      ]
+    }
+  ]
+}

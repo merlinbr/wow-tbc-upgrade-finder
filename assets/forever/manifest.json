@@ -1,0 +1,18 @@
+{
+  "catalogRevision": "wowsims/forever@0cfb1a0:e78be48cbc65e3a82ad3baa15ccb5f8fad524ccc35d18887b9be1ce241194de7:6de2991a0f23e3a565aba0f06af5f740fc41925f552c074ba196b6801e30b761",
+  "sourceCommit": "0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4",
+  "sha256": {
+    "db": "e78be48cbc65e3a82ad3baa15ccb5f8fad524ccc35d18887b9be1ce241194de7",
+    "leftoverDb": "6de2991a0f23e3a565aba0f06af5f740fc41925f552c074ba196b6801e30b761"
+  },
+  "counts": {
+    "itemsTotal": 8599,
+    "itemsEligible": 8583,
+    "itemsLeftover": 1186,
+    "enchants": 246,
+    "leftoverEnchants": 20,
+    "talents": 465,
+    "classes": 9,
+    "suffixes": 160
+  }
+}

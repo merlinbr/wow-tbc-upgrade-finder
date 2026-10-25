@@ -1,0 +1,480 @@
+{
+  "class": "shaman",
+  "trees": [
+    {
+      "name": "Elemental",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/261.jpg",
+      "talents": [
+        {
+          "id": "def:134234",
+          "name": "Convection",
+          "icon": "spell_nature_wispsplode",
+          "spellId": 16039,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:134233",
+          "name": "Concussion",
+          "icon": "spell_nature_earthshock",
+          "spellId": 16035,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:134230",
+          "name": "Elemental Devastation",
+          "icon": "spell_fire_elementaldevastation",
+          "spellId": 30160,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:134228",
+          "name": "Reverberation",
+          "icon": "spell_frost_frostward",
+          "spellId": 16040,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:134232",
+          "name": "Elemental Alacrity",
+          "icon": "spell_lightning_lightningbolt01",
+          "spellId": 16578,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:134231",
+          "name": "Call of Flame",
+          "icon": "spell_fire_immolation",
+          "spellId": 16038,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:134229",
+          "name": "Elemental Focus",
+          "icon": "spell_shadow_manaburn",
+          "spellId": 16164,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:134226",
+          "name": "Elemental Warding",
+          "icon": "spell_nature_spiritarmor",
+          "spellId": 28996,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:134225",
+          "name": "Trial by Fire",
+          "icon": "spell_fire_sealoffire",
+          "spellId": 16086,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:134224",
+          "name": "Eye of the Storm",
+          "icon": "spell_nature_eyeofthestorm",
+          "spellId": 29062,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:134223",
+          "name": "Earthbound",
+          "icon": "spell_nature_stranglevines",
+          "spellId": 1222988,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 3
+        },
+        {
+          "id": "def:134222",
+          "name": "Elemental Reach",
+          "icon": "spell_nature_stormreach",
+          "spellId": 28999,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:134221",
+          "name": "Lava Burst",
+          "icon": "spell_shaman_lavaburst",
+          "spellId": 408490,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:134220",
+          "name": "Lightning Overload",
+          "icon": "spell_nature_lightningoverload",
+          "spellId": 408438,
+          "maxPoints": 3,
+          "row": 4,
+          "col": 2,
+          "prereqId": "def:134232"
+        },
+        {
+          "id": "def:134227",
+          "name": "Elemental Fury",
+          "icon": "spell_fire_volcano",
+          "spellId": 16089,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2,
+          "prereqId": "def:134220"
+        },
+        {
+          "id": "def:134219",
+          "name": "Elemental Mastery",
+          "icon": "spell_nature_wispheal",
+          "spellId": 16166,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:134221"
+        }
+      ]
+    },
+    {
+      "name": "Enhancement",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/263.jpg",
+      "talents": [
+        {
+          "id": "def:134218",
+          "name": "Earth's Grasp",
+          "icon": "spell_nature_stoneclawtotem",
+          "spellId": 16043,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:134214",
+          "name": "Thundering Strikes",
+          "icon": "ability_thunderbolt",
+          "spellId": 16255,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:134217",
+          "name": "Ancestral Knowledge",
+          "icon": "spell_shadow_grimward",
+          "spellId": 17485,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:134215",
+          "name": "Guardian Totems",
+          "icon": "spell_nature_stoneskintotem",
+          "spellId": 16258,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:134216",
+          "name": "Mental Dexterity",
+          "icon": "spell_nature_mentalquickness",
+          "spellId": 415140,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:134213",
+          "name": "Improved Ghost Wolf",
+          "icon": "spell_nature_spiritwolf",
+          "spellId": 16262,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:134212",
+          "name": "Improved Lightning Shield",
+          "icon": "spell_nature_lightningshield",
+          "spellId": 16261,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:134211",
+          "name": "Elemental Weapons",
+          "icon": "spell_fire_flametounge",
+          "spellId": 16266,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:134210",
+          "name": "Shamanistic Focus",
+          "icon": "spell_nature_elementalabsorption",
+          "spellId": 1223030,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:134209",
+          "name": "Anticipation",
+          "icon": "spell_nature_mirrorimage",
+          "spellId": 16254,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 3
+        },
+        {
+          "id": "def:134207",
+          "name": "Toughness",
+          "icon": "spell_holy_devotion",
+          "spellId": 16252,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:134208",
+          "name": "Flurry",
+          "icon": "ability_ghoulfrenzy",
+          "spellId": 16256,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 1,
+          "prereqId": "def:134216"
+        },
+        {
+          "id": "def:134204",
+          "name": "Stormstrike",
+          "icon": "ability_shaman_stormstrike",
+          "spellId": 17364,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "def:134206",
+          "name": "Spirit Weapons",
+          "icon": "ability_parry",
+          "spellId": 16268,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:134205",
+          "name": "Mental Quickness",
+          "icon": "spell_nature_sleep",
+          "spellId": 30812,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:134203",
+          "name": "Improved Stormstrike",
+          "icon": "spell_shaman_improvedstormstrike",
+          "spellId": 1223031,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 2,
+          "prereqId": "def:134204"
+        },
+        {
+          "id": "def:134202",
+          "name": "Maelstrom Weapon",
+          "icon": "spell_shaman_maelstromweapon",
+          "spellId": 408498,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:134201",
+          "name": "Rage of the Farseer",
+          "icon": "spell_nature_bloodlust",
+          "spellId": 425336,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:134205"
+        }
+      ]
+    },
+    {
+      "name": "Restoration",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/262.jpg",
+      "talents": [
+        {
+          "id": "def:134200",
+          "name": "Improved Healing Wave",
+          "icon": "spell_nature_magicimmunity",
+          "spellId": 16182,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:134190",
+          "name": "Tidal Focus",
+          "icon": "spell_frost_manarecharge",
+          "spellId": 16179,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:134195",
+          "name": "Mindfulness",
+          "icon": "spell_nature_sleep",
+          "spellId": 1223033,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:134197",
+          "name": "Natural Grace",
+          "icon": "spell_nature_healingtouch",
+          "spellId": 29187,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:134196",
+          "name": "Totemic Focus",
+          "icon": "spell_nature_moonglow",
+          "spellId": 16173,
+          "maxPoints": 5,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:134198",
+          "name": "Improved Reincarnation",
+          "icon": "spell_nature_reincarnation",
+          "spellId": 16184,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:134192",
+          "name": "Ancestral Healing",
+          "icon": "spell_nature_undyingstrength",
+          "spellId": 16176,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:134194",
+          "name": "Healing Focus",
+          "icon": "spell_nature_healingwavelesser",
+          "spellId": 16181,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:134193",
+          "name": "Water Shield",
+          "icon": "ability_shaman_watershield",
+          "spellId": 408510,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:134199",
+          "name": "Tidal Mastery",
+          "icon": "spell_nature_tranquility",
+          "spellId": 16194,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:134191",
+          "name": "Restorative Totems",
+          "icon": "spell_nature_manaregentotem",
+          "spellId": 16187,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:134189",
+          "name": "Mana Tide Totem",
+          "icon": "spell_frost_summonwaterelemental",
+          "spellId": 16190,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "def:134188",
+          "name": "Healing Way",
+          "icon": "spell_nature_healingway",
+          "spellId": 29206,
+          "maxPoints": 3,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:134187",
+          "name": "Nature's Swiftness",
+          "icon": "spell_nature_ravenform",
+          "spellId": 16188,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:134186",
+          "name": "Purification",
+          "icon": "spell_frost_wizardmark",
+          "spellId": 16178,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:134185",
+          "name": "Riptide",
+          "icon": "spell_nature_riptide",
+          "spellId": 408521,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:134188"
+        }
+      ]
+    }
+  ]
+}

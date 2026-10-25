@@ -1,7 +1,8 @@
 # Forever manual editor — implementation handoff
 
 Date: 2026-10-25
-Status: Phase 1 complete and approved. Phase 2 plan written and committed. Implementation not started.
+Status: Phase 2 complete on `feat/forever-manual-editor`. All 15 plan tasks are implemented,
+tested and committed; see Implementation divergences.
 Branch at handoff: `docs/forever-armory-design` (latest design commit `8bb83bd24`, plus this
 handoff commit).
 Execution method chosen: **native inline** — one agent implements the plan task by task in a new session.
@@ -122,6 +123,58 @@ Do not modify the TBC application or its assets at all.
 - **Embedded UI.** `ui-forever` builds to `cmd/forever-armory/webui`; the Go binary embeds it. Run
   `npm run build` before any Go test that serves the index, and commit the bundle where the plan
   says to.
+
+## Implementation divergences
+
+Recorded as implementation proceeds. The plan is corrected in the same commit series when a test
+proves it wrong.
+
+1. **Pinned payload hashes were CRLF-normalized (Task 1).** The contract recorded
+   `9fa8335e…` / `eeb3ff77…`. Those are the SHA-256 values of the files after converting LF to
+   CRLF. The bytes actually served by `raw.githubusercontent.com` hash to `e78be48c…` /
+   `6de2991a…`. The generator hashes fetched bytes directly, so the contract, plan and review were
+   corrected to the raw-byte values. `catalog_revision` therefore ends in the corrected hashes.
+2. **Undead paladins are legal (Task 5).** The pinned `CLASS_RACES` lists human, dwarf and undead
+   for paladin, so the plan's `undeadPaladin` mismatch fixture was wrong. Validation reads the
+   pinned table; the plan's Task 5 and Task 11 fixtures now use an orc paladin instead.
+3. **Spec changes cannot change armor legality (Task 12).** Every spec of a class shares the
+   class armor table, and the pinned data's only spec-level rule is dual-wield (which covers whole
+   classes). The Task 12 capability-warning e2e therefore changes race to make an equipped
+   faction-restricted item incompatible. Equipment is preserved and the warning is shown.
+4. **The Task 13 picker test contradicted explicit save.** Its snippet reloaded after Apply, which
+   would require an immediate write. The spec now asserts the local slot update; Task 15's
+   full-flow test covers save plus reload.
+5. **Pinned items have only `scalingOptions` key `"0"` (Task 13).** No non-default variants exist in
+   the payload, so the picker's variant select is dormant. The test asserts the flattened default
+   variant's ilvl and stats rather than another variant's values.
+6. **Enchants endpoint gained `includeIncompatible=1` (Task 13).** The picker must show a weapon-only
+   effect on an armor slot as disabled with `incompatible_enchant_slot`, but the default
+   `/api/enchants?slot=` response filters those rows out. The opt-in flag returns them with
+   `compatible`/`reason`; default behavior is unchanged.
+7. **Violations carry an optional `talentId` (Task 14).** Talent node states and `+` disabling need
+   to know which talent a finding belongs to; the plan's `Violation` shape had no talent
+   identifier. `talentId` is populated for talent findings; equipment findings are unchanged.
+8. **`./tools/...` includes an unrelated failing package (Task 15).** `tools/tooltip` fails because
+   `./assets/db_inputs/dbc/enchants.json` is absent from this checkout; the failure predates and is
+   independent of Forever. The Forever-scoped command is
+   `go test ./internal/forever/... ./tools/forever-catalog -count=1`; every other package under
+   `./tools/...` passes. The TBC assets were not modified.
+
+## Completion
+
+All 15 tasks are committed on `feat/forever-manual-editor`, one commit per task with the plan's
+messages, plus a docs commit correcting the pinned hashes. Verification results:
+
+- `go test ./internal/forever/... ./tools/forever-catalog -count=1` — passes.
+- `cd ui-forever && npm run test:unit` — 4 tests pass.
+- `cd ui-forever && npm run build` — passes; bundle committed under `cmd/forever-armory/webui`.
+- `cd ui-forever && npx playwright test` — 16 passed, 4 skipped by project targeting (desktop
+  specs skip in the touch project; the responsive spec skips on desktop).
+- Manual smoke — created a paladin, equipped Icebane Helmet, allocated one Divine Strength point,
+  saved (version 2) and confirmed both persisted after restarting the binary on the same SQLite
+  file; the embedded index served with 200.
+- No TBC application asset or test was modified or staged; the pre-existing dirty files remain
+  unstaged.
 
 ## Definition of done for Phase 2
 

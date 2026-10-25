@@ -1,0 +1,344 @@
+// Trimmed copy of enum blocks from the pinned upstream
+// wowsims/forever@0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4 proto/common.proto (MIT).
+// Used only as parser test data.
+syntax = "proto3";
+package proto;
+
+enum Stat {
+	// Primary attributes ("main stat")
+	StatStrength = 0;
+	StatAgility = 1;
+	StatStamina = 2;
+	StatIntellect = 3;
+
+	// Spell Power and Spell Power derivatives
+	StatHealingPower = 4;
+	StatSpellDamage = 5;
+	StatArcaneDamage = 6;
+	StatFireDamage = 7;
+	StatFrostDamage = 8;
+	StatHolyDamage = 9;
+	StatNatureDamage = 10;
+	StatShadowDamage = 11;
+
+	// Caster Secondaries
+	// The game files' name for spell penetration: "Rune of Perfection" states
+	// "Spell Piercing increased".
+	StatSpellPiercing = 12;
+	StatSpirit = 13;
+
+	// Physical Secondaries
+	StatAttackPower = 14;
+	StatRangedAttackPower = 15;
+	StatFeralAttackPower = 16;
+
+	// Shared Secondaries: one rating each converts into the melee, ranged
+	// and spell percentages alike.
+	StatHitRating = 17;
+	StatCritRating = 18;
+	StatHasteRating = 19;
+
+	// Physical Secondaries
+	StatArmorPenetration = 20;
+	StatExpertiseRating = 21;
+
+	// Tank Secondaries
+	StatDefenseRating = 22;
+	StatBlockRating = 23;
+	StatBlockValue = 24;
+	StatDodgeRating = 25;
+	StatParryRating = 26;
+	StatArmor = 27;
+	StatBonusArmor = 28;
+
+	// Composite stats that are built up from the above gear stats + buffs.
+	// These still belong in the Stat enum because they can be present on
+	// some enchants and because the base values need to be stored for NPCs.
+	StatHealth = 29;
+	StatMana = 30;
+	StatMP5 = 31;
+
+	// Resistances
+	StatArcaneResistance = 32;
+	StatFireResistance = 33;
+	StatFrostResistance = 34;
+	StatNatureResistance = 35;
+	StatShadowResistance = 36;
+
+	StatPhysicalDamage = 37;
+
+	// Armor that neither the percent armor modifiers nor the scaling of armor
+	// from items touch, which A_MOD_ARMOR_NO_MODS states. It adds to Armor.
+	StatArmorNoMods = 38;
+
+	// DO NOT add new stats here without discussing it first; new stats come
+	// with a performance penalty.
+
+	// Checklist for making breaking changes to the Stat enum (deleting
+	// stats, re-ordering stats, changing the interpretation of stat values,
+	// etc.):
+	// (1) Make the desired change in the enum above.
+	// (2) Mirror the change in sim/core/stats/stats.go .
+	// (3) Update any required code in sim/core for proper sim behavior.
+	// (4) If the total number of stats changed, then change the size of the
+	//     Stats array type defined in tools/database/wowhead_tooltips.go .
+	// (5) Run "make items" so that the sim database reflects the stats
+	//     change. At this point, you should see no changes in DPS results
+	//     when running "make test", if the only changes made were indexing
+	//     or bookkeeping adjustments. However, saved browser settings and
+	//     old sim links will be broken on the UI side.
+	// (6) Increment the current_version_number option in the ProtoVersion
+	//     message at the top of this file.
+}
+
+enum PseudoStat {
+	PseudoStatMainHandDps = 0;
+	PseudoStatOffHandDps = 1;
+	PseudoStatRangedDps = 2;
+	PseudoStatBlockValueMultiplier = 3;
+	PseudoStatDodgePercent = 4;
+	PseudoStatParryPercent = 5;
+
+	// Spell School Hit
+	PseudoStatSchoolHitPercentArcane = 6;
+	PseudoStatSchoolHitPercentFire = 7;
+	PseudoStatSchoolHitPercentFrost = 8;
+	PseudoStatSchoolHitPercentHoly = 9;
+	PseudoStatSchoolHitPercentNature = 10;
+	PseudoStatSchoolHitPercentShadow = 11;
+
+	PseudoStatMeleeHitPercent = 12;
+	PseudoStatSpellHitPercent = 13;
+	PseudoStatMeleeCritPercent = 14;
+	PseudoStatSpellCritPercent = 15;
+	PseudoStatBlockPercent = 16;
+
+	PseudoStatMeleeSpeedMultiplier = 17;
+	PseudoStatRangedSpeedMultiplier = 18;
+	PseudoStatCastSpeedMultiplier = 19;
+	PseudoStatMeleeHastePercent = 20;
+	PseudoStatRangedHastePercent = 21;
+	PseudoStatSpellHastePercent = 22;
+	PseudoStatBlockValuePerStrength = 23;
+
+	PseudoStatRangedHitPercent = 24;
+	PseudoStatRangedCritPercent = 25;
+
+	PseudoStatReducedCritTakenPercent = 26;
+
+	// Dodge/parry reduction in percent. Forever's sources are mostly flat percentages
+	// (talents, the Hyjal flask); ExpertiseRating covers the few rating-denominated ones
+	// (the tier 1 4P bonuses) and converts into this at 10 rating per percent.
+	PseudoStatExpertisePercent = 27;
+
+	// Character sheet values per attack; the sim never reads them back.
+	PseudoStatOffHandHitPercent = 28;
+	PseudoStatOffHandCritPercent = 29;
+	PseudoStatMainHandHitRating = 30;
+	PseudoStatMainHandCritRating = 31;
+	PseudoStatOffHandHitRating = 32;
+	PseudoStatOffHandCritRating = 33;
+	PseudoStatRangedHitRating = 34;
+	PseudoStatRangedCritRating = 35;
+	PseudoStatMeleeCritSuppressionPercent = 36;
+	PseudoStatRangedCritSuppressionPercent = 37;
+	// The main-hand auto attack's table against the current target, 0 before the attack tables exist.
+	PseudoStatMainHandMissPercent = 38; // The miss hit has to cover.
+	PseudoStatMainHandDodgePercent = 39;
+	PseudoStatMainHandParryPercent = 40; // The target's parry against attacks from in front, not the character's own.
+	PseudoStatMainHandGlancePercent = 41;
+}
+
+enum ItemType {
+	ItemTypeUnknown = 0;
+	ItemTypeHead = 1;
+	ItemTypeNeck = 2;
+	ItemTypeShoulder = 3;
+	ItemTypeBack = 4;
+	ItemTypeChest = 5;
+	ItemTypeWrist = 6;
+	ItemTypeHands = 7;
+	ItemTypeWaist = 8;
+	ItemTypeLegs = 9;
+	ItemTypeFeet = 10;
+	ItemTypeFinger = 11;
+	ItemTypeTrinket = 12;
+	ItemTypeWeapon = 13;
+	ItemTypeRanged = 14;
+}
+
+enum ArmorType {
+	ArmorTypeUnknown = 0;
+	ArmorTypeCloth = 1;
+	ArmorTypeLeather = 2;
+	ArmorTypeMail = 3;
+	ArmorTypePlate = 4;
+}
+
+enum WeaponType {
+	WeaponTypeUnknown = 0;
+	WeaponTypeAxe = 1;
+	WeaponTypeDagger = 2;
+	WeaponTypeFist = 3;
+	WeaponTypeMace = 4;
+	WeaponTypeOffHand = 5;
+	WeaponTypePolearm = 6;
+	WeaponTypeShield = 7;
+	WeaponTypeStaff = 8;
+	WeaponTypeSword = 9;
+}
+
+enum HandType {
+	HandTypeUnknown = 0;
+	HandTypeMainHand = 1;
+	HandTypeOneHand = 2;
+	HandTypeOffHand = 3;
+	HandTypeTwoHand = 4;
+}
+
+enum RangedWeaponType {
+	RangedWeaponTypeUnknown = 0;
+	RangedWeaponTypeBow = 1;
+	RangedWeaponTypeCrossbow = 2;
+	RangedWeaponTypeGun = 3;
+	RangedWeaponTypeThrown = 4;
+	RangedWeaponTypeWand = 5;
+	RangedWeaponTypeIdol = 6;
+	RangedWeaponTypeLibram = 7;
+	RangedWeaponTypeTotem = 8;
+	RangedWeaponTypeSigil = 9;
+}
+
+enum Class {
+	ClassUnknown = 0;
+	ClassWarrior = 1;
+	ClassPaladin = 2;
+	ClassHunter = 3;
+	ClassRogue = 4;
+	ClassPriest = 5;
+	ClassShaman = 7;
+	ClassMage = 8;
+	ClassWarlock = 9;
+	ClassDruid = 11;
+	ClassExtra1 = 12;
+	ClassExtra2 = 13;
+	ClassExtra3 = 14;
+	ClassExtra4 = 15;
+	ClassExtra5 = 16;
+	ClassExtra6 = 17;
+}
+
+enum Race {
+	RaceUnknown = 0;
+	RaceBloodElf = 1;
+	RaceDwarf = 2;
+	RaceGnome = 3;
+	RaceHuman = 4;
+	RaceNightElf = 5;
+	RaceOrc = 6;
+	RaceTauren = 7;
+	RaceTroll = 8;
+	RaceUndead = 9;
+	RaceHighOrderSkyborne = 10;
+	RaceWindshaperSkyborne = 11;
+}
+
+enum ItemSlot {
+	ItemSlotHead = 0;
+	ItemSlotNeck = 1;
+	ItemSlotShoulder = 2;
+	ItemSlotBack = 3;
+	ItemSlotChest = 4;
+	ItemSlotWrist = 5;
+	ItemSlotHands = 6;
+	ItemSlotWaist = 7;
+	ItemSlotLegs = 8;
+	ItemSlotFeet = 9;
+	ItemSlotFinger1 = 10;
+	ItemSlotFinger2 = 11;
+	ItemSlotTrinket1 = 12;
+	ItemSlotTrinket2 = 13;
+	ItemSlotMainHand = 14; // can be 1h or 2h
+	ItemSlotOffHand = 15;
+	ItemSlotRanged = 16;
+}
+
+enum ItemQuality {
+	ItemQualityJunk = 0;
+	ItemQualityCommon = 1;
+	ItemQualityUncommon = 2;
+	ItemQualityRare = 3;
+	ItemQualityEpic = 4;
+	ItemQualityLegendary = 5;
+	ItemQualityArtifact = 6;
+	ItemQualityHeirloom = 7;
+}
+
+enum Profession {
+	ProfessionUnknown = 0;
+	Alchemy = 1;
+	Blacksmithing = 2;
+	Enchanting = 3;
+	Engineering = 4;
+	Herbalism = 5;
+	Inscription = 6;
+	reserved 7;
+	reserved "Jewelcrafting";
+	Leatherworking = 8;
+	Mining = 9;
+	Skinning = 10;
+	Tailoring = 11;
+}
+
+enum Faction {
+	Unknown = 0;
+	Alliance = 1;
+	Horde = 2;
+}
+
+enum EnchantType {
+	EnchantTypeNormal = 0;
+	EnchantTypeTwoHand = 1;
+	EnchantTypeShield = 2;
+	EnchantTypeKit = 3;
+	EnchantTypeStaff = 4;
+	EnchantTypeOffHand = 5;
+}
+
+enum EnchantProcKind {
+	EnchantProcKindNone = 0;
+	EnchantProcKindCombat = 1; // Any proc that is not survival only: damage, a stat buff, a debuff, a resource restore.
+	EnchantProcKindSurvival = 2; // Every effect of the proc absorbs, heals or adds armor.
+}
+
+enum Spec {
+	SpecUnknown = 0;
+
+	SpecBalanceDruid = 1;
+	SpecFeralCatDruid = 2;
+	SpecFeralBearDruid = 3;
+	SpecRestorationDruid = 4;
+
+	SpecHunter = 5;
+
+	SpecMage = 6;
+
+	SpecHolyPaladin = 7;
+	SpecProtectionPaladin = 8;
+	SpecRetributionPaladin = 9;
+
+	SpecDpsPriest = 10;
+	SpecHealerPriest = 18;
+
+	SpecRogue = 11;
+
+	SpecElementalShaman = 12;
+	SpecEnhancementShaman = 13;
+	SpecRestorationShaman = 14;
+
+	SpecWarlock = 15;
+
+	SpecDpsWarrior = 16;
+	SpecProtectionWarrior = 17;
+}
+

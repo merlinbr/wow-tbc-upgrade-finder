@@ -1,0 +1,30 @@
+{
+  "items": [
+    {
+      "id": 9001,
+      "name": "Leftover Blade",
+      "icon": "inv_sword_01",
+      "type": 13,
+      "weaponType": 9,
+      "handType": 2,
+      "quality": 2,
+      "scalingOptions": {
+        "0": { "ilvl": 20, "weaponDamageMin": 4, "weaponDamageMax": 7 }
+      }
+    }
+  ],
+  "enchants": [
+    {
+      "effectId": 15,
+      "itemId": 2304,
+      "spellId": 2831,
+      "name": "Leftover Kit",
+      "icon": "inv_misc_armorkit_17",
+      "type": 5,
+      "stats": [],
+      "quality": 1,
+      "lvl": 5
+    }
+  ],
+  "randomSuffixes": []
+}
