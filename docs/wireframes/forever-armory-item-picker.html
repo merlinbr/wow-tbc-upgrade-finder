@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forever Armory — item picker wireframe</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+:root{color-scheme:dark;--bg:#090b10;--panel:#131923;--raised:#182130;--border:#344258;--border-bright:#536b8a;--text:#e8edf5;--muted:#9ba9bd;--accent:#65b7ff;--accent-strong:#9ad4ff;--gold:#f1c56b;--error:#ff8d8d;--success:#87dbad}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 system-ui,-apple-system,sans-serif}button,input,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+#item-picker{min-height:100vh}.wireframe-notice{background:var(--raised);border-bottom:1px solid var(--border);color:var(--muted);font-size:12px;text-align:center;padding:8px 16px}.site-nav{max-width:1240px;margin:auto;min-height:64px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);gap:16px}.brand{font-size:18px;font-weight:700;letter-spacing:-.03em}.nav-links{display:flex;gap:20px;align-items:center;font-size:13px;color:var(--muted)}.content{max-width:1240px;margin:0 auto;padding:20px 0 28px}.breadcrumb{font-size:12px;color:var(--muted);margin:0 0 14px}.heading{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.heading h1{font-size:26px;line-height:1.2;margin:0 0 5px;letter-spacing:-.025em}.subtle{color:var(--muted);font-size:13px;margin:0}.button{min-height:44px;padding:9px 14px;border:1px solid var(--border-bright);border-radius:7px;background:var(--raised);color:var(--text);font-size:13px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}.button.primary{background:var(--accent);border-color:var(--accent);color:#09111a}.context{display:flex;align-items:center;gap:14px;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:12px 16px;margin-bottom:12px}.context strong{font-size:15px}.context-copy{min-width:0;flex:1}.context-copy p{margin:2px 0 0;color:var(--muted);font-size:12px}.scope-tag,.badge{white-space:nowrap;border:1px solid var(--border-bright);border-radius:5px;color:var(--muted);font-size:11px;padding:4px 8px}.retained{display:flex;align-items:flex-start;gap:9px;padding:10px 13px;margin-bottom:14px;background:var(--raised);border:1px solid #735d2f;border-radius:7px;font-size:12px;color:var(--gold)}.retained strong{color:var(--text)}.picker{border:1px solid var(--border);border-radius:10px;background:var(--panel);overflow:hidden}.tabs{display:flex;gap:22px;padding:0 20px;border-bottom:1px solid var(--border)}.tab{min-height:48px;padding:10px 2px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--muted);font-size:13px;font-weight:600}.tab[aria-selected="true"]{color:var(--accent-strong);border-bottom-color:var(--accent)}.panel{padding:16px 20px 20px}.panel[hidden]{display:none}.filter-row{display:grid;grid-template-columns:minmax(180px,1fr) minmax(150px,210px) minmax(175px,220px);gap:10px;margin-bottom:14px}.field label{display:block;color:var(--muted);font-size:11px;font-weight:600;margin:0 0 5px}.field input,.field select{height:44px;width:100%;min-width:0;padding:8px 10px;background:var(--bg);color:var(--text);border:1px solid var(--border-bright);border-radius:7px}.field input::placeholder{color:var(--muted)}.picker-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:14px;align-items:start}.results,.detail{min-width:0;border:1px solid var(--border);border-radius:8px;overflow:hidden}.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:var(--raised);border-bottom:1px solid var(--border);font-size:12px;font-weight:700}.section-head span:last-child{font-size:11px;font-weight:400;color:var(--muted)}.result-list{max-height:380px;overflow:auto}.result{width:100%;min-height:64px;display:flex;align-items:center;gap:10px;padding:9px 12px;text-align:left;background:var(--panel);border:0;border-bottom:1px solid var(--border);color:var(--text)}.result:last-child{border-bottom:0}.result:hover,.result[aria-pressed="true"]{background:var(--raised)}.result[aria-pressed="true"]{box-shadow:inset 3px 0 var(--accent)}.result-copy{min-width:0;flex:1}.result-name{display:block;font-size:13px;font-weight:650;overflow-wrap:anywhere}.result-meta{display:block;color:var(--muted);font-size:11px;margin-top:2px}.state{flex:0 0 auto;font-size:10px;border:1px solid var(--border-bright);border-radius:5px;padding:3px 6px;color:var(--muted)}.state.fits{color:var(--success);border-color:#456c59}.state.incompatible{color:var(--error);border-color:#754848}.state.unknown{color:var(--gold);border-color:#735d2f}.detail-inner{padding:15px}.detail-kicker{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.04em}.detail h2{font-size:18px;line-height:1.3;margin:4px 0 10px;overflow-wrap:anywhere}.detail-state{margin-bottom:12px}.detail-state strong{display:block;font-size:13px}.detail-state p{color:var(--muted);font-size:12px;margin:3px 0 0}.facts{display:grid;grid-template-columns:115px minmax(0,1fr);gap:8px 10px;border-top:1px solid var(--border);padding-top:12px;margin:0;font-size:12px}.facts dt{color:var(--muted)}.facts dd{margin:0;overflow-wrap:anywhere}.action-note{color:var(--muted);font-size:11px;margin:12px 0 0}.empty{padding:22px 14px;text-align:center;color:var(--muted);font-size:12px}.empty strong{display:block;color:var(--text);font-size:13px;margin-bottom:4px}.actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.button[disabled]{opacity:.48;cursor:not-allowed}.design-notes{margin-top:16px;border-top:1px solid var(--border);color:var(--muted);font-size:12px}.design-notes summary{min-height:44px;padding:11px 0;cursor:pointer;font-weight:600}.design-notes p{margin:0 0 9px}.foot{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--border);padding-top:12px;margin-top:18px;color:var(--muted);font-size:11px}
+@media(max-width:1300px){.site-nav,.content{margin-left:24px;margin-right:24px}}@media(max-width:760px){.picker-grid{grid-template-columns:minmax(0,1fr)}.result-list{max-height:280px}}@media(max-width:640px){.site-nav,.content{margin-left:16px;margin-right:16px}.site-nav{min-height:58px}.brand{font-size:16px}.nav-links{gap:12px;font-size:12px}.heading{flex-direction:column}.heading h1{font-size:23px}.context{align-items:flex-start;padding:11px 12px}.scope-tag{white-space:normal}.tabs{padding:0 14px}.panel{padding:13px 12px 14px}.filter-row{grid-template-columns:minmax(0,1fr);gap:8px}.picker-grid{gap:10px}.facts{grid-template-columns:105px minmax(0,1fr)}.actions{display:grid;grid-template-columns:1fr}.actions .button{width:100%}.foot{flex-direction:column;gap:4px}}
+.heading h1{font-weight:700}.detail h2{font-weight:600}.actions{padding:0 20px}.action-note{padding:0 20px 16px}.retained,.state.unknown{border-color:var(--gold)}.state.fits{border-color:var(--success)}.state.incompatible{border-color:var(--error)}@media(max-width:640px){.heading h1{font-size:24px}.actions{padding:0 12px}.action-note{padding:0 12px 14px}}
+</style>
+</head>
+<body>
+<div id="item-picker" class="min-h-screen">
+<div class="wireframe-notice">LOW-FIDELITY WIREFRAME · Illustrative demo rows · No catalog validation or save</div>
+<header class="site-nav"><div class="brand">Forever Armory</div><nav class="nav-links" aria-label="Application"><a id="picker-nav-library" href="#picker-title">My characters</a><span>Owner view · Private</span></nav></header>
+<main class="content">
+<p class="breadcrumb"><a id="picker-breadcrumb-library" href="#picker-title">My characters</a> / Elara / Planned · Pre-raid / Head</p>
+<section class="heading"><div><h1 id="picker-title">Choose for Head</h1><p class="subtle">Browse illustrative item or enchant examples for this selected build.</p></div><a id="picker-return" class="button" href="#selected-build">Cancel · return to build</a></section>
+<section class="context" id="selected-build" aria-label="Selected character and build"><div class="context-copy"><strong>Elara</strong><p>Level 60 Human · Paladin · Planned: Pre-raid · Private</p></div><span class="scope-tag">Head slot · edits only this plan</span></section>
+<div class="retained" role="status"><span aria-hidden="true">!</span><div><strong>Existing Head choice is retained:</strong> Previously saved headpiece — Unknown fit. This picker does not silently replace or remove it.</div></div>
+<section class="picker" aria-label="Item and enchant picker">
+<div class="tabs" role="tablist" aria-label="Choose item type"><button type="button" class="tab" id="items-tab" role="tab" aria-selected="true" aria-controls="items-panel" tabindex="0">Items</button><button type="button" class="tab" id="enchants-tab" role="tab" aria-selected="false" aria-controls="enchants-panel" tabindex="-1">Enchants</button></div>
+<div class="panel" id="items-panel" role="tabpanel" aria-labelledby="items-tab" tabindex="0">
+<div class="filter-row"><div class="field"><label for="items-search">Search items</label><input id="items-search" type="search" placeholder="Search illustrative items"></div><div class="field"><label for="items-source">Source (demo metadata)</label><select id="items-source"><option value="all">All sources</option><option value="example-vendor">Example vendor</option><option value="sample-drop">Sample drop</option><option value="unknown-source">Unspecified source</option></select></div><div class="field"><label for="items-state">Compatibility (demo only)</label><select id="items-state"><option value="all">All demo states</option><option value="fits">Fits demo</option><option value="incompatible">Incompatible</option><option value="unknown">Unknown</option></select></div></div>
+<div class="picker-grid"><section class="results" aria-label="Item results"><div class="section-head"><span>Illustrative item rows</span><span id="items-count" aria-live="polite"></span></div><div class="result-list" id="items-list"></div><div class="empty" id="items-empty" hidden><strong>No demo items match</strong>Try another search or reset filters.</div></section><section class="detail" aria-label="Selected item details"><div class="section-head"><span>Selected item detail</span><span>Not verified</span></div><div class="detail-inner" id="items-detail"></div></section></div>
+</div>
+<div class="panel" id="enchants-panel" role="tabpanel" aria-labelledby="enchants-tab" tabindex="0" hidden>
+<div class="filter-row"><div class="field"><label for="enchants-search">Search enchants</label><input id="enchants-search" type="search" placeholder="Search illustrative enchants"></div><div class="field"><label for="enchants-source">Source (demo metadata)</label><select id="enchants-source"><option value="all">All sources</option><option value="example-vendor">Example vendor</option><option value="sample-drop">Sample drop</option><option value="unknown-source">Unspecified source</option></select></div><div class="field"><label for="enchants-state">Compatibility (demo only)</label><select id="enchants-state"><option value="all">All demo states</option><option value="fits">Fits demo</option><option value="incompatible">Incompatible</option><option value="unknown">Unknown</option></select></div></div>
+<div class="picker-grid"><section class="results" aria-label="Enchant results"><div class="section-head"><span>Illustrative enchant rows</span><span id="enchants-count" aria-live="polite"></span></div><div class="result-list" id="enchants-list"></div><div class="empty" id="enchants-empty" hidden><strong>No demo enchants match</strong>Try another search or reset filters.</div></section><section class="detail" aria-label="Selected enchant details"><div class="section-head"><span>Selected enchant detail</span><span>Not verified</span></div><div class="detail-inner" id="enchants-detail"></div></section></div>
+</div>
+<div class="actions"><button type="button" class="button" id="reset-filters">Reset filters</button><button type="button" class="button primary" id="apply-choice" disabled>Apply to this build</button></div>
+<p class="action-note" id="action-note" aria-live="polite">Prototype only: selection does not alter this build. Demo fit feedback is illustrative, not a Forever legality check.</p>
+</section>
+<details class="design-notes"><summary>Design notes</summary><p>Save failure behavior: preserve the user's edits and report that the shared page was not updated. This static picker does not save, publish, import, or access a catalog.</p></details>
+<footer class="foot"><span>Design review · Item / enchant picker · Not a working application</span><span>Illustrative names, provenance, levels, and compatibility only</span></footer>
+</main>
+<script>
+(() => {
+  const data = {
+    items: [
+      {id:'helm-demo',name:'Illustrative plate helm',kind:'Plate armor · Head item',source:'example-vendor',sourceLabel:'Example vendor · illustrative / unverified',level:'Required character level: illustrative placeholder · 60',slot:'Head slot fit: fits this demo slot',classFit:'Class fit: demo says compatible for this example only',state:'fits',reason:'Illustrative demo feedback only; no Forever legality claim.'},
+      {id:'hood-demo',name:'Sample cloth hood',kind:'Cloth armor · Head item',source:'sample-drop',sourceLabel:'Sample drop · illustrative / unverified',level:'Required character level: illustrative placeholder · 60',slot:'Head slot fit: incompatible in this demo',classFit:'Class fit: not evaluated',state:'incompatible',reason:'Illustrative restriction: this sample is marked incompatible with the selected Head slot. It remains inspectable; do not treat as validated.'},
+      {id:'unknown-helm',name:'Illustrative untyped headpiece',kind:'Armor type: unknown · Head item',source:'unknown-source',sourceLabel:'Source not specified · illustrative / unverified',level:'Required character level: unknown (demo placeholder)',slot:'Head slot fit: unknown',classFit:'Class fit: unknown',state:'unknown',reason:'Demo data lacks enough information to confirm slot or class fit. This is not validated.'}
+    ],
+    enchants: [
+      {id:'enchant-demo',name:'Illustrative head enchant · sample ward',kind:'Enchant effect · illustrative ward',source:'example-vendor',sourceLabel:'Example vendor · illustrative / unverified',level:'Character level requirement: illustrative placeholder · 60',slot:'Effect fit: Head slot in this demo',classFit:'Effect identity: sample ward effect (not an item/carrier ID)',state:'fits',reason:'Illustrative enchant effect and contextual slot fit only; no Forever legality claim.'},
+      {id:'enchant-incompatible',name:'Sample weapon-only effect',kind:'Enchant effect · illustrative weapon bonus',source:'sample-drop',sourceLabel:'Sample drop · illustrative / unverified',level:'Character level requirement: illustrative placeholder · unknown',slot:'Effect fit: incompatible with Head slot in this demo',classFit:'Effect identity: sample weapon effect',state:'incompatible',reason:'Illustrative restriction: this effect is marked weapon-only for the demo. It is not a Head enchant and is not validated.'},
+      {id:'enchant-unknown',name:'Illustrative unclassified effect',kind:'Enchant effect · type unknown',source:'unknown-source',sourceLabel:'Source not specified · illustrative / unverified',level:'Character level requirement: unknown (demo placeholder)',slot:'Effect fit: unknown for Head slot',classFit:'Effect identity and class fit: unknown',state:'unknown',reason:'Demo data does not establish effect type or Head-slot fit. Inspectable, not validated.'}
+    ]
+  };
+  const stateLabels = {fits:'Fits demo',incompatible:'Incompatible · demo',unknown:'Unknown · demo'};
+  const selected = {items:'helm-demo',enchants:'enchant-demo'};
+  const tabs = [...document.querySelectorAll('#item-picker [role="tab"]')];
+  const render = key => {
+    const search = document.getElementById(`${key}-search`).value.trim().toLowerCase();
+    const source = document.getElementById(`${key}-source`).value;
+    const state = document.getElementById(`${key}-state`).value;
+    const rows = data[key];
+    const matches = rows.filter(row => (!search || `${row.name} ${row.kind} ${row.sourceLabel}`.toLowerCase().includes(search)) && (source === 'all' || row.source === source) && (state === 'all' || row.state === state));
+    const list = document.getElementById(`${key}-list`);
+    list.replaceChildren();
+    for (const row of matches) {
+      const button = document.createElement('button');
+      button.type = 'button'; button.className = 'result'; button.setAttribute('aria-pressed', String(selected[key] === row.id));
+      const copy = document.createElement('span'); copy.className = 'result-copy';
+      const name = document.createElement('span'); name.className = 'result-name'; name.textContent = row.name;
+      const meta = document.createElement('span'); meta.className = 'result-meta'; meta.textContent = row.kind;
+      const badge = document.createElement('span'); badge.className = `state ${row.state}`; badge.textContent = stateLabels[row.state];
+      copy.append(name, meta); button.append(copy, badge);
+      button.addEventListener('click', () => { selected[key] = row.id; render(key); list.querySelector('[aria-pressed="true"]')?.focus(); });
+      list.append(button);
+    }
+    document.getElementById(`${key}-count`).textContent = `${matches.length} shown · all illustrative`;
+    document.getElementById(`${key}-empty`).hidden = matches.length !== 0;
+    const current = matches.find(row => row.id === selected[key]);
+    const detail = document.getElementById(`${key}-detail`);
+    detail.replaceChildren();
+    const active = document.querySelector('#item-picker [role="tab"][aria-selected="true"]').id === `${key}-tab`;
+    if (!current) {
+      detail.textContent = matches.length ? 'Select a visible result to inspect it. Your previous choice is retained.' : 'No matching results. Reset filters or change your search.';
+      if (active) {
+        document.getElementById('apply-choice').disabled = true;
+        document.getElementById('action-note').textContent = 'No visible choice selected. Nothing in this plan has changed.';
+      }
+      return;
+    }
+    const kicker = document.createElement('div'); kicker.className = 'detail-kicker'; kicker.textContent = key === 'items' ? 'Item identity' : 'Enchant identity';
+    const title = document.createElement('h2'); title.textContent = current.name;
+    const status = document.createElement('div'); status.className = 'detail-state';
+    const statusTitle = document.createElement('strong'); statusTitle.className = `state ${current.state}`; statusTitle.textContent = stateLabels[current.state];
+    const explanation = document.createElement('p'); explanation.textContent = current.reason; status.append(statusTitle, explanation);
+    const facts = document.createElement('dl'); facts.className = 'facts';
+    for (const [label, value] of [['Type',current.kind],['Source / provenance',current.sourceLabel],['Level',current.level],['Slot fit',current.slot],['Class / effect fit',current.classFit]]) { const dt=document.createElement('dt');dt.textContent=label;const dd=document.createElement('dd');dd.textContent=value;facts.append(dt,dd); }
+    detail.append(kicker,title,status,facts);
+    if (active) {
+      document.getElementById('apply-choice').disabled = current.state !== 'fits';
+      document.getElementById('action-note').textContent = current.state === 'fits' ? 'Prototype only: Apply is a static affordance and does not change this build or save. Demo fit is not a Forever legality check.' : 'This choice is inspectable but not confirmed as compatible. Apply is disabled; no choice is changed or removed.';
+    }
+  };
+  const activate = tab => {
+    for (const item of tabs) { const active=item===tab; item.setAttribute('aria-selected',String(active)); item.tabIndex=active?0:-1; }
+    for (const panel of document.querySelectorAll('#item-picker [role="tabpanel"]')) panel.hidden = panel.id !== tab.getAttribute('aria-controls');
+    render(tab.id === 'items-tab' ? 'items' : 'enchants');
+  };
+  for (const tab of tabs) {
+    tab.addEventListener('click', () => activate(tab));
+    tab.addEventListener('keydown', event => {
+      let index=tabs.indexOf(tab);
+      if(event.key==='ArrowRight')index=(index+1)%tabs.length;
+      else if(event.key==='ArrowLeft')index=(index+tabs.length-1)%tabs.length;
+      else if(event.key==='Home')index=0;
+      else if(event.key==='End')index=tabs.length-1;
+      else return;
+      event.preventDefault();activate(tabs[index]);tabs[index].focus();
+    });
+  }
+  for (const key of ['items','enchants']) for (const id of [`${key}-search`,`${key}-source`,`${key}-state`]) document.getElementById(id).addEventListener('input', () => render(key));
+  document.getElementById('reset-filters').addEventListener('click', () => {
+    for(const id of ['items-search','enchants-search'])document.getElementById(id).value='';
+    for(const id of ['items-source','items-state','enchants-source','enchants-state'])document.getElementById(id).value='all';
+    render('items');render('enchants');
+  });
+  render('items');render('enchants');
+})();
+</script>
+</div>
+</body>
+</html>

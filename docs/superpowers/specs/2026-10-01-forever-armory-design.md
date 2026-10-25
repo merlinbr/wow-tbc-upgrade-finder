@@ -1,7 +1,32 @@
 # Forever Armory — First-Version Design
 
 Date: 2026-10-01
-Status: Design approved in conversation; written specification awaiting user review.
+Revised: 2026-10-25
+Status: Design approved in conversation; revised specification awaiting user review.
+
+## Revision note (2026-10-25)
+
+The October 20 review of `wowsims/forever` changed the starting point and corrected several
+assumptions. This revision keeps the approved product goal and exclusions and records:
+
+- **Selected upstream.** The catalog and talent structure come from `wowsims/forever` at commit
+  `0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4`. Its React application, simulator, optimizer and
+  saved-record format are not reused. The repository's MIT licence does not by itself settle
+  rights in the client-derived payload; that reuse is a documented, accepted risk with a
+  replaceable dataset adapter. Details and identifier rules are in the
+  [data and validation contract](../../forever-upstream-data-contract.md).
+- **Level promise narrowed.** The pinned catalog carries no required character level, so
+  equipment legality below level 60 cannot be verified. Level 60 is the supported
+  equipment-planning level for the first version.
+- **Talent encoding.** Positional talent strings are an interchange format, not a validator.
+  Allocations are stored by talent identity and bound to a catalog revision.
+- **Statistics.** The upstream engine is a useful reference, not parity evidence. Whole-character
+  stats remain explicitly unavailable until coverage is demonstrated.
+- **Native WoWSims interchange** is added as a proposed entry route, not approved scope.
+- **Delivery shape.** Work is sequenced by the [roadmap](../../plans/2026-10-20-forever-armory-roadmap.md).
+  Five wireframes are accepted; the item picker and talent editor await visual review.
+
+This document remains a design artifact, not authorization to implement.
 
 ## Goal
 
@@ -23,7 +48,9 @@ directory.
 - Independent equipment, enchants, and talents for every build.
 - Manual creation plus addon and Sixty Upgrades imports where compatibility is verified.
 - Character-centered equipment editor with Current / Planned and Gear / Stats / Talents views.
-- Level 60 by default, with basic lower-level support using verified restrictions.
+- Level 60 as the supported equipment-planning level. Lower-level characters may be created and
+  have talent budgets validated, but equipment legality below 60 is not claimed until a
+  required-level source exists.
 - Explicit publishing, a permanent read-only character URL, and published-set switching.
 - Saved edits to published builds update the existing shared page.
 - Export/import files for backup and portability.
@@ -78,8 +105,9 @@ characters from another device by signing in.
 - Current / Planned tabs distinguish actual equipment from targets.
 - Planned has a named-set selector and create, duplicate, rename, and delete actions.
 - Gear / Stats / Talents views operate on the selected build.
-- Selecting an equipment slot opens an item picker with text search, level and
-  equipment-compatibility restrictions, and source filtering where source data exists.
+- Selecting an equipment slot opens an item picker with text search, equipment-compatibility
+  restrictions, and source filtering where source data exists. Character-level restrictions are
+  shown only where the catalog carries them.
 - The picker and tooltips use the Forever catalog, never the bundled TBC database.
 - Equipment and enchant edits affect only the selected build.
 - Talents can be allocated independently per plan; Current can be populated manually
@@ -90,15 +118,18 @@ characters from another device by signing in.
 
 ### Levels and statistics
 
-Level 60 is the default, not a universal restriction. Store the selected level and
-apply verified item requirements and talent-point budgets. Existing incompatible
-choices must be flagged rather than silently removed or treated as valid.
+Level 60 is the supported equipment-planning level, not a universal character restriction. Store
+the selected level and derive the talent budget from it (one point per level from 10, so 51 at
+60). Apply item requirements only where the catalog carries them: the pinned Forever catalog has
+no required-character-level field, so equipment legality below 60 is shown as unverified rather
+than inferred from item level or expansion labels. Existing incompatible choices must be flagged
+rather than silently removed or treated as valid.
 
 Show individual catalog item information where verified. Whole-character stat totals
 and derived percentages appear only for combinations covered by verified Forever
 rules. If coverage is missing, show an explicit unavailable/partial state and name
-what is missing; do not present item-stat sums as full character totals. Accurate
-lower-level stat scaling is not a release prerequisite for basic lower-level planning.
+what is missing; do not present item-stat sums as full character totals. Whole-character
+totals are not a prerequisite for shipping a truthful item and talent planner.
 
 Do not reuse TBC racial, talent, buff, stat-conversion, or combat formulas as Forever
 formulas. No DPS estimates or simulation-based upgrade claims in this version.
@@ -108,9 +139,13 @@ formulas. No DPS estimates or simulation-based upgrade claims in this version.
 1. Manual: choose identity and level, then edit equipment and talents.
 2. Addon: import actual equipped gear/talents into Current through a verified format.
 3. Sixty Upgrades: import a planned build through a verified supported representation.
+4. Native WoWSims interchange (proposed, not approved): open a Forever simulator payload as a
+   new plan through an explicit adapter bound to one native protocol version and one catalog
+   revision.
 
-Manual entry is the foundation. The two import routes are conditional release
-features: do not advertise them as available until their feasibility gates pass.
+Manual entry is the foundation. Routes 2-4 are conditional release features: do not advertise
+them as available until their own feasibility gates pass. Route 4 is a proposal from the
+October 20 review and requires explicit approval before it enters an implementation plan.
 A Sixty Upgrades URL is not assumed to be an accessible export API. Existing addon
 Forever support is not assumed. An addon route may require a minimal exporter if
 no compatible, permitted exporter exists; that decision follows investigation.
@@ -175,13 +210,29 @@ invent a password or account-recovery system.
 Use a browser frontend, a hosted service, and durable server-side character storage.
 The service owns access control, validated saves/imports, and the public projection.
 Browser storage remembers guest access and preferences; it is not the sole copy of
-published characters. Backups and a documented restoration path are necessary for
-hosted data.
+published characters. Backups and a documented restoration path are necessary for hosted data.
+
+### Selected upstream (2026-10-25)
+
+The Forever catalog and talent structure come from `wowsims/forever` at commit
+`0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4`, pinned by payload hashes in the
+[data and validation contract](../../forever-upstream-data-contract.md). Candidate reuse is
+limited to that data and to framework-independent model helpers: item-search normalization,
+compatibility predicates, talent tree structure, and the talent-string codec. The React
+application, simulator, optimizer, rotations, EP and combat calculations are not reused, and no
+Forever payload may enter the TBC import, enrichment, or stat path.
+
+The MIT licence covers the repository's software and documentation. It does not by itself resolve
+rights in client-derived or third-party data, so this reuse is a documented, accepted risk rather
+than a clearance. The contract keeps the catalog behind an adapter, preserves attribution, and
+defines a replacement path so a licensed or self-generated dataset can be substituted without
+changing the domain, validation rules, or UI contracts.
 
 Reuse the current Svelte armory layout, equipment-card/tooltip patterns, and applicable
-UI interactions. Separate ownership/import data from presentation. The existing
-17-slot TBC projection, talent metadata, import protobufs, and engine-backed stats
-are not automatically valid for Forever; verify the actual supported slots and schemas.
+UI interactions. Separate ownership/import data from presentation. The TBC 17-slot projection
+happens to match the observed Forever slot count, but its enum values, talent metadata, import
+protobufs and engine-backed stats are not automatically valid for Forever. The contract fixes
+canonical slots, identifier domains and validation rules before implementation.
 
 Do not replace the existing TBC upgrade agent or refactor its simulator into a generic
 multi-game framework as part of this feature. Decide deployment and code placement
@@ -211,6 +262,14 @@ API contract.
 Demonstrate guest creation/recovery/revocation, account claim, durable saves, independent
 plans, and public projections that expose only published builds. Confirm that edits,
 renames, and account attachment preserve the sharing identifier.
+
+### Gate status at this revision
+
+| Gate | Status | Basis |
+| --- | --- | --- |
+| A: catalog and rules | **Partial** | Pinned candidate selected and contract written; representative identifiers and talent rules verified. Required character level and stat parity remain open, and reuse is an accepted risk rather than a clearance. |
+| B: import formats | **Partial / blocked** | Native interchange is proposed and gated; addon has no real Forever fixture; Sixty gear shape is verified but its talent ID domain is unresolved; the URL route is blocked. |
+| C: ownership and sharing | **Not started** | Phase 3 of the roadmap. |
 
 These boundaries can become separate implementation plans: data/import feasibility,
 manual armory/planner, and hosted ownership/sharing. Importers attach only once verified.
@@ -247,6 +306,12 @@ updates, and public community discovery. Add these only under their own requirem
   `cmd/wowsimcli/cmd/upgrades/import.go`, `simulator.go`, and
   `ui-finder/src/lib/ArmoryView.svelte` establish that the current app is a local
   browser UI backed by a TBC-specific Go simulator and in-memory imports/reports.
+- The [October 20 review](../../forever-armory-wowsims-review.md) compared this design against
+  `wowsims/forever` at commit `0cfb1a027cd4f73ae42e1db9b78d10ed6532a1f4`. It reproduced the TBC
+  import panic on a real Forever payload and recorded catalog counts, hashes, identifier domains
+  and reuse risks.
+- The [data and validation contract](../../forever-upstream-data-contract.md) fixes the pinned
+  manifest, identifier domains, validation rules, import-route status and open items.
 - Blizzard's Forever panel recap describes new class/talent/content/race changes:
   https://worldofwarcraft.blizzard.com/en-us/news/24303862/world-of-warcraft-forever-whats-next-panel-recap
 - User-provided Sixty Upgrades screenshots show a signed-out character library with
