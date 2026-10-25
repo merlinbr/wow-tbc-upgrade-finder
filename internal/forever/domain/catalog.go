@@ -211,6 +211,13 @@ type TalentClass struct {
 	Trees []TalentTree `json:"trees"`
 }
 
+// TalentIssues summarizes an allocation. Broken keeps the talent identities
+// that fail a gate or prerequisite; their points are retained.
+type TalentIssues struct {
+	Broken      []string `json:"broken"`
+	TotalPoints int      `json:"totalPoints"`
+}
+
 // SpecInfo is one playable specialization, derived from a class tree.
 type SpecInfo struct {
 	Key   Spec   `json:"key"`
