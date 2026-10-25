@@ -81,7 +81,9 @@ Attach each route independently, only after its own compatibility and data-use c
 
 - **Addon to Current:** obtain a consented real equipped-character output with addon/client versions; map identity, level, slots, enchants and talents. Confirm replacement of populated Current.
 - **Sixty text/file to a new plan:** resolve explicit slot and identifier mappings, rank-bearing talents, version assumptions and payload-use scope. Do not overwrite a plan by display name.
-- **Native WoWSims interchange:** proposed addition to discuss in the design revision, not already-approved scope. Use an explicit Forever adapter and compatible catalog/talent version; never reuse the TBC parser as a shortcut.
+- **Native WoWSims interchange:** approved as a gated route, inbound only, implemented after the
+  manual editor. Use an explicit Forever adapter and compatible catalog/talent version; never
+  reuse the TBC parser as a shortcut. A snapshot link is a payload, not a hosted record.
 - **Sixty URL:** remains unavailable without a provider-supported machine-export contract; a readable web page is not such a contract.
 
 All imports parse, resolve and validate before changing saved data. Malformed input, missing references and incompatible versions must leave the previous build intact. Preserve source/import time separately from last edit time, and distinguish missing fields from explicitly empty allocations.

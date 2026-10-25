@@ -355,7 +355,7 @@ parse -> resolve identifiers -> validate -> present diagnostics -> apply atomica
 | Route | Status | Mapping notes |
 | --- | --- | --- |
 | Manual | In scope | Foundation. No external contract. |
-| Native WoWSims JSON/link | **Proposed, gated** | Adopt only with exact native API version and a compatible catalog/talent revision. The snapshot link is a payload, not a hosted record; opening it must never imply ownership. |
+| Native WoWSims JSON/link | **Approved, gated (Phase 4)** | Inbound only. Adopt only with exact native API version and a compatible catalog/talent revision. The snapshot link is a payload, not a hosted record; opening it must never imply ownership. |
 | Addon (equipped character) | **Gated** | Fixed 17-slot order, item links, positional talent string. No real Forever fixture and no verified client/addon version yet. Talent ordering must be proven equivalent to the pinned config order before any conversion. |
 | Sixty Upgrades text/file | **Partial** | Gear shape verified. Enchant effect and spell IDs are distinct domains. Talent records exist in user exports, but the observed `talents[].id` (e.g. `105848`) matches neither the definition ID (`135378`) nor the rank spell (`14523`) for the same talent. Until that domain is resolved, a payload containing talent records is **rejected as a whole** rather than imported gear-only: silently dropping talents would violate the atomic contract. |
 | Sixty Upgrades URL | **Blocked** | No provider-supported machine-export contract. Do not scrape. |

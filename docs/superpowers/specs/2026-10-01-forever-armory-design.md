@@ -22,7 +22,8 @@ assumptions. This revision keeps the approved product goal and exclusions and re
   Allocations are stored by talent identity and bound to a catalog revision.
 - **Statistics.** The upstream engine is a useful reference, not parity evidence. Whole-character
   stats remain explicitly unavailable until coverage is demonstrated.
-- **Native WoWSims interchange** is added as a proposed entry route, not approved scope.
+- **Native WoWSims interchange** is approved as a gated entry route, inbound only, implemented
+  after the manual editor.
 - **Delivery shape.** Work is sequenced by the [roadmap](../../plans/2026-10-20-forever-armory-roadmap.md).
   Five wireframes are accepted; the item picker and talent editor await visual review.
 
@@ -46,7 +47,8 @@ directory.
 - Browser-remembered guest editing access and a separate private edit/recovery link.
 - One Current build and multiple named plans per character.
 - Independent equipment, enchants, and talents for every build.
-- Manual creation plus addon and Sixty Upgrades imports where compatibility is verified.
+- Manual creation plus addon, Sixty Upgrades and native WoWSims imports where compatibility is
+  verified. Each import route is independently gated.
 - Character-centered equipment editor with Current / Planned and Gear / Stats / Talents views.
 - Level 60 as the supported equipment-planning level. Lower-level characters may be created and
   have talent budgets validated, but equipment legality below 60 is not claimed until a
@@ -139,13 +141,14 @@ formulas. No DPS estimates or simulation-based upgrade claims in this version.
 1. Manual: choose identity and level, then edit equipment and talents.
 2. Addon: import actual equipped gear/talents into Current through a verified format.
 3. Sixty Upgrades: import a planned build through a verified supported representation.
-4. Native WoWSims interchange (proposed, not approved): open a Forever simulator payload as a
-   new plan through an explicit adapter bound to one native protocol version and one catalog
-   revision.
+4. Native WoWSims interchange: open a Forever simulator link or JSON payload as a new plan through
+   an explicit adapter bound to one native protocol version and one catalog revision. Implemented
+   in Phase 4, after the manual editor, inbound only.
 
 Manual entry is the foundation. Routes 2-4 are conditional release features: do not advertise
-them as available until their own feasibility gates pass. Route 4 is a proposal from the
-October 20 review and requires explicit approval before it enters an implementation plan.
+them as available until their own feasibility gates pass. Route 4 was proposed by the October 20
+review and is approved only as a gated Phase 4 route; its snapshot link is a payload, not a hosted
+record, so opening one never creates ownership or publication.
 A Sixty Upgrades URL is not assumed to be an accessible export API. Existing addon
 Forever support is not assumed. An addon route may require a minimal exporter if
 no compatible, permitted exporter exists; that decision follows investigation.
@@ -268,7 +271,7 @@ renames, and account attachment preserve the sharing identifier.
 | Gate | Status | Basis |
 | --- | --- | --- |
 | A: catalog and rules | **Partial** | Pinned candidate selected and contract written; representative identifiers and talent rules verified. Required character level and stat parity remain open, and reuse is an accepted risk rather than a clearance. |
-| B: import formats | **Partial / blocked** | Native interchange is proposed and gated; addon has no real Forever fixture; Sixty gear shape is verified but its talent ID domain is unresolved; the URL route is blocked. |
+| B: import formats | **Partial / blocked** | Native interchange is approved but gated; addon has no real Forever fixture; Sixty gear shape is verified but its talent ID domain is unresolved; the URL route is blocked. |
 | C: ownership and sharing | **Not started** | Phase 3 of the roadmap. |
 
 These boundaries can become separate implementation plans: data/import feasibility,
