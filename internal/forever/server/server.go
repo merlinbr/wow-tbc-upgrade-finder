@@ -29,6 +29,10 @@ func New(cat *catalog.Catalog, svc *service.Service, ui ...fs.FS) http.Handler {
 	}
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /api/meta", handler.handleMeta)
+	mux.HandleFunc("GET /api/items", handler.handleItems)
+	mux.HandleFunc("GET /api/items/{id}", handler.handleItemDetail)
+	mux.HandleFunc("GET /api/enchants", handler.handleEnchants)
+	mux.HandleFunc("GET /api/talents", handler.handleTalents)
 	mux.HandleFunc("GET /assets/{path...}", handler.handleAsset)
 	mux.HandleFunc("GET /", handler.handleIndex)
 	return mux
