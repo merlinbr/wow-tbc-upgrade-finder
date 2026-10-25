@@ -1,0 +1,35 @@
+import { ArmorType, Class, Race, RangedWeaponType, Spec, WeaponType } from '@generated/proto/common';
+
+export type EligibleWeaponType = {
+	weaponType: WeaponType;
+	canUseTwoHand: boolean;
+};
+
+export const CLASS_ARMOR_TYPES: Record<number, ArmorType[]> = {
+	[Class.ClassPaladin]: [ArmorType.ArmorTypePlate, ArmorType.ArmorTypeMail, ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth],
+	[Class.ClassWarrior]: [ArmorType.ArmorTypePlate, ArmorType.ArmorTypeMail, ArmorType.ArmorTypeLeather, ArmorType.ArmorTypeCloth],
+	[Class.ClassMage]: [ArmorType.ArmorTypeCloth],
+};
+
+export const CLASS_WEAPON_TYPES: Record<number, EligibleWeaponType[]> = {
+	[Class.ClassPaladin]: [{ weaponType: WeaponType.WeaponTypeSword, canUseTwoHand: true }],
+	[Class.ClassWarrior]: [{ weaponType: WeaponType.WeaponTypeSword, canUseTwoHand: true }],
+	[Class.ClassMage]: [{ weaponType: WeaponType.WeaponTypeStaff, canUseTwoHand: true }],
+};
+
+export const CLASS_RANGED_WEAPON_TYPES: Record<number, RangedWeaponType[]> = {
+	[Class.ClassPaladin]: [RangedWeaponType.RangedWeaponTypeLibram],
+	[Class.ClassWarrior]: [RangedWeaponType.RangedWeaponTypeBow],
+	[Class.ClassMage]: [RangedWeaponType.RangedWeaponTypeWand],
+};
+
+export const CLASS_RACES: Record<number, Race[]> = {
+	[Class.ClassPaladin]: [Race.RaceHuman, Race.RaceDwarf, Race.RaceUndead],
+	[Class.ClassWarrior]: [Race.RaceHuman, Race.RaceOrc],
+	[Class.ClassMage]: [Race.RaceHuman, Race.RaceGnome],
+};
+
+export const SPEC_CAN_DUAL_WIELD = new Set<Spec>([
+	Spec.SpecDpsWarrior,
+	Spec.SpecProtectionWarrior,
+]);

@@ -26,6 +26,7 @@ var requiredEnums = []string{
 	"Faction",
 	"EnchantType",
 	"EnchantProcKind",
+	"Spec",
 }
 
 // Enums holds the pinned enum tables parsed from proto/common.proto.
@@ -39,6 +40,7 @@ var (
 	enumMemberRe = regexp.MustCompile(`(?m)^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(-?[0-9]+)\s*;`)
 	acronymRe    = regexp.MustCompile(`([A-Z]+)([A-Z][a-z])`)
 	wordRe       = regexp.MustCompile(`([a-z0-9])([A-Z])`)
+	nonWordRunRe = regexp.MustCompile(`[^A-Za-z0-9]+`)
 )
 
 // ParseEnums extracts the required enum tables from the pinned proto text.
@@ -93,6 +95,7 @@ func enumKey(enumName, memberName string) string {
 func snakeCase(s string) string {
 	s = acronymRe.ReplaceAllString(s, "${1}_${2}")
 	s = wordRe.ReplaceAllString(s, "${1}_${2}")
+	s = nonWordRunRe.ReplaceAllString(s, "_")
 	return strings.ToLower(strings.Trim(s, "_"))
 }
 

@@ -1,0 +1,508 @@
+{
+  "class": "rogue",
+  "trees": [
+    {
+      "name": "Assassination",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/182.jpg",
+      "talents": [
+        {
+          "id": "def:135272",
+          "name": "Improved Gouge",
+          "icon": "ability_gouge",
+          "spellId": 13741,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135253",
+          "name": "Remorseless Attacks",
+          "icon": "ability_fiegndead",
+          "spellId": 14144,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135252",
+          "name": "Malice",
+          "icon": "ability_racial_bloodrage",
+          "spellId": 14138,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135251",
+          "name": "Ruthlessness",
+          "icon": "ability_druid_disembowel",
+          "spellId": 14156,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135250",
+          "name": "Murder",
+          "icon": "spell_shadow_deathscream",
+          "spellId": 14158,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135269",
+          "name": "Improved Slice and Dice",
+          "icon": "ability_rogue_slicedice",
+          "spellId": 14165,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:135289",
+          "name": "Relentless Strikes",
+          "icon": "ability_warrior_decisivestrike",
+          "spellId": 14179,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135247",
+          "name": "Improved Expose Armor",
+          "icon": "ability_warrior_riposte",
+          "spellId": 14168,
+          "maxPoints": 2,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:135246",
+          "name": "Lethality",
+          "icon": "ability_criticalstrike",
+          "spellId": 14128,
+          "maxPoints": 5,
+          "row": 2,
+          "col": 2,
+          "prereqId": "def:135252"
+        },
+        {
+          "id": "def:135244",
+          "name": "Vile Poisons",
+          "icon": "ability_rogue_feigndeath",
+          "spellId": 16513,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135245",
+          "name": "Cold Blood",
+          "icon": "spell_ice_lament",
+          "spellId": 14177,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135243",
+          "name": "Improved Poisons",
+          "icon": "ability_poisons",
+          "spellId": 14113,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "def:135248",
+          "name": "Vigor",
+          "icon": "spell_nature_earthbindtotem",
+          "spellId": 14983,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:135239",
+          "name": "Mutilate",
+          "icon": "ability_rogue_deadlybrew",
+          "spellId": 1310707,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135241",
+          "name": "Improved Kidney Shot",
+          "icon": "ability_rogue_kidneyshot",
+          "spellId": 14174,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:135240",
+          "name": "Seal Fate",
+          "icon": "spell_shadow_chilltouch",
+          "spellId": 14186,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135242",
+          "name": "Venom",
+          "icon": "inv_sword_31",
+          "spellId": 1310703,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135239"
+        }
+      ]
+    },
+    {
+      "name": "Combat",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/181.jpg",
+      "talents": [
+        {
+          "id": "def:135238",
+          "name": "Improved Eviscerate",
+          "icon": "ability_rogue_eviscerate",
+          "spellId": 14162,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135271",
+          "name": "Improved Sinister Strike",
+          "icon": "spell_shadow_ritualofsacrifice",
+          "spellId": 13732,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:145370",
+          "name": "Lightning Reflexes",
+          "icon": "spell_nature_invisibilty",
+          "spellId": 13712,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135249",
+          "name": "Puncturing Wounds",
+          "icon": "ability_backstab",
+          "spellId": 1224716,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135268",
+          "name": "Deflection",
+          "icon": "ability_parry",
+          "spellId": 13713,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135267",
+          "name": "Precision",
+          "icon": "ability_marksmanship",
+          "spellId": 13705,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135266",
+          "name": "Endurance",
+          "icon": "spell_shadow_shadowward",
+          "spellId": 13742,
+          "maxPoints": 2,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135265",
+          "name": "Riposte",
+          "icon": "ability_warrior_challange",
+          "spellId": 14251,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 1,
+          "prereqId": "def:135268"
+        },
+        {
+          "id": "def:135262",
+          "name": "Improved Sprint",
+          "icon": "ability_rogue_sprint",
+          "spellId": 13743,
+          "maxPoints": 2,
+          "row": 2,
+          "col": 3
+        },
+        {
+          "id": "def:135263",
+          "name": "Improved Kick",
+          "icon": "ability_kick",
+          "spellId": 13754,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:138268",
+          "name": "Flawless Execution",
+          "icon": "inv_sword_35",
+          "spellId": 1310711,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135270",
+          "name": "Dual Wield Specialization",
+          "icon": "ability_dualwield",
+          "spellId": 13715,
+          "maxPoints": 5,
+          "row": 3,
+          "col": 2,
+          "prereqId": "def:135267"
+        },
+        {
+          "id": "def:135258",
+          "name": "Blade Flurry",
+          "icon": "ability_warrior_punishingblow",
+          "spellId": 13877,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135257",
+          "name": "Hack and Slash",
+          "icon": "inv_sword_27",
+          "spellId": 13960,
+          "maxPoints": 5,
+          "row": 4,
+          "col": 2
+        },
+        {
+          "id": "def:135256",
+          "name": "Weapon Expertise",
+          "icon": "spell_holy_blessingofstrength",
+          "spellId": 30919,
+          "maxPoints": 2,
+          "row": 5,
+          "col": 1,
+          "prereqId": "def:135258"
+        },
+        {
+          "id": "def:135260",
+          "name": "Aggression",
+          "icon": "ability_racial_avatar",
+          "spellId": 18427,
+          "maxPoints": 3,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:135254",
+          "name": "Adrenaline Rush",
+          "icon": "spell_shadow_shadowworddominate",
+          "spellId": 13750,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1
+        }
+      ]
+    },
+    {
+      "name": "Subtlety",
+      "background": "https://wow.zamimg.com/images/wow/talents/backgrounds/tbc/183.jpg",
+      "talents": [
+        {
+          "id": "def:135286",
+          "name": "Camouflage",
+          "icon": "ability_stealth",
+          "spellId": 13975,
+          "maxPoints": 5,
+          "row": 0,
+          "col": 0
+        },
+        {
+          "id": "def:135291",
+          "name": "Master of Deception",
+          "icon": "spell_shadow_charm",
+          "spellId": 13958,
+          "maxPoints": 3,
+          "row": 0,
+          "col": 1
+        },
+        {
+          "id": "def:135290",
+          "name": "Opportunity",
+          "icon": "ability_warrior_warcry",
+          "spellId": 14057,
+          "maxPoints": 2,
+          "row": 0,
+          "col": 2
+        },
+        {
+          "id": "def:135281",
+          "name": "Setup",
+          "icon": "spell_nature_mirrorimage",
+          "spellId": 13983,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 0
+        },
+        {
+          "id": "def:135283",
+          "name": "Elusiveness",
+          "icon": "spell_magic_lesserinvisibilty",
+          "spellId": 13981,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 1
+        },
+        {
+          "id": "def:135287",
+          "name": "Dirty Tricks",
+          "icon": "ability_sap",
+          "spellId": 1224782,
+          "maxPoints": 2,
+          "row": 1,
+          "col": 2
+        },
+        {
+          "id": "def:135279",
+          "name": "Improved Ambush",
+          "icon": "ability_rogue_ambush",
+          "spellId": 14079,
+          "maxPoints": 3,
+          "row": 1,
+          "col": 3
+        },
+        {
+          "id": "def:135285",
+          "name": "Initiative",
+          "icon": "spell_shadow_fumble",
+          "spellId": 13976,
+          "maxPoints": 3,
+          "row": 2,
+          "col": 0
+        },
+        {
+          "id": "def:135284",
+          "name": "Ghostly Strike",
+          "icon": "spell_shadow_curse",
+          "spellId": 14278,
+          "maxPoints": 1,
+          "row": 2,
+          "col": 1
+        },
+        {
+          "id": "def:142620",
+          "name": "Improved Distract",
+          "icon": "ability_rogue_distract",
+          "spellId": 14084,
+          "maxPoints": 2,
+          "row": 2,
+          "col": 2
+        },
+        {
+          "id": "def:135277",
+          "name": "Heightened Senses",
+          "icon": "ability_ambush",
+          "spellId": 30894,
+          "maxPoints": 2,
+          "row": 3,
+          "col": 0
+        },
+        {
+          "id": "def:135273",
+          "name": "Premeditation",
+          "icon": "spell_shadow_possession",
+          "spellId": 14183,
+          "maxPoints": 1,
+          "row": 3,
+          "col": 1
+        },
+        {
+          "id": "def:135282",
+          "name": "Serrated Blades",
+          "icon": "inv_sword_17",
+          "spellId": 14171,
+          "maxPoints": 3,
+          "row": 3,
+          "col": 2
+        },
+        {
+          "id": "def:135275",
+          "name": "Dirty Deeds",
+          "icon": "spell_shadow_summonsuccubus",
+          "spellId": 14082,
+          "maxPoints": 2,
+          "row": 4,
+          "col": 0
+        },
+        {
+          "id": "def:135276",
+          "name": "Preparation",
+          "icon": "spell_shadow_antishadow",
+          "spellId": 14185,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 1
+        },
+        {
+          "id": "def:135278",
+          "name": "Hemorrhage",
+          "icon": "spell_shadow_lifedrain",
+          "spellId": 16511,
+          "maxPoints": 1,
+          "row": 4,
+          "col": 2,
+          "prereqId": "def:135282"
+        },
+        {
+          "id": "def:142619",
+          "name": "Quietus",
+          "icon": "ability_rogue_garrote",
+          "spellId": 1310728,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 0,
+          "prereqId": "def:135275"
+        },
+        {
+          "id": "def:135280",
+          "name": "Cutthroat",
+          "icon": "classicon_rogue",
+          "spellId": 462708,
+          "maxPoints": 5,
+          "row": 5,
+          "col": 2
+        },
+        {
+          "id": "def:142618",
+          "name": "Thousand Cuts",
+          "icon": "ability_rogue_rupture",
+          "spellId": 1310721,
+          "maxPoints": 1,
+          "row": 6,
+          "col": 1,
+          "prereqId": "def:135276"
+        }
+      ]
+    }
+  ]
+}

@@ -311,3 +311,34 @@ enum EnchantProcKind {
 	EnchantProcKindSurvival = 2; // Every effect of the proc absorbs, heals or adds armor.
 }
 
+enum Spec {
+	SpecUnknown = 0;
+
+	SpecBalanceDruid = 1;
+	SpecFeralCatDruid = 2;
+	SpecFeralBearDruid = 3;
+	SpecRestorationDruid = 4;
+
+	SpecHunter = 5;
+
+	SpecMage = 6;
+
+	SpecHolyPaladin = 7;
+	SpecProtectionPaladin = 8;
+	SpecRetributionPaladin = 9;
+
+	SpecDpsPriest = 10;
+	SpecHealerPriest = 18;
+
+	SpecRogue = 11;
+
+	SpecElementalShaman = 12;
+	SpecEnhancementShaman = 13;
+	SpecRestorationShaman = 14;
+
+	SpecWarlock = 15;
+
+	SpecDpsWarrior = 16;
+	SpecProtectionWarrior = 17;
+}
+

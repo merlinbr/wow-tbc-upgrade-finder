@@ -184,3 +184,87 @@ type Catalog struct {
 	LeftoverItems    []Item         `json:"leftoverItems,omitempty"`
 	LeftoverEnchants []Enchant      `json:"leftoverEnchants,omitempty"`
 }
+
+// Talent is one talent identity in a tree. ID is either def:<definitionId> or
+// the documented location fallback loc:<class>:<treeIndex>:<row>,<col>.
+type Talent struct {
+	ID        string `json:"id"`
+	Name      string `json:"name"`
+	Icon      string `json:"icon,omitempty"`
+	SpellID   int    `json:"spellId,omitempty"`
+	MaxPoints int    `json:"maxPoints"`
+	Row       int    `json:"row"`
+	Col       int    `json:"col"`
+	PrereqID  string `json:"prereqId,omitempty"`
+}
+
+// TalentTree is one of the three trees of a class.
+type TalentTree struct {
+	Name       string   `json:"name"`
+	Background string   `json:"background,omitempty"`
+	Talents    []Talent `json:"talents"`
+}
+
+// TalentClass is the whole talent structure for one class.
+type TalentClass struct {
+	Class Class        `json:"class"`
+	Trees []TalentTree `json:"trees"`
+}
+
+// SpecInfo is one playable specialization, derived from a class tree.
+type SpecInfo struct {
+	Key   Spec   `json:"key"`
+	Name  string `json:"name"`
+	Class Class  `json:"class"`
+}
+
+// ClassInfo is the class-level metadata exposed by /api/meta.
+type ClassInfo struct {
+	Class Class      `json:"class"`
+	Name  string     `json:"name"`
+	Specs []SpecInfo `json:"specs"`
+}
+
+// WeaponEligibility is one class weapon proficiency.
+type WeaponEligibility struct {
+	WeaponType    string `json:"weaponType"`
+	CanUseTwoHand bool   `json:"canUseTwoHand"`
+}
+
+// Capabilities is the pinned class/spec capability data used by validation.
+type Capabilities struct {
+	Classes   []ClassInfo                   `json:"classes"`
+	Specs     map[Class][]SpecInfo          `json:"specs"`
+	Armor     map[Class][]string            `json:"armor"`
+	Weapons   map[Class][]WeaponEligibility `json:"weapons"`
+	Ranged    map[Class][]string            `json:"ranged"`
+	Races     map[Class][]string            `json:"races"`
+	DualWield map[Spec]bool                 `json:"dualWield"`
+}
+
+// Manifest pins one generated catalog build. It carries no timestamp so
+// regeneration is byte-stable.
+type Manifest struct {
+	CatalogRevision string         `json:"catalogRevision"`
+	SourceCommit    string         `json:"sourceCommit"`
+	SHA256          ManifestHashes `json:"sha256"`
+	Counts          ManifestCounts `json:"counts"`
+}
+
+// ManifestHashes records the raw payload hashes the revision was built from.
+type ManifestHashes struct {
+	DB         string `json:"db"`
+	LeftoverDB string `json:"leftoverDb"`
+}
+
+// ManifestCounts records source and eligible row counts.
+type ManifestCounts struct {
+	ItemsTotal       int `json:"itemsTotal"`
+	ItemsEligible    int `json:"itemsEligible"`
+	ItemsLeftover    int `json:"itemsLeftover"`
+	Enchants         int `json:"enchants"`
+	LeftoverEnchants int `json:"leftoverEnchants"`
+	Talents          int `json:"talents"`
+	Classes          int `json:"classes"`
+	Suffixes         int `json:"suffixes"`
+}

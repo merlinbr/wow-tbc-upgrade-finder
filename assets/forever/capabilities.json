@@ -1,0 +1,741 @@
+{
+  "classes": [
+    {
+      "class": "druid",
+      "name": "Druid",
+      "specs": [
+        {
+          "key": "druid_balance",
+          "name": "Balance",
+          "class": "druid"
+        },
+        {
+          "key": "druid_feral_combat",
+          "name": "Feral Combat",
+          "class": "druid"
+        },
+        {
+          "key": "druid_restoration",
+          "name": "Restoration",
+          "class": "druid"
+        }
+      ]
+    },
+    {
+      "class": "hunter",
+      "name": "Hunter",
+      "specs": [
+        {
+          "key": "hunter_beast_mastery",
+          "name": "Beast Mastery",
+          "class": "hunter"
+        },
+        {
+          "key": "hunter_marksmanship",
+          "name": "Marksmanship",
+          "class": "hunter"
+        },
+        {
+          "key": "hunter_survival",
+          "name": "Survival",
+          "class": "hunter"
+        }
+      ]
+    },
+    {
+      "class": "mage",
+      "name": "Mage",
+      "specs": [
+        {
+          "key": "mage_arcane",
+          "name": "Arcane",
+          "class": "mage"
+        },
+        {
+          "key": "mage_fire",
+          "name": "Fire",
+          "class": "mage"
+        },
+        {
+          "key": "mage_frost",
+          "name": "Frost",
+          "class": "mage"
+        }
+      ]
+    },
+    {
+      "class": "paladin",
+      "name": "Paladin",
+      "specs": [
+        {
+          "key": "paladin_holy",
+          "name": "Holy",
+          "class": "paladin"
+        },
+        {
+          "key": "paladin_protection",
+          "name": "Protection",
+          "class": "paladin"
+        },
+        {
+          "key": "paladin_retribution",
+          "name": "Retribution",
+          "class": "paladin"
+        }
+      ]
+    },
+    {
+      "class": "priest",
+      "name": "Priest",
+      "specs": [
+        {
+          "key": "priest_discipline",
+          "name": "Discipline",
+          "class": "priest"
+        },
+        {
+          "key": "priest_holy",
+          "name": "Holy",
+          "class": "priest"
+        },
+        {
+          "key": "priest_shadow",
+          "name": "Shadow",
+          "class": "priest"
+        }
+      ]
+    },
+    {
+      "class": "rogue",
+      "name": "Rogue",
+      "specs": [
+        {
+          "key": "rogue_assassination",
+          "name": "Assassination",
+          "class": "rogue"
+        },
+        {
+          "key": "rogue_combat",
+          "name": "Combat",
+          "class": "rogue"
+        },
+        {
+          "key": "rogue_subtlety",
+          "name": "Subtlety",
+          "class": "rogue"
+        }
+      ]
+    },
+    {
+      "class": "shaman",
+      "name": "Shaman",
+      "specs": [
+        {
+          "key": "shaman_elemental",
+          "name": "Elemental",
+          "class": "shaman"
+        },
+        {
+          "key": "shaman_enhancement",
+          "name": "Enhancement",
+          "class": "shaman"
+        },
+        {
+          "key": "shaman_restoration",
+          "name": "Restoration",
+          "class": "shaman"
+        }
+      ]
+    },
+    {
+      "class": "warlock",
+      "name": "Warlock",
+      "specs": [
+        {
+          "key": "warlock_affliction",
+          "name": "Affliction",
+          "class": "warlock"
+        },
+        {
+          "key": "warlock_demonology",
+          "name": "Demonology",
+          "class": "warlock"
+        },
+        {
+          "key": "warlock_destruction",
+          "name": "Destruction",
+          "class": "warlock"
+        }
+      ]
+    },
+    {
+      "class": "warrior",
+      "name": "Warrior",
+      "specs": [
+        {
+          "key": "warrior_arms",
+          "name": "Arms",
+          "class": "warrior"
+        },
+        {
+          "key": "warrior_fury",
+          "name": "Fury",
+          "class": "warrior"
+        },
+        {
+          "key": "warrior_protection",
+          "name": "Protection",
+          "class": "warrior"
+        }
+      ]
+    }
+  ],
+  "specs": {
+    "druid": [
+      {
+        "key": "druid_balance",
+        "name": "Balance",
+        "class": "druid"
+      },
+      {
+        "key": "druid_feral_combat",
+        "name": "Feral Combat",
+        "class": "druid"
+      },
+      {
+        "key": "druid_restoration",
+        "name": "Restoration",
+        "class": "druid"
+      }
+    ],
+    "hunter": [
+      {
+        "key": "hunter_beast_mastery",
+        "name": "Beast Mastery",
+        "class": "hunter"
+      },
+      {
+        "key": "hunter_marksmanship",
+        "name": "Marksmanship",
+        "class": "hunter"
+      },
+      {
+        "key": "hunter_survival",
+        "name": "Survival",
+        "class": "hunter"
+      }
+    ],
+    "mage": [
+      {
+        "key": "mage_arcane",
+        "name": "Arcane",
+        "class": "mage"
+      },
+      {
+        "key": "mage_fire",
+        "name": "Fire",
+        "class": "mage"
+      },
+      {
+        "key": "mage_frost",
+        "name": "Frost",
+        "class": "mage"
+      }
+    ],
+    "paladin": [
+      {
+        "key": "paladin_holy",
+        "name": "Holy",
+        "class": "paladin"
+      },
+      {
+        "key": "paladin_protection",
+        "name": "Protection",
+        "class": "paladin"
+      },
+      {
+        "key": "paladin_retribution",
+        "name": "Retribution",
+        "class": "paladin"
+      }
+    ],
+    "priest": [
+      {
+        "key": "priest_discipline",
+        "name": "Discipline",
+        "class": "priest"
+      },
+      {
+        "key": "priest_holy",
+        "name": "Holy",
+        "class": "priest"
+      },
+      {
+        "key": "priest_shadow",
+        "name": "Shadow",
+        "class": "priest"
+      }
+    ],
+    "rogue": [
+      {
+        "key": "rogue_assassination",
+        "name": "Assassination",
+        "class": "rogue"
+      },
+      {
+        "key": "rogue_combat",
+        "name": "Combat",
+        "class": "rogue"
+      },
+      {
+        "key": "rogue_subtlety",
+        "name": "Subtlety",
+        "class": "rogue"
+      }
+    ],
+    "shaman": [
+      {
+        "key": "shaman_elemental",
+        "name": "Elemental",
+        "class": "shaman"
+      },
+      {
+        "key": "shaman_enhancement",
+        "name": "Enhancement",
+        "class": "shaman"
+      },
+      {
+        "key": "shaman_restoration",
+        "name": "Restoration",
+        "class": "shaman"
+      }
+    ],
+    "warlock": [
+      {
+        "key": "warlock_affliction",
+        "name": "Affliction",
+        "class": "warlock"
+      },
+      {
+        "key": "warlock_demonology",
+        "name": "Demonology",
+        "class": "warlock"
+      },
+      {
+        "key": "warlock_destruction",
+        "name": "Destruction",
+        "class": "warlock"
+      }
+    ],
+    "warrior": [
+      {
+        "key": "warrior_arms",
+        "name": "Arms",
+        "class": "warrior"
+      },
+      {
+        "key": "warrior_fury",
+        "name": "Fury",
+        "class": "warrior"
+      },
+      {
+        "key": "warrior_protection",
+        "name": "Protection",
+        "class": "warrior"
+      }
+    ]
+  },
+  "armor": {
+    "druid": [
+      "leather",
+      "cloth"
+    ],
+    "hunter": [
+      "mail",
+      "leather",
+      "cloth"
+    ],
+    "mage": [
+      "cloth"
+    ],
+    "paladin": [
+      "plate",
+      "mail",
+      "leather",
+      "cloth"
+    ],
+    "priest": [
+      "cloth"
+    ],
+    "rogue": [
+      "leather",
+      "cloth"
+    ],
+    "shaman": [
+      "mail",
+      "leather",
+      "cloth"
+    ],
+    "warlock": [
+      "cloth"
+    ],
+    "warrior": [
+      "plate",
+      "mail",
+      "leather",
+      "cloth"
+    ]
+  },
+  "weapons": {
+    "druid": [
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "fist",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "mace",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "polearm",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      }
+    ],
+    "hunter": [
+      {
+        "weaponType": "axe",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "fist",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "polearm",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "sword",
+        "canUseTwoHand": true
+      }
+    ],
+    "mage": [
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "sword",
+        "canUseTwoHand": false
+      }
+    ],
+    "paladin": [
+      {
+        "weaponType": "axe",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "mace",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "polearm",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "shield",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "sword",
+        "canUseTwoHand": true
+      }
+    ],
+    "priest": [
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "mace",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      }
+    ],
+    "rogue": [
+      {
+        "weaponType": "axe",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "fist",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "mace",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "sword",
+        "canUseTwoHand": false
+      }
+    ],
+    "shaman": [
+      {
+        "weaponType": "axe",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "fist",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "mace",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "shield",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      }
+    ],
+    "warlock": [
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "sword",
+        "canUseTwoHand": false
+      }
+    ],
+    "warrior": [
+      {
+        "weaponType": "axe",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "dagger",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "fist",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "mace",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "off_hand",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "polearm",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "shield",
+        "canUseTwoHand": false
+      },
+      {
+        "weaponType": "staff",
+        "canUseTwoHand": true
+      },
+      {
+        "weaponType": "sword",
+        "canUseTwoHand": true
+      }
+    ]
+  },
+  "ranged": {
+    "druid": [
+      "idol"
+    ],
+    "hunter": [
+      "bow",
+      "crossbow",
+      "gun"
+    ],
+    "mage": [
+      "wand"
+    ],
+    "paladin": [
+      "libram"
+    ],
+    "priest": [
+      "wand"
+    ],
+    "rogue": [
+      "bow",
+      "crossbow",
+      "gun",
+      "thrown"
+    ],
+    "shaman": [
+      "totem"
+    ],
+    "warlock": [
+      "wand"
+    ],
+    "warrior": [
+      "bow",
+      "crossbow",
+      "gun",
+      "thrown"
+    ]
+  },
+  "races": {
+    "druid": [
+      "night_elf",
+      "high_order_skyborne",
+      "tauren",
+      "windshaper_skyborne"
+    ],
+    "hunter": [
+      "human",
+      "dwarf",
+      "night_elf",
+      "high_order_skyborne",
+      "orc",
+      "tauren",
+      "troll",
+      "windshaper_skyborne"
+    ],
+    "mage": [
+      "human",
+      "gnome",
+      "high_order_skyborne",
+      "orc",
+      "undead",
+      "troll"
+    ],
+    "paladin": [
+      "human",
+      "dwarf",
+      "undead"
+    ],
+    "priest": [
+      "human",
+      "dwarf",
+      "night_elf",
+      "gnome",
+      "undead",
+      "troll"
+    ],
+    "rogue": [
+      "human",
+      "dwarf",
+      "night_elf",
+      "gnome",
+      "high_order_skyborne",
+      "orc",
+      "undead",
+      "troll",
+      "windshaper_skyborne"
+    ],
+    "shaman": [
+      "dwarf",
+      "orc",
+      "tauren",
+      "troll",
+      "windshaper_skyborne"
+    ],
+    "warlock": [
+      "human",
+      "gnome",
+      "orc",
+      "undead",
+      "troll"
+    ],
+    "warrior": [
+      "human",
+      "dwarf",
+      "night_elf",
+      "gnome",
+      "high_order_skyborne",
+      "orc",
+      "undead",
+      "tauren",
+      "troll",
+      "windshaper_skyborne"
+    ]
+  },
+  "dualWield": {
+    "hunter_beast_mastery": true,
+    "hunter_marksmanship": true,
+    "hunter_survival": true,
+    "rogue_assassination": true,
+    "rogue_combat": true,
+    "rogue_subtlety": true,
+    "warrior_arms": true,
+    "warrior_fury": true,
+    "warrior_protection": true
+  }
+}
